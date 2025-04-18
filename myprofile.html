@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - CodeX</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <!-- Header -->
+  <header class="bg-white p-4 shadow fixed top-0 w-full z-10">
+    <div class="container mx-auto flex justify-between items-center">
+      <img src="codexbg.png" alt="Logo" class="h-12">
+      <h2 class="text-xl font-semibold" id="welcomeMessage"></h2>
+      <!-- Logout Icon -->
+      <a href="codex.html" class="text-gray-600 hover:text-red-600 text-xl flex items-center gap-2">
+        <i class="fas fa-sign-out-alt"></i>
+        <span class="text-sm">Log out</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="pt-24 container mx-auto px-4">
+    <div class="bg-white p-6 rounded shadow mb-6">
+      <div class="flex items-center justify-between w-full">
+        <!-- Profile Section -->
+        <div class="flex items-center space-x-4 pr-10"> <!-- Add padding-right here -->
+          <div class="relative group">
+            <img
+              id="profilePic"
+              src="http://localhost:5000/uploads/default-profile.png"
+              alt="Profile Picture"
+              class="w-16 h-16 rounded-full border border-gray-300 object-cover"
+            />
+            <label
+              for="profileImage"
+              class="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center cursor-pointer"
+              title="Upload Profile Picture"
+            >
+              <span class="text-sm">+</span>
+              <input
+                type="file"
+                id="profileImage"
+                name="profileImage"
+                accept="image/*"
+                class="hidden"
+                onchange="previewImage(event)"
+              />
+            </label>
+            <div
+              class="absolute bottom-10 right-0 bg-gray-800 text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            >
+              Upload Profile Picture
+            </div>
+          </div>
+    
+          <div>
+            <h3 class="text-xl font-semibold" id="userName">User Name</h3>
+            <p class="text-sm text-gray-600" id="studentNumber">Student Number</p>
+          </div>
+        </div>
+    
+        <!-- 🎯 Centered Purchase Button (Blue) -->
+        <button
+          onclick="handlePurchase()"
+          class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded shadow">
+          View all available courses
+        </button>
+      </div>
+    </div>
+
+    <!-- Dashboard Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- My Courses -->
+      <div class="bg-white p-6 rounded shadow hover:shadow-md transition">
+        <div class="flex items-center gap-2 mb-2">
+          <i class="fas fa-book-reader text-blue-600 text-lg"></i>
+          <h3 class="text-lg font-semibold">My Courses</h3>
+        </div>
+        <ul id="coursesList" class="space-y-2 mb-4"></ul>
+        <div class="text-right">
+          <a href="#courses" class="text-sm text-white bg-blue-600 px-4 py-1 rounded hover:bg-blue-700 transition inline-block">
+           My Courses
+          </a>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="bg-white p-6 rounded shadow hover:shadow-md transition">
+        <div class="flex items-center gap-2 mb-2">
+          <i class="fas fa-chart-line text-green-600 text-lg"></i>
+          <h3 class="text-lg font-semibold">Course Progress</h3>
+        </div>
+        <div id="progressList"></div>
+      </div>
+
+      <!-- Certificates -->
+      <div class="bg-white p-6 rounded shadow hover:shadow-md transition">
+        <div class="flex items-center gap-2 mb-2">
+          <i class="fas fa-award text-yellow-500 text-lg"></i>
+          <h3 class="text-lg font-semibold">Certificates</h3>
+        </div>
+        <p id="certificateCountText">You have earned <strong id="certificateCount">0 certificates</strong>.</p>
+        <a href="#" class="text-blue-600 font-semibold hover:text-blue-800 mt-2 inline-block transition">View Certificate</a>
+      </div>
+
+      <!-- Payment History -->
+      <div class="bg-white p-6 rounded shadow hover:shadow-md transition">
+        <div class="flex items-center gap-2 mb-2">
+          <i class="fas fa-receipt text-purple-500 text-lg"></i>
+          <h3 class="text-lg font-semibold">Payment History</h3>
+        </div>
+        <ul id="paymentHistory" class="text-sm space-y-2"></ul>
+      </div>
+
+      <!-- Account Settings -->
+      <div class="bg-white p-6 rounded shadow hover:shadow-md transition">
+        <div class="flex items-center gap-2 mb-2">
+          <i class="fas fa-user-cog text-orange-500 text-lg"></i>
+          <h3 class="text-lg font-semibold">Account Settings</h3>
+        </div>
+        <ul class="text-sm space-y-2">
+          <li><a href="#" class="text-blue-600 font-semibold hover:text-blue-800 transition">Change Password</a></li>
+          <li><a href="#" class="text-blue-600 font-semibold hover:text-blue-800 transition">Update Email</a></li>
+          <li><a href="#" class="text-blue-600 font-semibold hover:text-blue-800 transition">Notification Preferences</a></li>
+        </ul>
+      </div>
+
+      <!-- Support -->
+      <div class="bg-white p-6 rounded shadow hover:shadow-md transition">
+        <div class="flex items-center gap-2 mb-2">
+          <i class="fas fa-headset text-red-500 text-lg"></i>
+          <h3 class="text-lg font-semibold">Support</h3>
+        </div>
+        <p>Need help or have questions?</p>
+        <a href="#" class="text-blue-600 font-semibold hover:text-blue-800 transition">Contact Support</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 shadow mt-12">
+    <div class="container mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-300">
+      <p>&copy; 2025 CodeX Academy. All rights reserved.</p>
+      <div class="flex space-x-6">
+        <a href="#privacy" class="hover:text-blue-400 transition">Privacy Policy</a>
+        <a href="#terms" class="hover:text-blue-400 transition">Terms of Service</a>
+        <a href="#faq" class="hover:text-blue-400 transition">FAQ</a>
+      </div>
+      <div class="flex space-x-4">
+        <a href="https://facebook.com" target="_blank" class="hover:text-blue-500 transition"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://instagram.com" target="_blank" class="hover:text-pink-500 transition"><i class="fab fa-instagram"></i></a>
+        <a href="https://twitter.com" target="_blank" class="hover:text-blue-400 transition"><i class="fab fa-x-twitter"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  function previewImage(event) {
+  const selectedFile = event.target.files[0];
+  const output = document.getElementById("profilePic");
+
+  // Preview image immediately using FileReader
+  if (selectedFile) {
+    const reader = new FileReader();
+    reader.onload = function () {
+      output.src = reader.result; // Temporary preview
+    };
+    reader.readAsDataURL(selectedFile);
+  } else {
+    return;
+  }
+
+  // Get user ID from localStorage
+  const userId = localStorage.getItem("userID");
+  if (!userId) {
+    alert("You are not logged in.");
+    window.location.href = "codex.html"; // Redirect to login page
+    return;
+  }
+
+  // Prepare FormData to upload
+  const formData = new FormData();
+  formData.append("profilePic", selectedFile);
+
+  // Upload to server
+  fetch(`http://localhost:5000/upload-profile-pic/${userId}`, {
+    method: "POST",
+    body: formData,
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.imageUrl) {
+        // Correct the image source to use the uploaded file URL from the server
+        output.src = `http://localhost:5000${data.imageUrl}`;
+      } else {
+        console.warn("Server did not return an imageUrl");
+      }
+    })
+    .catch((err) => {
+      console.error("Upload error:", err);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Get user ID from localStorage
+  const userId = localStorage.getItem("userID");
+
+  if (!userId) {
+    alert("You are not logged in.");
+    window.location.href = "codex.html"; // Redirect to login page
+    return;
+  }
+
+  fetch(`http://localhost:5000/user/${userId}`)
+    .then((res) => {
+      if (!res.ok) throw new Error("Failed to fetch user data");
+      return res.json();
+    })
+    .then((userData) => {
+      document.getElementById("welcomeMessage").textContent = `Welcome, ${userData.name}`;
+      document.getElementById("userName").textContent = userData.name;
+      document.getElementById("studentNumber").textContent = `Student Number: ${userData.student_id}`;
+
+      const certCount = userData.certificateCount || 0;
+      document.getElementById("certificateCount").textContent = `${certCount} certificate${certCount !== 1 ? 's' : ''}`;
+
+      const coursesList = document.getElementById("coursesList");
+      const progressList = document.getElementById("progressList");
+      const paymentHistory = document.getElementById("paymentHistory");
+
+      // Check if courses array exists before looping over it
+      if (userData.courses && Array.isArray(userData.courses)) {
+        userData.courses.forEach(course => {
+          const listItem = document.createElement("li");
+          listItem.className = "flex justify-between items-center";
+          listItem.innerHTML = `<span>${course.name}</span><button class='text-blue-600 font-semibold hover:text-blue-800 transition'>Continue</button>`;
+          coursesList.appendChild(listItem);
+
+          const progressItem = document.createElement("div");
+          progressItem.className = "mb-4";
+          progressItem.innerHTML = `
+            <div class='flex justify-between items-center mb-1'>
+              <p>${course.name}</p>
+              <span class='text-sm font-medium text-gray-600'>${course.progress}%</span>
+            </div>
+            <div class='w-full bg-gray-200 rounded-full h-2'>
+              <div class='bg-blue-600 h-2 rounded-full' style='width: ${course.progress}%'></div>
+            </div>`;
+          progressList.appendChild(progressItem);
+        });
+      }
+
+      // Check if paymentHistory array exists before looping over it
+      if (userData.paymentHistory && Array.isArray(userData.paymentHistory)) {
+        userData.paymentHistory.forEach(payment => {
+          const paymentItem = document.createElement("li");
+          paymentItem.innerHTML = `${payment.course} – ${payment.amount} – <span class='text-green-600 font-semibold'>${payment.status}</span>`;
+          paymentHistory.appendChild(paymentItem);
+        });
+      }
+
+      // Optional: Load profile picture if available
+      if (userData.profilePic) {
+        const profilePic = document.getElementById("profilePic");
+        profilePic.src = `http://localhost:5000${userData.profilePic}`;
+      }
+    })
+    .catch((err) => {
+      console.error("Error loading user data:", err);
+    });
+});
+function handlePurchase() {
+  window.location.href = 'purchase.html'; // Replace with your actual course purchase page
+}
+  </script>
+</body>
+</html>
