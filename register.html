@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<style>
+    #loaderOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6); /* semi-transparent overlay */
+      display: none; /* Change from hidden to none */
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+  
+    .loaderContent {
+      text-align: center;
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+  
+    .computerIcon {
+      font-size: 48px;
+      animation: bounce 1.2s infinite;
+    }
+  
+    .loadingText {
+      margin-top: 15px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+    }
+  
+    /* Animation */
+    @keyframes bounce {
+      0%, 100% {
+          transform: translateY(0);
+      }
+      50% {
+          transform: translateY(-10px);
+      }
+    }
+  
+    .hidden {
+      display: none;
+    }
+  </style>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-6 text-center">Create Account</h2>
+
+    <form id="registerForm">
+        <!-- Full Name & Username -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label for="name" class="block text-gray-600 text-sm mb-2"> Name</label>
+            <input type="text" id="name" name="name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300" required>
+          </div>
+      
+          <div>
+            <label for="surname" class="block text-gray-600 text-sm mb-2">Surname</label>
+            <input type="text" id="surname" name="surname" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300" required>
+          </div>
+        </div>
+      
+        <!-- Email & Cell Number -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label for="email" class="block text-gray-600 text-sm mb-2">Email</label>
+            <input type="email" id="email" name="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300" required>
+          </div>
+      
+          <div>
+            <label for="cell" class="block text-gray-600 text-sm mb-2">Cell Number</label>
+            <input type="tel" id="cell" name="cell" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300" required>
+          </div>
+        </div>
+      
+        <!-- Date of Birth & Optional Dropdown -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label for="dob" class="block text-gray-600 text-sm mb-2">Date of Birth</label>
+            <input type="date" id="dob" name="dob" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300">
+          </div>
+      
+          <!-- Optional: Gender Dropdown -->
+          <div>
+            <label for="gender" class="block text-gray-600 text-sm mb-2">Gender</label>
+            <select id="gender" name="gender" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300">
+              <option value="">Select gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+        </div>
+      
+        <!-- Password & Confirm Password -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <!-- Password -->
+            <div>
+                <label for="password" class="block text-gray-600 text-sm mb-2">Password</label>
+                <input type="password" id="password" name="password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300" placeholder="Enter password" required>
+                <small id="passwordHint" class="text-gray-500 text-sm mt-1 hidden">
+                    Must be 8+ characters, include a capital letter, number, and special character.
+                </small>
+            </div>
+          
+            <!-- Confirm Password -->
+            <div>
+                <label for="confirmPassword" class="block text-gray-600 text-sm mb-2">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300" placeholder="Confirm password" required>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Sign Up</button>
+    </form>
+
+    <div class="text-center mt-4">
+      <p class="text-sm text-gray-600">Already have an account? <a href="codex.html" class="text-blue-600 hover:underline">Sign in</a></p>
+    </div>
+  </div>
+  <div id="loaderOverlay" class="hidden">
+    <div class="loaderContent">
+        <div class="computerIcon">
+            💻
+        </div>
+        <div class="loadingText">Processing... Please wait</div>
+    </div>
+</div>
+
+<script>
+    const loaderOverlay = document.getElementById('loaderOverlay');
+    const passwordInput = document.getElementById('password');
+    const passwordHint = document.getElementById('passwordHint');
+    const registerForm = document.getElementById('registerForm');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+  
+    // Show password hint when typing
+    passwordInput.addEventListener('input', function () {
+        if (this.value.length > 0) {
+            passwordHint.classList.remove('hidden');
+        } else {
+            passwordHint.classList.add('hidden');
+        }
+    });
+  
+    // Generate a random 7-character alphanumeric string
+    function generateStudentId() {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let studentId = '';
+        for (let i = 0; i < 7; i++) {
+            studentId += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        return studentId;
+    }
+  
+    // Function to check if the email already exists
+    async function checkEmailExists(email) {
+        try {
+            const response = await fetch(`http://localhost:5000/check-email?email=${encodeURIComponent(email)}`);
+            const data = await response.json();
+            return data.exists; // { exists: true/false }
+        } catch (error) {
+            console.error('Error checking email:', error);
+            alert('An error occurred while checking the email. Please try again.');
+            return false; // Allow form to continue if check fails
+        }
+    }
+  
+    // Form submission with retry logic
+    registerForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
+        loaderOverlay.style.display = 'flex'; // Show overlay & loader
+  
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+  
+        const passwordRequirements = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+        if (!passwordRequirements.test(password)) {
+            alert('Password must be at least 8 characters long and include at least 1 number, 1 capital letter, and 1 special character.');
+            loaderOverlay.style.display = 'none'; // Hide loader if validation fails
+            return;
+        }
+  
+        if (password !== confirmPassword) {
+            alert('Passwords do not match!');
+            loaderOverlay.style.display = 'none'; // Hide loader if validation fails
+            return;
+        }
+  
+        const baseData = {
+            name: document.getElementById('name').value,
+            surname: document.getElementById('surname').value,
+            email: document.getElementById('email').value,
+            cell: document.getElementById('cell').value,
+            dob: document.getElementById('dob').value,
+            gender: document.getElementById('gender').value,
+            password: password
+        };
+  
+        // Check if email already exists
+        const emailExists = await checkEmailExists(baseData.email);
+        if (emailExists) {
+            alert('This email is already registered. Please use a different one or log in.');
+            loaderOverlay.style.display = 'none'; // Hide loader if email exists
+            return;
+        }
+  
+        let attempts = 0;
+        const maxAttempts = 10;
+  
+        while (attempts < maxAttempts) {
+            const formData = {
+                ...baseData,
+                student_id: generateStudentId()
+            };
+  
+            try {
+                const res = await fetch('http://localhost:5000/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+  
+                const result = await res.json();
+  
+                if (res.ok) {
+                    alert(`Registered successfully! Your Student ID is: ${formData.student_id}`);
+                    registerForm.reset();
+                    localStorage.setItem('showSigninModal', 'true');
+                    window.location.href = 'codex.html';
+                    return;
+                } else {
+                    if (result.message.includes('Duplicate student ID')) {
+                        console.warn(`Student ID ${formData.student_id} already exists. Retrying...`);
+                        attempts++;
+                        continue;
+                    } else {
+                        alert(result.message || 'Something went wrong.');
+                        loaderOverlay.style.display = 'none'; // Hide loader on failure
+                        return;
+                    }
+                }
+            } catch (err) {
+                console.error("Error submitting form:", err);
+                alert('An error occurred. Please try again later.');
+                loaderOverlay.style.display = 'none'; // Hide loader on failure
+                return;
+            }
+        }
+  
+        alert('Failed to generate a unique student ID. Please try again later.');
+        loaderOverlay.style.display = 'none'; // Hide loader after all attempts
+    });
+  </script>
+
+</body>
+</html>

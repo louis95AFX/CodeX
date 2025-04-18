@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Final Quiz - Code Academy</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+  <header class="bg-blue-600 text-white p-4">
+    <div class="container mx-auto flex justify-between">
+      <h1 class="text-xl font-bold">Final Quiz</h1>
+      <nav>
+        <a href="dashboard.html" class="hover:underline">Dashboard</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container mx-auto py-10">
+    <form id="quiz-form" class="bg-white p-6 rounded shadow">
+      <h2 class="text-xl font-bold mb-6">Answer the following questions:</h2>
+
+      <div class="mb-4">
+        <label class="font-semibold">1. What tag is used to define a hyperlink in HTML?</label><br>
+        <input type="text" name="q1" class="mt-2 border p-2 w-full">
+      </div>
+
+      <div class="mb-4">
+        <label class="font-semibold">2. How do you include a CSS file in HTML?</label><br>
+        <input type="text" name="q2" class="mt-2 border p-2 w-full">
+      </div>
+
+      <div class="mb-4">
+        <label class="font-semibold">3. What does <code>flex-direction: column;</code> do?</label><br>
+        <input type="text" name="q3" class="mt-2 border p-2 w-full">
+      </div>
+
+      <div class="mb-4">
+        <label class="font-semibold block mb-2">4. Which of the following is used to declare a JavaScript variable?</label>
+        <label class="block"><input type="radio" name="q4" value="var" class="mr-2">var</label>
+        <label class="block"><input type="radio" name="q4" value="let" class="mr-2">let</label>
+        <label class="block"><input type="radio" name="q4" value="const" class="mr-2">const</label>
+        <label class="block"><input type="radio" name="q4" value="all" class="mr-2">All of the above</label>
+      </div>
+
+      <div class="mb-4">
+        <label class="font-semibold block mb-2">5. What does CSS stand for?</label>
+        <label class="block"><input type="radio" name="q5" value="Creative Style Sheets" class="mr-2">Creative Style Sheets</label>
+        <label class="block"><input type="radio" name="q5" value="Cascading Style Sheets" class="mr-2">Cascading Style Sheets</label>
+        <label class="block"><input type="radio" name="q5" value="Computer Style Sheets" class="mr-2">Computer Style Sheets</label>
+        <label class="block"><input type="radio" name="q5" value="Colorful Style Sheets" class="mr-2">Colorful Style Sheets</label>
+      </div>
+
+      <div class="text-right">
+        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded">Submit Quiz</button>
+      </div>
+    </form>
+
+    <div id="result" class="hidden mt-6 text-center">
+      <h2 class="text-2xl font-bold text-green-600">Congratulations!</h2>
+      <p class="mt-2">You've passed the quiz and completed the course.</p>
+      <button onclick="generateCertificate()" class="mt-4 bg-green-600 text-white px-6 py-2 rounded">Download Certificate</button>
+    </div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script>
+    document.getElementById('quiz-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const answers = new FormData(this);
+      const correct = {
+        q1: '<a>',
+        q2: '<link>',
+        q3: 'Stacks items vertically',
+        q4: 'all',
+        q5: 'Cascading Style Sheets'
+      };
+
+      let score = 0;
+      if (answers.get('q1').toLowerCase().includes('a')) score++;
+      if (answers.get('q2').toLowerCase().includes('link')) score++;
+      if (answers.get('q3').toLowerCase().includes('vertical') || answers.get('q3').toLowerCase().includes('stack')) score++;
+      if (answers.get('q4') === correct.q4) score++;
+      if (answers.get('q5') === correct.q5) score++;
+
+      if (score >= 3) {
+        document.getElementById('quiz-form').classList.add('hidden');
+        document.getElementById('result').classList.remove('hidden');
+      } else {
+        alert('You need at least 3 correct answers to pass. Try again!');
+      }
+    });
+
+    function generateCertificate() {
+      const element = document.createElement('div');
+      element.innerHTML = `
+        <div style="text-align: center; padding: 50px; border: 5px solid #4F46E5; font-family: sans-serif">
+          <h1 style="font-size: 2.5em; color: #4F46E5;">Certificate of Completion</h1>
+          <p style="margin-top: 30px; font-size: 1.2em">This certifies that</p>
+          <h2 style="font-size: 2em; font-weight: bold; margin: 10px 0;">Student Name</h2>
+          <p>has successfully completed the Code Academy HTML, CSS & JS Basics Course</p>
+          <p style="margin-top: 20px;">Date: ${new Date().toLocaleDateString()}</p>
+        </div>
+      `;
+
+      html2pdf().from(element).save('certificate.pdf');
+    }
+  </script>
+</body>
+</html>

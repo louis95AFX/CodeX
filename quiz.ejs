@@ -1,0 +1,27 @@
+<!-- views/quiz.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>Answer the questions:</h1>
+    <form action="/result" method="POST">
+        <% questions.forEach(question => { %>
+            <div>
+                <p><%= question.question %></p>
+                <% question.options.forEach(option => { %>
+                    <label>
+                        <input type="radio" name="<%= question.id %>" value="<%= option %>">
+                        <%= option %>
+                    </label>
+                <% }) %>
+            </div>
+        <% }) %>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
