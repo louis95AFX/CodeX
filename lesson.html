@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson - Code Academy</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+</head>
+<body class="bg-gray-50">
+  <header class="bg-blue-600 text-white p-4">
+    <div class="container mx-auto flex justify-between">
+      <h1 class="text-xl font-bold">Code Academy</h1>
+      <nav>
+        <a href="dashboard.html" class="hover:underline">Dashboard</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container mx-auto py-10">
+    <h2 id="lesson-title" class="text-2xl font-bold mb-4">Lesson</h2>
+    <p id="lesson-desc" class="mb-6 text-gray-700"></p>
+
+    <div class="bg-white p-4 rounded shadow">
+      <textarea id="editor" name="editor"></textarea>
+      <button onclick="runCode()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded">Run Code</button>
+    </div>
+
+    <h3 class="text-xl mt-6 font-semibold">Output:</h3>
+    <iframe id="output" class="w-full h-64 bg-white p-2 border mt-2"></iframe>
+
+    <div class="mt-10 text-right">
+      <button onclick="completeLesson()" class="bg-blue-600 text-white px-6 py-2 rounded">Mark Complete</button>
+    </div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/htmlmixed/htmlmixed.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/css/css.min.js"></script>
+  <script>
+    const editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
+      mode: 'htmlmixed',
+      lineNumbers: true,
+      theme: 'default',
+    });
+
+    const lesson = localStorage.getItem('currentLesson') || 'level1';
+    const lessonContent = {
+      level1: {
+        title: 'Level 1: Basics',
+        desc: 'Learn HTML structure and basic tags.',
+        code: '<!DOCTYPE html>\n<html>\n<head><title>My First Page</title></head>\n<body>\n  <h1>Hello, world!</h1>\n</body>\n</html>'
+      },
+      level2: {
+        title: 'Level 2: Intermediate',
+        desc: 'Work with forms and CSS layout techniques.',
+        code: '<style>form { display: flex; flex-direction: column; }</style>\n<form>\n  <label>Name:</label><input type="text">\n  <label>Email:</label><input type="email">\n</form>'
+      },
+      level3: {
+        title: 'Level 3: Final Project',
+        desc: 'Create a simple web project and prepare for the final quiz.',
+        code: '<!DOCTYPE html>\n<html>\n<head><style>h1 { color: purple; }</style></head>\n<body>\n  <h1>My Mini Project</h1>\n</body>\n</html>'
+      }
+    };
+
+    const { title, desc, code } = lessonContent[lesson];
+    document.getElementById('lesson-title').textContent = title;
+    document.getElementById('lesson-desc').textContent = desc;
+    editor.setValue(code);
+
+    function runCode() {
+      const outputFrame = document.getElementById('output');
+      const userCode = editor.getValue();
+      const doc = outputFrame.contentDocument || outputFrame.contentWindow.document;
+      doc.open();
+      doc.write(userCode);
+      doc.close();
+    }
+
+    function completeLesson() {
+      let progress = JSON.parse(localStorage.getItem('progress')) || {};
+      progress[lesson] = 100;
+      localStorage.setItem('progress', JSON.stringify(progress));
+      alert('Lesson marked as complete! Returning to dashboard.');
+      window.location.href = 'dashboard.html';
+    }
+  </script>
+</body>
+</html>
