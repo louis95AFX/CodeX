@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - Code Academy</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <header class="bg-blue-600 text-white p-4">
+    <div class="container mx-auto flex justify-between">
+      <h1 class="text-xl font-bold">Code Academy</h1>
+      <nav>
+        <a href="codex.html" class="hover:underline">Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container mx-auto my-10">
+    <h2 class="text-2xl font-bold mb-4">Welcome, Learner!</h2>
+    <p class="mb-6">Start your coding journey and track your progress through each level.</p>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="bg-white p-6 rounded shadow">
+        <h3 class="text-xl font-semibold mb-2">Level 1: Basics</h3>
+        <p class="mb-2">HTML structure, tags, and introduction to CSS & JS.</p>
+        <button onclick="startLesson('level1')" class="bg-blue-600 text-white px-4 py-2 rounded">Start Level</button>
+        <p class="text-green-600 mt-2" id="progress-level1"></p>
+      </div>
+
+      <div class="bg-white p-6 rounded shadow">
+        <h3 class="text-xl font-semibold mb-2">Level 2: Intermediate</h3>
+        <p class="mb-2">Forms, layout, and CSS positioning techniques.</p>
+        <button onclick="startLesson('level2')" class="bg-blue-600 text-white px-4 py-2 rounded">Start Level</button>
+        <p class="text-green-600 mt-2" id="progress-level2"></p>
+      </div>
+
+      <div class="bg-white p-6 rounded shadow">
+        <h3 class="text-xl font-semibold mb-2">Level 3: Projects & Final Quiz</h3>
+        <p class="mb-2">Build mini projects and complete the quiz to earn your certificate.</p>
+        <button onclick="startLesson('level3')" class="bg-blue-600 text-white px-4 py-2 rounded">Start Level</button>
+        <p class="text-green-600 mt-2" id="progress-level3"></p>
+      </div>
+    </div>
+
+    <div class="text-center mt-10">
+      <a href="quiz.html" class="inline-block mt-6 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Take Final Quiz</a>
+    </div>
+  </main>
+
+  <script>
+    function startLesson(level) {
+      localStorage.setItem('currentLesson', level);
+      window.location.href = 'lesson.html';
+    }
+
+    // Display progress (placeholder logic)
+    const progress = JSON.parse(localStorage.getItem('progress')) || {};
+    ['level1', 'level2', 'level3'].forEach(level => {
+      const element = document.getElementById(`progress-${level}`);
+      if (progress[level]) {
+        element.textContent = `Progress: ${progress[level]}%`;
+      }
+    });
+  </script>
+</body>
+</html>
