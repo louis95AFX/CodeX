@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enrolment Page</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: url('codexp.jpg') no-repeat center center fixed; /* Replace with your background image */
+            background-size: cover;
+            color: white;
+        }
+        .container {
+            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .form-container {
+            background-color: rgba(0, 0, 0, 0.7); /* Transparent black background */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group label {
+            color: white;
+        }
+        .form-control {
+            background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent white background */
+            color: black;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2>Enrolment Form</h2>
+            <form id="enrolmentForm">
+                <div class="form-group">
+                    <label for="name">Full Name:</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="dob">Date of Birth:</label>
+                    <input type="date" class="form-control" id="dob" name="dob" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">Gender:</label>
+                    <select class="form-control" id="gender" name="gender" required>
+                        <option value="">--Select Gender--</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="course">Select Course:</label>
+                    <select class="form-control" id="course" name="course" required>
+                        <option value="">--Select a Course--</option>
+                        <option value="html-basics">HTML Basics & Forms</option>
+                        <option value="css-styling">CSS Styling & Layout</option>
+                        <option value="javascript-dom">JavaScript & DOM Manipulation</option>
+                        <option value="python-programming">Python Programming</option>
+                        <option value="java-programming">Java Programming</option>
+                        <option value="cpp-programming">C++ Programming</option>
+                        <option value="ruby-programming">Ruby Programming</option>
+                        <option value="php-web-development">PHP for Web Development</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="paymentMethod">Payment Method:</label>
+                    <select class="form-control" id="paymentMethod" name="paymentMethod" required>
+                        <option value="">--Select Payment Method--</option>
+                        <option value="credit-card">Credit Card</option>
+                        <option value="paypal">PayPal</option>
+                        <option value="bank-transfer">Bank Transfer</option>
+                    </select>
+                </div>
+<!-- Hidden Fields for Payment Method -->
+<div id="creditCardFields" style="display: none;">
+    <div class="form-group">
+        <label for="creditCardNumber">Credit Card Number:</label>
+        <input type="text" class="form-control" id="creditCardNumber" name="creditCardNumber">
+    </div>
+    <div class="form-group">
+        <label for="expiryDate">Expiry Date:</label>
+        <input type="text" class="form-control" id="expiryDate" name="expiryDate">
+    </div>
+    <div class="form-group">
+        <label for="cvv">CVV:</label>
+        <input type="text" class="form-control" id="cvv" name="cvv">
+    </div>
+</div>
+
+<div id="paypalFields" style="display: none;">
+    <p>Please proceed with your PayPal payment.</p>
+    <!-- Add PayPal button or instructions -->
+</div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" required> I agree to the <a href="#">Terms and Conditions</a>.
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="codex.js"></script>
+
+</body>
+</html>
