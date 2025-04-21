@@ -1,43 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lesson - Code Academy</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
-</head>
-<body class="bg-gray-50">
-  <header class="bg-blue-600 text-white p-4">
-    <div class="container mx-auto flex justify-between">
-      <h1 class="text-xl font-bold">Code Academy</h1>
-      <nav>
-        <a href="dashboard.html" class="hover:underline">Dashboard</a>
-      </nav>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Learn HTML</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css" />
+  </head>
+<style>
+  .fade {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.fade.show {
+  opacity: 1;
+}
+
+</style>
+<body class="bg-gray-100">
+ <!-- Header -->
+  <header class="bg-white p-4 shadow fixed top-0 w-full z-10">
+    <div class="container mx-auto flex justify-between items-center">
+      <img src="codexbg.png" alt="Logo" class="h-12">
+      <!-- Logout Icon -->
+      <a href="webdev.html" class="text-gray-600 hover:text-red-600 text-xl flex items-center gap-2">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        <span class="text-sm">Exit Lesson</span>
+      </a>
+      
     </div>
   </header>
 
-  <main class="container mx-auto py-10">
-    <h2 id="lesson-title" class="text-2xl font-bold mb-4">Lesson</h2>
-    <p id="lesson-desc" class="mb-6 text-gray-700"></p>
+  <div class="flex ">
+    <aside class="w-64 bg-white shadow h-screen p-4">
+      <h2 class="text-lg font-semibold mt-20 mb-4">Lessons</h2>
+      
+      <!-- Current Lesson Progress -->
+      <div id="current-lesson" class="mb-4">
+        <h3 class="font-semibold text-xl">Current Lesson</h3>
+        <p id="current-lesson-title" class="text-gray-600"></p>
+        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+          <div id="lesson-progress-bar" class="bg-blue-600 h-2 rounded-full" style="width: 0%;"></div>
+        </div>
+      </div>
+    
+      <!-- Lesson Links (sidebar navigation) -->
+      <div class="mt-8">
+        <h3 class="text-lg font-semibold">Lesson Navigation</h3>
+        <ul id="lesson-links">
+          <!-- Lessons will be added dynamically -->
+        </ul>
+      </div>
+    </aside>
 
-    <div class="bg-white p-4 rounded shadow">
-      <textarea id="editor" name="editor"></textarea>
-      <button onclick="runCode()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded">Run Code</button>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 pt-20 overflow-y-auto">
+      <h2 id="lesson-title" class="text-2xl font-bold mb-2">Welcome to HTML</h2>
+      <p id="lesson-desc" class="mb-4 text-gray-700">Choose a lesson to begin coding.</p>
+    
+      <!-- Progress Bar -->
+      <div class="w-full bg-gray-200 rounded-full h-2 mb-6">
+        <div id="progress-bar" class="bg-blue-600 h-2 rounded-full" style="width: 0%;"></div>
+      </div>
+    
+      <!-- Lesson Info Panel -->
+      <div id="lesson-info" class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded">
+        <h3 id="lesson-header" class="text-xl font-semibold text-yellow-800 mb-2">Lesson Title</h3>
+        <p id="lesson-description" class="text-gray-700">Lesson description goes here. This will help learners understand the core idea of the lesson before they code.</p>
+    
+        <div id="lesson-challenge" class="mt-4 text-sm text-blue-800">
+          <strong>Challenge:</strong> <span id="challenge-text">Try doing something with the code below!</span>
+        </div>
+      </div>
+    
+      <!-- Code Editor -->
+      <div class="bg-white p-4 rounded shadow">
+        <textarea id="editor" name="editor"></textarea>
+        <button onclick="runCode()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded">Run Code</button>
+      </div>
+    
+      <!-- Output Preview -->
+      <h3 class="text-xl mt-6 font-semibold">Output:</h3>
+      <iframe id="output" class="w-full h-64 bg-white p-2 border mt-2"></iframe>
+    
+      <!-- Quiz Section -->
+      <div id="quiz-section" class="hidden mt-8">
+        <h3 class="text-xl font-semibold mb-4">Quiz: Test Your Knowledge</h3>
+        <div id="quiz-container"></div>
+        <button onclick="submitQuiz()" class="mt-4 bg-blue-600 text-white px-6 py-2 rounded">Submit Quiz</button>
+      </div>
+    
+      <!-- Completion -->
+      <div class="mt-10 text-right">
+        <button onclick="moveToNextLesson()" class="bg-blue-600 text-white px-6 py-2 rounded">Next Lesson</button>
+      </div>
+    </main>
+    
+  </div>
+
+  <!-- Modal -->
+<div id="modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex justify-center items-center">
+  <div class="bg-white p-6 rounded shadow-lg w-1/3 max-w-xs">
+    <h3 class="text-xl font-semibold mb-4">COMPLETE!!</h3>
+    <p class="mb-4">Continue to next lesson?</p>
+    <div class="flex justify-between">
+      <button onclick="moveToNextLesson()" class="bg-green-600 text-white px-6 py-2 rounded">Yes</button>
+      <button onclick="closeModal()" class="bg-red-600 text-white px-6 py-2 rounded">No</button>
     </div>
+  </div>
+</div>
+<!-- Error message -->
+<div id="errorMsg" class="fade" style="color: red; margin-top: 10px;">
+  🚫 Hmm, that doesn't look quite right. Try again!
+</div>
 
-    <h3 class="text-xl mt-6 font-semibold">Output:</h3>
-    <iframe id="output" class="w-full h-64 bg-white p-2 border mt-2"></iframe>
+<!-- Success Button -->
+<button id="nextBtn" class="fade" disabled style="margin-top: 10px;">
+  ✅ Challenge Complete! Proceed
+</button>
 
-    <div class="mt-10 text-right">
-      <button onclick="completeLesson()" class="bg-blue-600 text-white px-6 py-2 rounded">Mark Complete</button>
-    </div>
-  </main>
-
+  <!-- CodeMirror & Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/htmlmixed/htmlmixed.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/css/css.min.js"></script>
+
   <script>
     const editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
       mode: 'htmlmixed',
@@ -45,46 +135,464 @@
       theme: 'default',
     });
 
-    const lesson = localStorage.getItem('currentLesson') || 'level1';
-    const lessonContent = {
-      level1: {
-        title: 'Level 1: Basics',
-        desc: 'Learn HTML structure and basic tags.',
-        code: '<!DOCTYPE html>\n<html>\n<head><title>My First Page</title></head>\n<body>\n  <h1>Hello, world!</h1>\n</body>\n</html>'
-      },
-      level2: {
-        title: 'Level 2: Intermediate',
-        desc: 'Work with forms and CSS layout techniques.',
-        code: '<style>form { display: flex; flex-direction: column; }</style>\n<form>\n  <label>Name:</label><input type="text">\n  <label>Email:</label><input type="email">\n</form>'
-      },
-      level3: {
-        title: 'Level 3: Final Project',
-        desc: 'Create a simple web project and prepare for the final quiz.',
-        code: '<!DOCTYPE html>\n<html>\n<head><style>h1 { color: purple; }</style></head>\n<body>\n  <h1>My Mini Project</h1>\n</body>\n</html>'
-      }
-    };
+    const lessons = {
+  level1: {
+    title: 'What is HTML?',
+    desc: 'Learn HTML structure and basic tags.',
+    description: 'HTML is an incredibly powerful and versatile language that lets you create everything from simple web pages to complex web applications, with the amazing ability to structure content on the web.',
+    challenge: 'Press the "Run Code" button to see your first web page in action!',
+    code: '<!DOCTYPE html>\n<html>\n<head><title>My First Page</title></head>\n<body>\n  <h1>Hello, world!</h1>\n</body>\n</html>',
+  
+  },
+  level2: {
+  title: 'Basic Structure of an HTML',
+  desc: 'Learn how to build the foundation of every webpage using basic HTML tags.',
+    description: `Every HTML document follows a simple structure. 
 
-    const { title, desc, code } = lessonContent[lesson];
-    document.getElementById('lesson-title').textContent = title;
-    document.getElementById('lesson-desc').textContent = desc;
-    editor.setValue(code);
+It starts with <!DOCTYPE html>, which tells the version of HTML we are using. 
 
-    function runCode() {
-      const outputFrame = document.getElementById('output');
-      const userCode = editor.getValue();
-      const doc = outputFrame.contentDocument || outputFrame.contentWindow.document;
-      doc.open();
-      doc.write(userCode);
-      doc.close();
+This is followed by the <html> tag, which contains all the HTML content. 
+
+Inside the <html> tag, we add the <body> tag, which holds all the visible content of the webpage.`,
+  challenge: `You are given the base code of an HTML page. Place the following text inside the <body> tag:
+
+"To infinity and beyond!"
+`,  code: `<!DOCTYPE html>
+<html>
+    <body>
+        
+    </body>
+</html>`,
+},
+
+level3: {
+  title: 'Tags and Elements',
+  desc: 'Understand the difference between HTML tags and elements with a hands-on example.',
+  description: `In HTML, tags are keywords enclosed in angle brackets, like <html>. They tell the browser how to display the content. Elements are the components of an HTML document, consisting of a start tag, content, and an end tag.
+
+Here's a simple breakdown:
+
+Tags: Keywords in angle brackets that define how content is displayed.
+Elements: Components made up of a start tag, content, and an end tag.
+
+For example:
+
+<p>This is a paragraph.</p>
+
+In this example, <p> is the start tag, "This is a paragraph." is the content, and </p> is the end tag. Together, they form a paragraph element.`,
+  challenge: `**Easy**
+
+You are given an HTML code with a paragraph tag (<p>). Change the text inside the paragraph to:
+
+**Hello, HTML!**
+
+Make sure to not delete the start or end tag!`,
+  code: `<!DOCTYPE html>
+<html>
+    <body>
+        <p>This is some text</p>
+    </body>
+</html>`
+},
+
+
+level4: {
+  title: 'Nesting and Closing Tags',
+  desc: 'Learn how to properly nest HTML elements and ensure all tags are closed correctly.',
+  description: `In HTML, nesting means placing one element inside another. For example, you can put a <strong> tag inside a <p> tag to make text bold within a paragraph.
+
+Here's how it looks:
+
+<p>This is <strong>bold</strong> text.</p>
+
+Closing tags are crucial. Every start tag must have a corresponding end tag. The end tag is the same as the start tag but with a forward slash (/) before the tag name. For example, <p> starts a paragraph, and </p> ends it.
+
+Incorrect nesting can lead to rendering issues. Always make sure to close tags in the correct order. The inner tag should be closed before the outer tag.
+
+Correct nesting:
+
+<p>This is <strong>bold</strong> text.</p>
+
+Incorrect nesting:
+
+<p>This is <strong>bold text.</p></strong>`,
+  challenge: `**Easy**
+
+You are given an HTML document with a paragraph element. Inside the paragraph, nest a <strong> element around the word "important".`,
+  code: `<!DOCTYPE html>
+<html>
+    <body>
+        <p>This is an important message.</p>
+    </body>
+</html>`
+},
+
+level5: {
+  title: 'Comments in HTML',
+  desc: 'Use comments to leave helpful notes in your code that won’t appear on the page.',
+  description: `Comments are notes in the code that don't appear on the web page. They are useful for:
+
+- Explaining complex code  
+- Leaving notes for yourself or others  
+- Temporarily disabling code  
+
+In HTML, comments are written between \`<!--\` and \`-->\`.
+
+Here's an example:
+
+\`\`\`html
+<!-- This is a comment -->
+<p>This is a paragraph.</p>
+\`\`\``,
+  challenge: `**Easy**
+
+Add a comment inside the <body> tag with your name and today’s date.`,
+  code: `<!DOCTYPE html>
+<html>
+    <body>
+        <p>This is a paragraph.</p>
+    </body>
+</html>`
+},
+
+level6: {
+  title: 'Headings',
+  desc: 'Learn how to organize your page with headings from <h1> to <h6>.',
+  description: `You're probably not going to use only plain text on your website, right? If you want to add a title or section name, the best way is to use headings. There are six levels of headings, from <h1> (the most important) to <h6> (the least important). 
+
+<h1>This is a main heading</h1>  
+<h2>This is a subheading</h2>  
+<h3>This is a sub-subheading</h3>
+
+Headings organize your content and make it easier for people and search engines to understand your page. Start with <h1> for the main title and use <h2> to <h6> for other sections.`,
+  challenge: `**Easy**
+
+Create an HTML document with a main heading (<h1>) that says "Welcome to My Page" and a subheading (<h2>) that says "Introduction".`,
+  code: `<!DOCTYPE html>
+<html>
+  <body>
+    <!-- Write code here -->
+  </body>
+</html>`
+},
+level7: {
+  title: 'Paragraphs',
+  desc: 'Learn how to organize text into blocks using paragraphs.',
+  description: `In HTML, paragraphs are used to show blocks of text. You define them with the <p> tag.
+
+When you put text between <p> and </p>, the browser will display it as a separate paragraph with some space above and below.
+
+Here’s how you can add a paragraph in HTML:
+
+<p>This is a paragraph.</p>
+<p>This is another paragraph.</p>
+
+For example, if you're creating an article, the title would be a heading, and the actual text would be a paragraph.`,
+  challenge: `**Easy**
+
+Create an HTML document with two paragraphs. The first paragraph should say "Welcome to our pizza restaurant!" and the second paragraph should say "Explore our menu today."`,
+  code: `<!DOCTYPE html>
+<html>
+  <body>
+    <!-- Write code here -->
+  </body>
+</html>`
+},
+
+level8: {
+  title: 'Line Breaks',
+  desc: 'Learn how to use the <br> tag to break lines within a paragraph.',
+  description: `In HTML, the <br> tag is used to create a line break. This tag is useful when you want to start text on a new line without creating a new paragraph. Unlike the <p> tag, which adds a blank line before and after the text, the <br> tag simply moves the text to the next line.
+
+Here's how you can use the <br> tag in HTML:
+
+<p>This is a line.<br>This is another line.</p>
+
+In this example, "This is a line." and "This is another line." will be displayed on separate lines within the same paragraph. The <br> tag is an empty element, which means it doesn't have a closing tag. You just write <br> where you want the line break to occur.`,
+  challenge: `**Easy**
+
+You are given an HTML document with a paragraph. Use a line break to make the text appear like this:
+
+Hello, world!  
+This is a new line.`,
+  code: `<!DOCTYPE html>
+<html>
+  <body>
+    <p>Hello, world!This is a new line.</p>
+  </body>
+</html>`
+}
+
+
+
+
+
+};
+const expectedOutputs = [
+  // level1
+  `<!DOCTYPE html>
+<html>
+<head><title>My First Page</title></head>
+<body>
+  <h1>Hello, world!</h1>
+</body>
+</html>`,
+
+  // level2
+  `<!DOCTYPE html>
+<html>
+    <body>
+        To infinity and beyond!
+    </body>
+</html>`,
+
+  // level3
+  `<!DOCTYPE html>
+<html>
+    <body>
+        <p>Hello, HTML!</p>
+    </body>
+</html>`,
+
+  // level4
+  `<!DOCTYPE html>
+<html>
+    <body>
+        <p>This is an <strong>important</strong> message.</p>
+    </body>
+</html>`,
+
+  // level5
+  `<!DOCTYPE html>
+<html>
+    <body>
+        <!-- Your Name - Today's Date -->
+        <p>This is a paragraph.</p>
+    </body>
+</html>`,
+
+  // level6
+  `<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Welcome to My Page</h1>
+    <h2>Introduction</h2>
+  </body>
+</html>`,
+
+  // level7
+  `<!DOCTYPE html>
+<html>
+  <body>
+    <p>Welcome to our pizza restaurant!</p>
+    <p>Explore our menu today.</p>
+  </body>
+</html>`,
+
+  // level8
+  `<!DOCTYPE html>
+<html>
+  <body>
+    <p>Hello, world!<br>This is a new line.</p>
+  </body>
+</html>`
+];
+
+
+    function loadLesson(level) {
+      localStorage.setItem('currentLesson', level);
+      const lesson = lessons[level];
+      document.getElementById('lesson-title').textContent = lesson.title;
+      document.getElementById('lesson-desc').textContent = lesson.desc;
+      editor.setValue(lesson.code);
+      document.getElementById('quiz-section').classList.add('hidden'); // Hide quiz initially
+      loadProgress(level);
+      document.getElementById('output').srcdoc = ''; // Clear previous output
+      loadQuiz(lesson.quiz);
+    }
+
+    function loadProgress(level) {
+      const progress = JSON.parse(localStorage.getItem('progress')) || {};
+      const lessonProgress = progress[level] || 0;
+      document.getElementById('progress-bar').style.width = lessonProgress + '%';
+    }
+    let expectedOutput = "<p>Hello, world!<br>This is a new line.</p>"; // can change per level
+
+    function runCode(levelIndex = 0) {
+  const userCode = editor.getValue();
+  const outputFrame = document.getElementById('output');
+  const nextButton = document.getElementById('nextBtn');
+  const errorMsg = document.getElementById('errorMsg');
+
+  const expected = expectedOutputs[levelIndex];
+
+  outputFrame.srcdoc = userCode;
+
+  const normalizedExpected = expected.replace(/\s+/g, ' ').trim().toLowerCase();
+  const normalizedUserCode = userCode.replace(/\s+/g, ' ').trim().toLowerCase();
+
+  if (normalizedUserCode.includes(normalizedExpected)) {
+    nextButton.disabled = false;
+    nextButton.classList.add('show');
+    errorMsg.classList.remove('show');
+  } else {
+    nextButton.disabled = true;
+    nextButton.classList.remove('show');
+    errorMsg.classList.add('show');
+  }
+}
+
+
+
+    function showModal() {
+      document.getElementById('modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.add('hidden');
     }
 
     function completeLesson() {
-      let progress = JSON.parse(localStorage.getItem('progress')) || {};
-      progress[lesson] = 100;
-      localStorage.setItem('progress', JSON.stringify(progress));
-      alert('Lesson marked as complete! Returning to dashboard.');
-      window.location.href = 'dashboard.html';
+  const current = localStorage.getItem('currentLesson') || 'level1';
+  let progress = JSON.parse(localStorage.getItem('progress')) || {};
+  progress[current] = 100;
+  localStorage.setItem('progress', JSON.stringify(progress));
+  loadProgress(current);
+  document.getElementById('quiz-section').classList.remove('hidden'); // Show quiz section
+  showModal(); // Show the modal after completing the lesson
+}
+
+function moveToNextLesson() {
+  const current = localStorage.getItem('currentLesson') || 'level1';
+  const nextLesson = getNextLesson(current);
+  loadLesson(nextLesson);
+  closeModal(); // Close the modal after selecting "Yes"
+  updateSidebar(); // Update sidebar after lesson change
+}
+
+function getNextLesson(currentLesson) {
+  const lessonKeys = Object.keys(lessons);
+  const currentIndex = lessonKeys.indexOf(currentLesson);
+  const nextIndex = currentIndex + 1;
+
+  if (nextIndex < lessonKeys.length) {
+    return lessonKeys[nextIndex];
+  } else {
+    alert('You have completed all lessons!');
+    return currentLesson; // Keep on the last lesson
+  }
+}
+
+
+
+    function loadQuiz(quiz) {
+      const quizContainer = document.getElementById('quiz-container');
+      quizContainer.innerHTML = ''; // Clear previous quiz
+      quiz.forEach((q, index) => {
+        const quizItem = document.createElement('div');
+        quizItem.classList.add('mb-4');
+        quizItem.innerHTML = `
+          <p class="font-semibold">${q.question}</p>
+          ${q.options.map((option, i) => `
+            <label class="block mt-2">
+              <input type="radio" name="q${index}" value="${option}" class="mr-2">
+              ${option}
+            </label>
+          `).join('')}
+        `;
+        quizContainer.appendChild(quizItem);
+      });
     }
+
+    function submitQuiz() {
+      const quizAnswers = JSON.parse(localStorage.getItem('quizAnswers')) || {};
+      const quiz = lessons[localStorage.getItem('currentLesson')].quiz;
+      let score = 0;
+      quiz.forEach((q, index) => {
+        const selectedAnswer = document.querySelector(`input[name="q${index}"]:checked`);
+        if (selectedAnswer && selectedAnswer.value === q.answer) {
+          score++;
+        }
+      });
+      alert(`You scored ${score} out of ${quiz.length}`);
+      localStorage.setItem('quizAnswers', JSON.stringify(quizAnswers));
+    }
+
+    // Load default or last lesson on page load
+    window.onload = () => {
+      const defaultLesson = localStorage.getItem('currentLesson') || 'level1';
+      loadLesson(defaultLesson);
+    };
+
+    // Function to update the sidebar content
+function updateSidebar() {
+  const currentLesson = localStorage.getItem('currentLesson') || 'level1';
+  const lesson = lessons[currentLesson];
+
+  // Update the current lesson section
+  document.getElementById('current-lesson-title').textContent = lesson.title;
+
+  // Update the progress bar
+  loadProgress(currentLesson);
+
+  // Update the lesson links in the sidebar
+  const lessonLinksContainer = document.getElementById('lesson-links');
+  lessonLinksContainer.innerHTML = ''; // Clear existing links
+
+  Object.keys(lessons).forEach((key) => {
+    const lessonItem = document.createElement('li');
+    lessonItem.classList.add('mb-2');
+
+    const lessonLink = document.createElement('a');
+    lessonLink.href = '#';
+    lessonLink.textContent = lessons[key].title;
+    lessonLink.classList.add('text-blue-600', 'hover:underline', 'block');
+    
+    if (key === currentLesson) {
+      lessonLink.classList.add('font-semibold');
+    }
+
+    lessonLink.addEventListener('click', () => {
+      loadLesson(key); // Load the selected lesson
+    });
+
+    lessonItem.appendChild(lessonLink);
+    lessonLinksContainer.appendChild(lessonItem);
+  });
+}
+
+// Call this function when the page loads or when the lesson is changed
+updateSidebar();
+
+function loadProgress(level) {
+  const progress = JSON.parse(localStorage.getItem('progress')) || {};
+  const lessonProgress = progress[level] || 0;
+  document.getElementById('lesson-progress-bar').style.width = lessonProgress + '%';
+}
+
+function loadLesson(level) {
+  localStorage.setItem('currentLesson', level);
+  const lesson = lessons[level];
+  
+  // Update Lesson Title & Description
+  document.getElementById('lesson-title').textContent = lesson.title;
+  document.getElementById('lesson-header').textContent = lesson.title;
+  document.getElementById('lesson-description').textContent = lesson.description;
+  document.getElementById('challenge-text').textContent = lesson.challenge;
+
+  // Set editor content
+  editor.setValue(lesson.code);
+  document.getElementById('quiz-section').classList.add('hidden'); // Hide quiz initially
+  loadProgress(level);
+  document.getElementById('output').srcdoc = ''; // Clear previous output
+  loadQuiz(lesson.quiz);
+  updateSidebar(); // Update sidebar when a new lesson is loaded
+}
+
+window.onload = () => {
+  loadLesson('level1');
+};
+
   </script>
 </body>
 </html>
