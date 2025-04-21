@@ -418,10 +418,7 @@
       Enroll Now
     </button>
 </div>
-
-
     </div>
-
     </div>
   </section>
 
@@ -433,74 +430,113 @@
     <p class="mb-2">Price: <strong id="modalCoursePrice">R0</strong></p>
 
     <!-- Payfast Form -->
-    <form action="https://sandbox.payfast.co.za/eng/process" method="post">
-        <input type="hidden" name="merchant_id" value="10000100"> <!-- Example sandbox ID -->
-        <input type="hidden" name="merchant_key" value="46f0cd694581a"> <!-- Example sandbox key -->
-      
-        <input type="hidden" name="return_url" value="http://localhost:5000/myprofile.html">
-        <input type="hidden" name="cancel_url" value="https://yourdomain.com/cancelled.html">
-        <input type="hidden" name="notify_url" value="https://yourdomain.com/notify.html">
-      
-        <input type="hidden" name="amount" value="10.00">
-        <input type="hidden" name="item_name" value="Test Course">
-      
-        <!-- Optional Buyer Info -->
-        <input type="hidden" name="email_address" value="test@example.com">
-        <input type="hidden" name="name_first" value="Louis">
-        <input type="hidden" name="name_last" value="Smith">
-      
-        <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded mt-3 w-full">Proceed to Payment</button>
-      </form>
+    <form action="https://sandbox.payfast.co.za/eng/process" method="post" onsubmit="redirectToPayment(event)">
+      <input type="hidden" name="merchant_id" value="10000100">
+      <input type="hidden" name="merchant_key" value="46f0cd694581a">
+    
+      <!-- Dynamically generated URLs -->
+      <input type="hidden" id="return_url" name="return_url">
+      <input type="hidden" id="cancel_url" name="cancel_url">
+      <input type="hidden" id="notify_url" name="notify_url">
+
+      <input type="hidden" name="amount" value="10.00">
+      <input type="hidden" name="item_name" value="Test Course">
+    
+      <!-- Optional buyer info -->
+      <input type="hidden" name="email_address" value="test@example.com">
+      <input type="hidden" name="name_first" value="Louis">
+      <input type="hidden" name="name_last" value="Smith">
+    
+      <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded mt-3 w-full">Proceed to Payment</button>
+    </form>
+    
   </div>
 </div>
 
+<script>
+  let selectedCourse = "";
+  let coursePrice = "";
+  let userEmail = localStorage.getItem("userEmail"); 
 
-  <script>
-    function setCourse(buttonElement) {
-  selectedCourse = buttonElement.getAttribute("data-course");
-  coursePrice = buttonElement.getAttribute("data-price");
+  function setCourse(buttonElement) {
+    selectedCourse = buttonElement.getAttribute("data-course");
+    coursePrice = buttonElement.getAttribute("data-price");
 
-  // Update modal text
-  document.getElementById("modalCourseTitle").innerText = `Enroll in ${selectedCourse}`;
-  document.getElementById("modalCoursePrice").innerText = `R${coursePrice}`;
+    // Update modal text
+    document.getElementById("modalCourseTitle").innerText = `Enroll in ${selectedCourse}`;
+    document.getElementById("modalCoursePrice").innerText = `R${coursePrice}`;
 
-  // Update Payfast form hidden inputs
-  document.querySelector("input[name='amount']").value = coursePrice;
-  document.querySelector("input[name='item_name']").value = selectedCourse;
+    // Update Payfast form hidden inputs
+    document.querySelector("input[name='amount']").value = coursePrice;
+    document.querySelector("input[name='item_name']").value = selectedCourse;
 
-  showPaymentModal();
-}
+    showPaymentModal();
+  }
 
+  const origin = window.location.origin;
+  if (origin.startsWith("https://")) {
+    document.getElementById("return_url").value = `${origin}/myprofile.html`;
+    document.getElementById("cancel_url").value = `${origin}/cancelled.html`;
+    document.getElementById("notify_url").value = `${origin}/notify`;
+  }
 
-function showPaymentModal() {
-  document.getElementById("paymentModal").classList.remove("hidden");
-}
+  function showPaymentModal() {
+    document.getElementById("paymentModal").classList.remove("hidden");
+  }
 
-function closeModal() {
-  document.getElementById("paymentModal").classList.add("hidden");
-}
+  function closeModal() {
+    document.getElementById("paymentModal").classList.add("hidden");
+  }
 
-function redirectToPayment() {
-  document.getElementById("pfAmount").value = coursePrice;
-  document.getElementById("pfItemName").value = selectedCourse;
+  function redirectToPayment(event) {
+    event.preventDefault();  // Prevent the form from submitting immediately
+    // Check if userEmail exists
+    if (!userEmail) {
+        alert("Please log in before enrolling in a course.");
+        window.location.href = "codex.html";
+        return;
+      }
+    // Prepare the purchase data
+    const purchaseData = {
+      course: selectedCourse,
+      price: coursePrice,
+      email: userEmail,
+      created_at: new Date().toISOString(),
+    };
 
-  // Optionally submit the form programmatically
-  // document.querySelector("form").submit();
-}
-
-    function filterCourses() {
-      const searchQuery = document.getElementById('courseSearch').value.toLowerCase();
-      const courses = document.querySelectorAll('.course-card');
-
-      courses.forEach(course => {
-        const courseTitle = course.querySelector('h4').textContent.toLowerCase();
-        if (courseTitle.includes(searchQuery)) {
-          course.style.display = 'block';
+    // Send the purchase data to your backend (Server-side API) before proceeding with the payment
+    fetch("http://localhost:5000/savePurchase", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(purchaseData),
+    })
+      .then((response) => {
+        if (response.ok) {
+          // Proceed with the Payfast payment after saving the data to the database
+          document.querySelector("form").submit(); // Submit the Payfast form
         } else {
-          course.style.display = 'none';
+          alert("Error saving purchase data.");
         }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("An error occurred while processing your payment.");
       });
-    }
-  </script>
+  }
+
+  function filterCourses() {
+    const searchQuery = document.getElementById('courseSearch').value.toLowerCase();
+    const courses = document.querySelectorAll('.course-card');
+
+    courses.forEach(course => {
+      const courseTitle = course.querySelector('h4').textContent.toLowerCase();
+      course.style.display = courseTitle.includes(searchQuery) ? 'block' : 'none';
+    });
+  }
+</script>
+
+
 </body>
 </html>
