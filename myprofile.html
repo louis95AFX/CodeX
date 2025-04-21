@@ -7,6 +7,22 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
+<!-- Spinner styles (you can put this in your CSS file or inside <style>) -->
+  <style>
+    .loader {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  </style>
 <body class="bg-gray-100 text-gray-800">
 
   <!-- Header -->
@@ -82,11 +98,11 @@
         <ul id="coursesList" class="space-y-2 mb-4"></ul>
         <div class="text-right">
           <a href="#courses" class="text-sm text-white bg-blue-600 px-4 py-1 rounded hover:bg-blue-700 transition inline-block">
-           My Courses
+            My Courses
           </a>
         </div>
       </div>
-
+      
       <!-- Progress -->
       <div class="bg-white p-6 rounded shadow hover:shadow-md transition">
         <div class="flex items-center gap-2 mb-2">
@@ -140,6 +156,11 @@
 
     </div>
   </main>
+  <div id="loadingSpinner" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255,255,255,0.8); display: flex; justify-content: center;
+  align-items: center; z-index: 9999;">
+  <div class="loader"></div>
+</div>
 
   <!-- Footer -->
   <footer class="bg-gray-800 shadow mt-12">
@@ -159,123 +180,164 @@
   </footer>
 
   <script>
-  function previewImage(event) {
-  const selectedFile = event.target.files[0];
-  const output = document.getElementById("profilePic");
-
-  // Preview image immediately using FileReader
-  if (selectedFile) {
-    const reader = new FileReader();
-    reader.onload = function () {
-      output.src = reader.result; // Temporary preview
-    };
-    reader.readAsDataURL(selectedFile);
-  } else {
-    return;
-  }
-
-  // Get user ID from localStorage
-  const userId = localStorage.getItem("userID");
-  if (!userId) {
-    alert("You are not logged in.");
-    window.location.href = "codex.html"; // Redirect to login page
-    return;
-  }
-
-  // Prepare FormData to upload
-  const formData = new FormData();
-  formData.append("profilePic", selectedFile);
-
-  // Upload to server
-  fetch(`http://localhost:5000/upload-profile-pic/${userId}`, {
-    method: "POST",
-    body: formData,
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.imageUrl) {
-        // Correct the image source to use the uploaded file URL from the server
-        output.src = `http://localhost:5000${data.imageUrl}`;
+    // Preview image and upload to server
+    function previewImage(event) {
+      const selectedFile = event.target.files[0];
+      const output = document.getElementById("profilePic");
+  
+      if (selectedFile) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          output.src = reader.result; // Temporary preview
+        };
+        reader.readAsDataURL(selectedFile);
       } else {
-        console.warn("Server did not return an imageUrl");
+        return;
       }
-    })
-    .catch((err) => {
-      console.error("Upload error:", err);
-    });
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  // Get user ID from localStorage
-  const userId = localStorage.getItem("userID");
-
-  if (!userId) {
-    alert("You are not logged in.");
-    window.location.href = "codex.html"; // Redirect to login page
-    return;
-  }
-
-  fetch(`http://localhost:5000/user/${userId}`)
-    .then((res) => {
-      if (!res.ok) throw new Error("Failed to fetch user data");
-      return res.json();
-    })
-    .then((userData) => {
-      document.getElementById("welcomeMessage").textContent = `Welcome, ${userData.name}`;
-      document.getElementById("userName").textContent = userData.name;
-      document.getElementById("studentNumber").textContent = `Student Number: ${userData.student_id}`;
-
-      const certCount = userData.certificateCount || 0;
-      document.getElementById("certificateCount").textContent = `${certCount} certificate${certCount !== 1 ? 's' : ''}`;
-
-      const coursesList = document.getElementById("coursesList");
-      const progressList = document.getElementById("progressList");
-      const paymentHistory = document.getElementById("paymentHistory");
-
-      // Check if courses array exists before looping over it
-      if (userData.courses && Array.isArray(userData.courses)) {
-        userData.courses.forEach(course => {
-          const listItem = document.createElement("li");
-          listItem.className = "flex justify-between items-center";
-          listItem.innerHTML = `<span>${course.name}</span><button class='text-blue-600 font-semibold hover:text-blue-800 transition'>Continue</button>`;
-          coursesList.appendChild(listItem);
-
-          const progressItem = document.createElement("div");
-          progressItem.className = "mb-4";
-          progressItem.innerHTML = `
-            <div class='flex justify-between items-center mb-1'>
-              <p>${course.name}</p>
-              <span class='text-sm font-medium text-gray-600'>${course.progress}%</span>
-            </div>
-            <div class='w-full bg-gray-200 rounded-full h-2'>
-              <div class='bg-blue-600 h-2 rounded-full' style='width: ${course.progress}%'></div>
-            </div>`;
-          progressList.appendChild(progressItem);
+  
+      const userId = localStorage.getItem("userID");
+      if (!userId) {
+        alert("You are not logged in.");
+        window.location.href = "codex.html";
+        return;
+      }
+  
+      const formData = new FormData();
+      formData.append("profilePic", selectedFile);
+  
+      fetch(`http://localhost:5000/upload-profile-pic/${userId}`, {
+        method: "POST",
+        body: formData,
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.imageUrl) {
+            output.src = `http://localhost:5000${data.imageUrl}`;
+          } else {
+            console.warn("Server did not return an imageUrl");
+          }
+        })
+        .catch(err => {
+          console.error("Upload error:", err);
         });
+    }
+  
+    // Redirect to course purchase
+    function handlePurchase() {
+      window.location.href = 'purchase.html';
+    }
+  
+    // Main logic runs after DOM is loaded
+    document.addEventListener("DOMContentLoaded", async () => {
+      const spinner = document.getElementById("loadingSpinner");
+      if (spinner) spinner.style.display = "flex";
+  
+      const userId = localStorage.getItem("userID");
+      const userEmail = localStorage.getItem("userEmail");
+  
+      if (!userId) {
+        alert("You are not logged in.");
+        window.location.href = "codex.html";
+        return;
       }
-
-      // Check if paymentHistory array exists before looping over it
-      if (userData.paymentHistory && Array.isArray(userData.paymentHistory)) {
-        userData.paymentHistory.forEach(payment => {
-          const paymentItem = document.createElement("li");
-          paymentItem.innerHTML = `${payment.course} – ${payment.amount} – <span class='text-green-600 font-semibold'>${payment.status}</span>`;
-          paymentHistory.appendChild(paymentItem);
-        });
+  
+      try {
+        // Fetch and populate user data
+        const res = await fetch(`http://localhost:5000/user/${userId}`);
+        if (!res.ok) throw new Error("Failed to fetch user data");
+        const userData = await res.json();
+  
+        document.getElementById("welcomeMessage").textContent = `Welcome, ${userData.name}`;
+        document.getElementById("userName").textContent = userData.name;
+        document.getElementById("studentNumber").textContent = `Student Number: ${userData.student_id}`;
+  
+        const certCount = userData.certificateCount || 0;
+        document.getElementById("certificateCount").textContent = `${certCount} certificate${certCount !== 1 ? 's' : ''}`;
+  
+        const coursesList = document.getElementById("coursesList");
+        const progressList = document.getElementById("progressList");
+        const paymentHistory = document.getElementById("paymentHistory");
+  
+        if (userData.courses && Array.isArray(userData.courses)) {
+          userData.courses.forEach(course => {
+            const listItem = document.createElement("li");
+            listItem.className = "flex justify-between items-center";
+            listItem.innerHTML = `<span>${course.name}</span><button class='text-blue-600 font-semibold hover:text-blue-800 transition'>Continue</button>`;
+            coursesList.appendChild(listItem);
+  
+            const progressItem = document.createElement("div");
+            progressItem.className = "mb-4";
+            progressItem.innerHTML = `
+              <div class='flex justify-between items-center mb-1'>
+                <p>${course.name}</p>
+                <span class='text-sm font-medium text-gray-600'>${course.progress}%</span>
+              </div>
+              <div class='w-full bg-gray-200 rounded-full h-2'>
+                <div class='bg-blue-600 h-2 rounded-full' style='width: ${course.progress}%'></div>
+              </div>`;
+            progressList.appendChild(progressItem);
+          });
+        }
+  
+        if (userData.paymentHistory && Array.isArray(userData.paymentHistory)) {
+          userData.paymentHistory.forEach(payment => {
+            const paymentItem = document.createElement("li");
+            paymentItem.innerHTML = `${payment.course} – ${payment.amount} – <span class='text-green-600 font-semibold'>${payment.status}</span>`;
+            paymentHistory.appendChild(paymentItem);
+          });
+        }
+  
+        if (userData.profilePic) {
+          const profilePic = document.getElementById("profilePic");
+          profilePic.src = `http://localhost:5000${userData.profilePic}`;
+        }
+      } catch (err) {
+        console.error("Error loading user data:", err);
       }
-
-      // Optional: Load profile picture if available
-      if (userData.profilePic) {
-        const profilePic = document.getElementById("profilePic");
-        profilePic.src = `http://localhost:5000${userData.profilePic}`;
+  
+      // Load course links
+      if (userEmail) {
+        try {
+          const response = await fetch(`http://localhost:5000/getUserCourses?email=${encodeURIComponent(userEmail)}`);
+          const courses = await response.json();
+  
+          const coursesList = document.getElementById("coursesList");
+          coursesList.innerHTML = "";
+  
+          if (courses.length === 0) {
+            coursesList.innerHTML = `<li class="text-gray-600">You haven't enrolled in any courses yet.</li>`;
+          } else {
+            const coursePageMap = {
+              "Web Development": "webdev.html",
+              "Graphic Design": "graphicdesign.html",
+              "Digital Marketing": "digitalmarketing.html"
+            };
+  
+            courses.forEach(course => {
+              const listItem = document.createElement("li");
+              listItem.className = "p-2 bg-gray-100 rounded hover:bg-blue-100 transition";
+  
+              const courseName = course.course;
+              const courseLink = coursePageMap[courseName] || `course.html?courseName=${encodeURIComponent(courseName)}`;
+  
+              listItem.innerHTML = `
+                <a href="${courseLink}" class="block text-blue-700">
+                  <strong>${courseName}</strong>
+                </a>
+              `;
+  
+              coursesList.appendChild(listItem);
+            });
+          }
+        } catch (error) {
+          console.error("Error loading user courses:", error);
+          document.getElementById("coursesList").innerHTML = `<li class="text-red-600">Failed to load courses.</li>`;
+        }
       }
-    })
-    .catch((err) => {
-      console.error("Error loading user data:", err);
+  
+      if (spinner) spinner.style.display = "none";
     });
-});
-function handlePurchase() {
-  window.location.href = 'purchase.html'; // Replace with your actual course purchase page
-}
   </script>
+  
 </body>
 </html>
