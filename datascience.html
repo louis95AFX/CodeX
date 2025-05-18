@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Science Academy | Interactive Learning</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/r/r.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/sql/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/comment/comment.min.js"></script>
+    <style>
+        .cm-s-dracula.CodeMirror {
+            border-radius: 8px;
+            height: auto;
+            min-height: 100px;
+            font-size: 14px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .terminal-output {
+            background-color: #282a36;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            margin: 10px 0;
+        }
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.5s;
+        }
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .glow-button:hover {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.7);
+        }
+        .data-text {
+            background: linear-gradient(90deg, #3b82f6, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shine 3s linear infinite;
+            background-size: 200% auto;
+        }
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+        .data-visualization {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #1d4ed8 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-gray-800 border-b border-gray-700 sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-chart-line text-blue-400 text-2xl"></i>
+                <h1 class="text-2xl font-bold data-text">Data Science Academy</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <div class="w-12 h-12">
+                        <svg class="w-full h-full" viewBox="0 0 36 36">
+                            <path
+                                d="M18 2.0845
+                                a 15.9155 15.9155 0 0 1 0 31.831
+                                a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none"
+                                stroke="#2d3748"
+                                stroke-width="3"
+                            />
+                            <path
+                                class="progress-ring__circle"
+                                d="M18 2.0845
+                                a 15.9155 15.9155 0 0 1 0 31.831
+                                a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none"
+                                stroke="#3b82f6"
+                                stroke-width="3"
+                                stroke-dasharray="100, 100"
+                                stroke-dashoffset="100"
+                            />
+                        </svg>
+                    </div>
+                    <span class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs font-bold">0%</span>
+                </div>
+                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md glow-button transition-all">
+                    <i class="fas fa-user mr-2"></i>My Profile
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8 flex">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-gray-800 rounded-lg p-4 mr-6 hidden md:block h-fit sticky top-24">
+            <h2 class="text-xl font-bold mb-4 text-blue-400 flex items-center">
+                <i class="fas fa-list-ol mr-2"></i> Course Modules
+            </h2>
+            <ul class="space-y-2">
+                <li>
+                    <button class="w-full text-left px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-md flex items-center justify-between module-button" data-module="1">
+                        <span class="flex items-center">
+                            <i class="fas fa-database mr-2"></i> 
+                            Python for Data Science
+                        </span>
+                        <i class="fas fa-check-circle text-gray-500"></i>
+                    </button>
+                </li>
+                <li>
+                    <button class="w-full text-left px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-md flex items-center justify-between module-button" data-module="2">
+                        <span class="flex items-center">
+                            <i class="fas fa-chart-bar mr-2"></i> 
+                            Data Visualization
+                        </span>
+                        <i class="fas fa-check-circle text-gray-500"></i>
+                    </button>
+                </li>
+                <li>
+                    <button class="w-full text-left px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-md flex items-center module-button" data-module="3">
+                        <i class="fas fa-brain mr-2"></i> 
+                        Machine Learning Basics
+                    </button>
+                </li>
+                <li>
+                    <button class="w-full text-left px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-md flex items-center module-button" data-module="4">
+                        <i class="fas fa-project-diagram mr-2"></i> 
+                        Deep Learning
+                    </button>
+                </li>
+                <li>
+                    <button class="w-full text-left px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-md flex items-center module-button" data-module="5">
+                        <i class="fas fa-server mr-2"></i> 
+                        Big Data Technologies
+                    </button>
+                </li>
+                <li>
+                    <button class="w-full text-left px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded-md flex items-center module-button" data-module="6">
+                        <i class="fas fa-flask mr-2"></i> 
+                        Data Science Projects
+                    </button>
+                </li>
+            </ul>
+
+            <h2 class="text-xl font-bold mt-8 mb-4 text-blue-400 flex items-center">
+                <i class="fas fa-trophy mr-2"></i> Achievements
+            </h2>
+            <div class="grid grid-cols-3 gap-2">
+                <div class="bg-gray-700 p-2 rounded-md flex flex-col items-center">
+                    <i class="fas fa-medal text-gray-500 text-xl mb-1"></i>
+                    <span class="text-xs">First Steps</span>
+                </div>
+                <div class="bg-gray-700 p-2 rounded-md flex flex-col items-center">
+                    <i class="fas fa-chart-pie text-gray-500 text-xl mb-1"></i>
+                    <span class="text-xs">Analyst</span>
+                </div>
+                <div class="bg-gray-700 p-2 rounded-md flex flex-col items-center">
+                    <i class="fas fa-robot text-gray-500 text-xl mb-1"></i>
+                    <span class="text-xs">ML Engineer</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1">
+            <!-- Course Header -->
+            <div class="bg-gradient-to-r from-gray-800 to-gray-700 rounded-lg p-6 mb-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold mb-2">Python for Data Science</h2>
+                        <p class="text-gray-300">Module 1 • 5 lessons • 3 hours</p>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-md flex items-center">
+                            <i class="fas fa-bookmark mr-2"></i> Save
+                        </button>
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center glow-button">
+                            <i class="fas fa-share-alt mr-2"></i> Share
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-4 w-full bg-gray-700 rounded-full h-2">
+                    <div class="bg-blue-500 h-2 rounded-full" style="width: 0%" id="module-progress"></div>
+                </div>
+            </div>
+
+            <!-- Lesson Content -->
+            <div class="bg-gray-800 rounded-lg p-6 mb-6">
+                <h3 class="text-xl font-bold mb-4 flex items-center">
+                    <i class="fas fa-database mr-2 text-blue-400"></i> 
+                    Pandas DataFrames Basics
+                </h3>
+                
+                <div class="prose prose-invert max-w-none mb-6">
+                    <p>Pandas is the fundamental package for data analysis in Python. It provides high-performance, easy-to-use data structures and data analysis tools.</p>
+                    
+                    <h4 class="text-lg font-semibold mt-4 text-blue-300">Key Pandas Concepts</h4>
+                    <ul class="list-disc pl-6">
+                        <li><strong>Series</strong> - One-dimensional labeled array capable of holding any data type</li>
+                        <li><strong>DataFrame</strong> - Two-dimensional labeled data structure with columns of potentially different types</li>
+                        <li><strong>Index</strong> - Immutable sequence used for indexing and alignment</li>
+                        <li><strong>GroupBy</strong> - Split-apply-combine operations on DataFrames</li>
+                    </ul>
+                    
+                    <div class="bg-gray-700 p-4 rounded-md my-4 border-l-4 border-blue-500">
+                        <h4 class="font-bold text-blue-300 flex items-center">
+                            <i class="fas fa-lightbulb mr-2"></i> Real-World Example
+                        </h4>
+                        <p>Imagine analyzing sales data:</p>
+                        <ul class="list-disc pl-6">
+                            <li>Load CSV data into a DataFrame</li>
+                            <li>Clean missing values</li>
+                            <li>Group by product category</li>
+                            <li>Calculate summary statistics</li>
+                            <li>Visualize trends over time</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-700 p-4 rounded-md mb-6">
+                    <h4 class="font-bold mb-3 flex items-center">
+                        <i class="fas fa-question-circle mr-2 text-yellow-400"></i> Quick Quiz
+                    </h4>
+                    <p class="mb-3">Which Pandas method is used to read a CSV file into a DataFrame?</p>
+                    <div class="space-y-2">
+                        <button class="w-full text-left px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-md quiz-option">pd.read_excel()</button>
+                        <button class="w-full text-left px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-md quiz-option correct-answer">pd.read_csv()</button>
+                        <button class="w-full text-left px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-md quiz-option">pd.load_csv()</button>
+                        <button class="w-full text-left px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-md quiz-option">pd.csv_to_df()</button>
+                    </div>
+                    <div class="mt-3 p-3 bg-green-900 text-green-200 rounded-md hidden" id="quiz-feedback">
+                        <i class="fas fa-check-circle mr-2"></i> Correct! pd.read_csv() is the standard method for importing CSV files into Pandas DataFrames.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Coding Section -->
+            <div class="bg-gray-800 rounded-lg p-6 mb-6">
+                <h3 class="text-xl font-bold mb-4 flex items-center">
+                    <i class="fas fa-code mr-2 text-green-400"></i> 
+                    Hands-On Exercise: Data Cleaning with Pandas
+                </h3>
+                
+                <div class="prose prose-invert max-w-none mb-6">
+                    <p>Let's practice cleaning a messy dataset. In this exercise, you'll complete the data cleaning function that handles missing values and converts data types.</p>
+                    
+                    <div class="bg-gray-700 p-4 rounded-md my-4 border-l-4 border-green-500">
+                        <h4 class="font-bold text-green-300 flex items-center">
+                            <i class="fas fa-info-circle mr-2"></i> Instructions
+                        </h4>
+                        <ol class="list-decimal pl-6">
+                            <li>Complete the <code>clean_data</code> function below</li>
+                            <li>Fill missing numerical values with the column mean</li>
+                            <li>Fill missing categorical values with "Unknown"</li>
+                            <li>Convert the 'date' column to datetime format</li>
+                            <li>Click "Run Code" to test your implementation</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-mono text-sm text-gray-400">data-cleaning.py</span>
+                        <div class="flex space-x-2">
+                            <button class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded-md text-sm" id="reset-code">
+                                <i class="fas fa-redo mr-1"></i> Reset
+                            </button>
+                            <button class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-sm glow-button" id="run-code">
+                                <i class="fas fa-play mr-1"></i> Run Code
+                            </button>
+                        </div>
+                    </div>
+                    <textarea id="code-editor">import pandas as pd
+import numpy as np
+
+def clean_data(df):
+    """
+    Clean a DataFrame by handling missing values and converting data types
+    
+    Parameters:
+    df (DataFrame): Input DataFrame with messy data
+    
+    Returns:
+    DataFrame: Cleaned DataFrame
+    """
+    # Your code here
+    # Hint: Use df.fillna() and pd.to_datetime()
+    
+    return df
+
+# Sample data
+data = {
+    'product': ['A', 'B', np.nan, 'D'],
+    'price': [10, np.nan, 30, 40],
+    'quantity': [100, 200, np.nan, 400],
+    'date': ['2023-01-01', '2023-01-02', 'invalid', '2023-01-04']
+}
+
+df = pd.DataFrame(data)
+cleaned_df = clean_data(df)
+
+# Display results
+print("Original DataFrame:")
+print(df)
+print("\nCleaned DataFrame:")
+print(cleaned_df)
+print("\nData types after cleaning:")
+print(cleaned_df.dtypes)</textarea>
+                </div>
+                
+                <div class="bg-gray-900 p-4 rounded-md">
+                    <h4 class="font-bold mb-2 flex items-center">
+                        <i class="fas fa-terminal mr-2 text-blue-400"></i> Console Output
+                    </h4>
+                    <div class="terminal-output" id="code-output">
+                        <span class="text-gray-400">// Output will appear here after running the code</span>
+                    </div>
+                </div>
+                
+                <div class="mt-4 p-4 bg-blue-900 text-blue-200 rounded-md hidden" id="hint-box">
+                    <h4 class="font-bold flex items-center">
+                        <i class="fas fa-lightbulb mr-2"></i> Need a hint?
+                    </h4>
+                    <p class="mt-2">For numerical columns, use <code>fillna()</code> with <code>df[column].mean()</code>. For categorical columns, fill with a string like "Unknown". Use <code>pd.to_datetime()</code> with <code>errors='coerce'</code> to handle invalid dates.</p>
+                    <button class="mt-2 text-blue-300 text-sm hover:underline" id="show-solution">Show solution</button>
+                    <div class="hidden mt-2" id="solution">
+                        <pre class="bg-gray-800 p-2 rounded-md overflow-x-auto">def clean_data(df):
+    # Fill numerical missing values with column mean
+    num_cols = df.select_dtypes(include=['number']).columns
+    df[num_cols] = df[num_cols].fillna(df[num_cols].mean())
+    
+    # Fill categorical missing values with "Unknown"
+    cat_cols = df.select_dtypes(exclude=['number']).columns
+    df[cat_cols] = df[cat_cols].fillna("Unknown")
+    
+    # Convert date column to datetime
+    df['date'] = pd.to_datetime(df['date'], errors='coerce')
+    
+    return df</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Visualization Example -->
+            <div class="data-visualization rounded-lg p-6 mb-6">
+                <h3 class="text-xl font-bold mb-4 flex items-center text-white">
+                    <i class="fas fa-chart-bar mr-2"></i> 
+                    Interactive Data Visualization
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white bg-opacity-10 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-3 text-blue-200">Sample Sales Data</h4>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full bg-white bg-opacity-5 rounded-md">
+                                <thead>
+                                    <tr class="text-left text-blue-200">
+                                        <th class="px-4 py-2">Month</th>
+                                        <th class="px-4 py-2">Product A</th>
+                                        <th class="px-4 py-2">Product B</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-t border-blue-900">
+                                        <td class="px-4 py-2">Jan</td>
+                                        <td class="px-4 py-2">120</td>
+                                        <td class="px-4 py-2">150</td>
+                                    </tr>
+                                    <tr class="border-t border-blue-900">
+                                        <td class="px-4 py-2">Feb</td>
+                                        <td class="px-4 py-2">135</td>
+                                        <td class="px-4 py-2">145</td>
+                                    </tr>
+                                    <tr class="border-t border-blue-900">
+                                        <td class="px-4 py-2">Mar</td>
+                                        <td class="px-4 py-2">148</td>
+                                        <td class="px-4 py-2">160</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white bg-opacity-10 p-4 rounded-lg flex items-center justify-center">
+                        <div class="w-full h-64 flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-chart-line text-4xl text-blue-200 mb-2"></i>
+                                <p class="text-blue-200">Visualization will appear here when you complete the coding exercise</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="flex justify-between">
+                <button class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-md flex items-center" id="prev-lesson">
+                    <i class="fas fa-arrow-left mr-2"></i> Previous Lesson
+                </button>
+                <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md flex items-center glow-button" id="next-lesson">
+                    Next Lesson <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 bg-gray-800 border-t border-gray-700 flex justify-around py-3">
+        <button class="text-gray-300 hover:text-blue-400 flex flex-col items-center">
+            <i class="fas fa-home text-lg"></i>
+            <span class="text-xs mt-1">Home</span>
+        </button>
+        <button class="text-gray-300 hover:text-blue-400 flex flex-col items-center">
+            <i class="fas fa-book text-lg"></i>
+            <span class="text-xs mt-1">Courses</span>
+        </button>
+        <button class="text-gray-300 hover:text-blue-400 flex flex-col items-center">
+            <i class="fas fa-chart-bar text-lg"></i>
+            <span class="text-xs mt-1">Visualize</span>
+        </button>
+        <button class="text-gray-300 hover:text-blue-400 flex flex-col items-center">
+            <i class="fas fa-user text-lg"></i>
+            <span class="text-xs mt-1">Profile</span>
+        </button>
+    </div>
+
+    <script>
+        // Initialize CodeMirror
+        const editor = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
+            mode: 'python',
+            theme: 'dracula',
+            lineNumbers: true,
+            indentUnit: 4,
+            matchBrackets: true,
+            extraKeys: {
+                'Ctrl-Enter': runCode,
+                'Cmd-Enter': runCode
+            }
+        });
+
+        // Track user progress
+        let completedLessons = 0;
+        const totalLessons = 5; // For this module
+        let currentModule = 1;
+        
+        // Update progress display
+        function updateProgress() {
+            const percentage = Math.round((completedLessons / totalLessons) * 100);
+            
+            // Update circular progress
+            const circle = document.querySelector('.progress-ring__circle');
+            const offset = 100 - percentage;
+            circle.style.strokeDashoffset = offset;
+            
+            // Update percentage text
+            document.querySelector('.relative span').textContent = `${percentage}%`;
+            
+            // Update module progress bar
+            document.getElementById('module-progress').style.width = `${percentage}%`;
+            
+            // Update achievements if needed
+            if (percentage >= 20) {
+                document.querySelector('.fa-medal').classList.remove('text-gray-500');
+                document.querySelector('.fa-medal').classList.add('text-yellow-400');
+            }
+            if (percentage >= 50) {
+                document.querySelector('.fa-chart-pie').classList.remove('text-gray-500');
+                document.querySelector('.fa-chart-pie').classList.add('text-blue-400');
+            }
+            if (percentage >= 80) {
+                document.querySelector('.fa-robot').classList.remove('text-gray-500');
+                document.querySelector('.fa-robot').classList.add('text-green-400');
+            }
+            
+            // Mark module as completed if all lessons are done
+            if (percentage === 100) {
+                const moduleButton = document.querySelector(`.module-button[data-module="${currentModule}"]`);
+                moduleButton.querySelector('.fa-check-circle').classList.remove('text-gray-500');
+                moduleButton.querySelector('.fa-check-circle').classList.add('text-green-400');
+                moduleButton.classList.remove('bg-gray-700');
+                moduleButton.classList.add('bg-blue-600');
+            }
+        }
+
+        // Quiz interaction
+        document.querySelectorAll('.quiz-option').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.quiz-option').forEach(btn => {
+                    btn.classList.remove('bg-blue-600', 'hover:bg-blue-500');
+                    btn.classList.add('bg-gray-600', 'hover:bg-gray-500');
+                });
+                this.classList.remove('bg-gray-600', 'hover:bg-gray-500');
+                this.classList.add('bg-blue-600', 'hover:bg-blue-500');
+                
+                const feedback = document.getElementById('quiz-feedback');
+                if (this.classList.contains('correct-answer')) {
+                    feedback.classList.remove('hidden');
+                    if (completedLessons === 0) {
+                        completedLessons = 1;
+                        updateProgress();
+                    }
+                }
+            });
+        });
+
+        // Run code button
+        document.getElementById('run-code').addEventListener('click', runCode);
+
+        // Reset code button
+        document.getElementById('reset-code').addEventListener('click', function() {
+            editor.setValue(`import pandas as pd
+import numpy as np
+
+def clean_data(df):
+    """
+    Clean a DataFrame by handling missing values and converting data types
+    
+    Parameters:
+    df (DataFrame): Input DataFrame with messy data
+    
+    Returns:
+    DataFrame: Cleaned DataFrame
+    """
+    # Your code here
+    # Hint: Use df.fillna() and pd.to_datetime()
+    
+    return df
+
+# Sample data
+data = {
+    'product': ['A', 'B', np.nan, 'D'],
+    'price': [10, np.nan, 30, 40],
+    'quantity': [100, 200, np.nan, 400],
+    'date': ['2023-01-01', '2023-01-02', 'invalid', '2023-01-04']
+}
+
+df = pd.DataFrame(data)
+cleaned_df = clean_data(df)
+
+# Display results
+print("Original DataFrame:")
+print(df)
+print("\nCleaned DataFrame:")
+print(cleaned_df)
+print("\nData types after cleaning:")
+print(cleaned_df.dtypes)`);
+            document.getElementById('code-output').innerHTML = '<span class="text-gray-400">// Output will appear here after running the code</span>';
+            document.getElementById('hint-box').classList.add('hidden');
+        });
+
+        function runCode() {
+            const output = document.getElementById('code-output');
+            output.innerHTML = '<span class="text-gray-400">Running code...</span>';
+            
+            // Get the code from the editor
+            const code = editor.getValue();
+            
+            // Create a function from the code
+            try {
+                // Temporarily override console.log to capture output
+                const logs = [];
+                const originalConsoleLog = console.log;
+                console.log = function() {
+                    logs.push(Array.from(arguments).join(' '));
+                    originalConsoleLog.apply(console, arguments);
+                };
+                
+                // Evaluate the code
+                eval(code);
+                
+                // Restore console.log
+                console.log = originalConsoleLog;
+                
+                // Display the output
+                if (logs.length > 0) {
+                    output.innerHTML = logs.join('<br>');
+                    
+                    // Check if the output looks correct
+                    if (logs.some(log => log.includes('Cleaned DataFrame')) && 
+                        logs.some(log => log.includes('Unknown')) &&
+                        logs.some(log => log.includes('datetime64'))) {
+                        output.innerHTML += '<br><span class="text-green-400">✓ Data cleaning successful! Great job!</span>';
+                        
+                        // Update progress if this is the first time completing the exercise
+                        if (completedLessons < 2) {
+                            completedLessons = 2;
+                            updateProgress();
+                        }
+                        
+                        // Show visualization placeholder
+                        document.querySelector('.fa-chart-line').parentElement.parentElement.innerHTML = `
+                            <canvas id="salesChart" class="w-full h-full"></canvas>
+                            <script>
+                                // This would be replaced with actual chart.js code in a real implementation
+                                const ctx = document.getElementById('salesChart').getContext('2d');
+                                const chart = new Chart(ctx, {
+                                    type: 'line',
+                                    data: {
+                                        labels: ['Jan', 'Feb', 'Mar'],
+                                        datasets: [
+                                            {
+                                                label: 'Product A',
+                                                data: [120, 135, 148],
+                                                borderColor: '#3b82f6',
+                                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                                tension: 0.1
+                                            },
+                                            {
+                                                label: 'Product B',
+                                                data: [150, 145, 160],
+                                                borderColor: '#10b981',
+                                                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                                tension: 0.1
+                                            }
+                                        ]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        plugins: {
+                                            legend: {
+                                                position: 'top',
+                                                labels: {
+                                                    color: '#fff'
+                                                }
+                                            }
+                                        },
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true,
+                                                ticks: {
+                                                    color: '#fff'
+                                                },
+                                                grid: {
+                                                    color: 'rgba(255, 255, 255, 0.1)'
+                                                }
+                                            },
+                                            x: {
+                                                ticks: {
+                                                    color: '#fff'
+                                                },
+                                                grid: {
+                                                    color: 'rgba(255, 255, 255, 0.1)'
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            </script>
+                        `;
+                    }
+                } else {
+                    output.innerHTML = '<span class="text-gray-400">No output. Did you call print() or console.log()?</span>';
+                }
+                
+                // Show hint box if output is incorrect
+                if (!logs.some(log => log.includes('Cleaned DataFrame')) || 
+                    !logs.some(log => log.includes('Unknown')) ||
+                    !logs.some(log => log.includes('datetime64'))) {
+                    document.getElementById('hint-box').classList.remove('hidden');
+                } else {
+                    document.getElementById('hint-box').classList.add('hidden');
+                }
+            } catch (error) {
+                output.innerHTML = `<span class="text-red-400">Error: ${error.message}</span>`;
+                document.getElementById('hint-box').classList.remove('hidden');
+            }
+        }
+
+        // Show solution
+        document.getElementById('show-solution').addEventListener('click', function() {
+            const solution = document.getElementById('solution');
+            if (solution.classList.contains('hidden')) {
+                solution.classList.remove('hidden');
+                this.textContent = 'Hide solution';
+            } else {
+                solution.classList.add('hidden');
+                this.textContent = 'Show solution';
+            }
+        });
+
+        // Navigation buttons
+        document.getElementById('next-lesson').addEventListener('click', function() {
+            // In a real app, this would load the next lesson
+            // For demo purposes, we'll just increment progress
+            if (completedLessons < totalLessons) {
+                completedLessons++;
+                updateProgress();
+            }
+            
+            // Show completion message if all lessons are done
+            if (completedLessons === totalLessons) {
+                alert('Congratulations! You have completed this module!');
+            }
+        });
+
+        document.getElementById('prev-lesson').addEventListener('click', function() {
+            // In a real app, this would load the previous lesson
+            // For demo purposes, we'll just show a message
+            alert('This would navigate to the previous lesson in a real application.');
+        });
+
+        // Initialize progress to 0
+        updateProgress();
+    </script>
+</body>
+</html>

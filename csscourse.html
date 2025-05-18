@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Mastery - Interactive Learning Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
+    <style>
+        .lesson-card:hover .lesson-icon {
+            transform: scale(1.1);
+            transition: all 0.3s ease;
+        }
+        .cm-editor {
+            height: 100%;
+        }
+        .output-iframe {
+            border: 1px solid #e5e7eb;
+            background: white;
+            min-height: 200px;
+        }
+        .sidebar {
+            scrollbar-width: thin;
+            scrollbar-color: #4b5563 #1f2937;
+        }
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sidebar::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: #4b5563;
+            border-radius: 6px;
+        }
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        .tab-button.active {
+            border-bottom: 3px solid #3b82f6;
+            color: #3b82f6;
+        }
+        .flash {
+            animation: flash 0.5s;
+        }
+        @keyframes flash {
+            0% { background-color: rgba(59, 130, 246, 0.3); }
+            100% { background-color: transparent; }
+        }
+        .exercise-tab {
+            display: none;
+        }
+        .exercise-tab.active {
+            display: block;
+        }
+        .hint-box {
+            display: none;
+        }
+        .hint-box.visible {
+            display: block;
+        }
+        .success-message {
+            display: none;
+        }
+        .success-message.visible {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .css-preview {
+            border: 1px solid #374151;
+            background: white;
+            min-height: 200px;
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-gray-800 shadow-lg">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fab fa-css3-alt text-3xl text-blue-500"></i>
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+                    CSS Mastery
+                </h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <div class="w-12 h-12">
+                        <svg class="w-full h-full" viewBox="0 0 36 36">
+                            <path 
+                                d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none"
+                                stroke="#4b5563",
+                                stroke-width="2",
+                                stroke-dasharray="100, 100"
+                            />
+                            <path 
+                                class="progress-ring__circle"
+                                d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none"
+                                stroke="#3b82f6",
+                                stroke-width="2",
+                                stroke-dasharray="0, 100"
+                            />
+                        </svg>
+                    </div>
+                    <span class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs font-bold">0%</span>
+                </div>
+                <button class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-medium flex items-center space-x-2">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>My Profile</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar w-64 bg-gray-800 overflow-y-auto flex-shrink-0">
+            <div class="p-4">
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold mb-2 text-gray-300">Course Content</h2>
+                    <div class="space-y-1">
+                        <div class="mb-2">
+                            <div class="flex items-center justify-between px-2 py-1 bg-gray-700 rounded">
+                                <span class="font-medium">Module 1: CSS Basics</span>
+                                <span class="text-xs text-gray-400">0%</span>
+                            </div>
+                            <div class="mt-1 ml-4 space-y-1">
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Introduction to CSS
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    CSS Syntax & Selectors
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Colors & Backgrounds
+                                </a>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="flex items-center justify-between px-2 py-1 bg-gray-700 rounded">
+                                <span class="font-medium">Module 2: Styling Text</span>
+                                <span class="text-xs text-gray-400">0%</span>
+                            </div>
+                            <div class="mt-1 ml-4 space-y-1">
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Font Properties
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-blue-400 font-medium">
+                                    <i class="fas fa-play-circle text-blue-400 mr-2"></i>
+                                    Text Formatting
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Google Fonts
+                                </a>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 3: Box Model</span>
+                                <span class="text-xs text-gray-400">0%</span>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 4: Layout</span>
+                                <span class="text-xs text-gray-400">0%</span>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 5: Responsive Design</span>
+                                <span class="text-xs text-gray-400">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold mb-2 text-gray-300">Quick Links</h2>
+                    <div class="space-y-2">
+                        <a href="#" class="flex items-center px-3 py-2 rounded-lg bg-gray-700 hover:bg-gray-600">
+                            <i class="fas fa-trophy text-yellow-400 mr-3"></i>
+                            <span>Challenges</span>
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-palette text-blue-400 mr-3"></i>
+                            <span>Color Picker</span>
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-question-circle text-green-400 mr-3"></i>
+                            <span>FAQ</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="p-4 bg-gray-700 rounded-lg">
+                    <h3 class="font-medium mb-2">Daily Challenge</h3>
+                    <p class="text-sm text-gray-300 mb-3">Style a navigation bar with hover effects.</p>
+                    <button class="w-full bg-blue-600 hover:bg-blue-700 py-1 rounded text-sm">
+                        Start Challenge
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto bg-gray-900">
+            <div class="container mx-auto px-4 py-6">
+                <!-- Breadcrumbs -->
+                <div class="flex items-center text-sm text-gray-400 mb-6">
+                    <a href="#" class="hover:text-blue-400">Home</a>
+                    <span class="mx-2">/</span>
+                    <a href="#" class="hover:text-blue-400">Module 2</a>
+                    <span class="mx-2">/</span>
+                    <span class="text-blue-400">Text Formatting</span>
+                </div>
+                
+                <!-- Lesson Header -->
+                <div class="bg-gray-800 rounded-lg p-6 mb-6 shadow-lg">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h2 class="text-2xl font-bold mb-2">Text Formatting</h2>
+                            <p class="text-gray-400 mb-4">Learn how to style and format text using CSS properties like text-align, text-decoration, and more.</p>
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <span class="ml-2 text-gray-400">4.0</span>
+                                </div>
+                                <span class="text-gray-400"><i class="fas fa-clock mr-1"></i> 30 min</span>
+                                <span class="text-gray-400"><i class="fas fa-tasks mr-1"></i> 3 exercises</span>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="p-2 rounded-full bg-gray-700 hover:bg-gray-600">
+                                <i class="fas fa-bookmark"></i>
+                            </button>
+                            <button class="p-2 rounded-full bg-gray-700 hover:bg-gray-600">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Lesson Content -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <!-- Theory Section -->
+                    <div class="lg:col-span-2 bg-gray-800 rounded-lg p-6 shadow-lg">
+                        <div class="prose prose-invert max-w-none">
+                            <h3 class="text-xl font-semibold mb-4">CSS Text Properties</h3>
+                            <p>CSS provides numerous properties for styling text. These properties allow you to control the appearance of text, including alignment, decoration, spacing, and more.</p>
+                            
+                            <div class="my-6 p-4 bg-gray-700 rounded-lg border-l-4 border-blue-500">
+                                <h4 class="font-medium mb-2">Key Text Properties:</h4>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li><code>text-align</code> - Aligns text horizontally</li>
+                                    <li><code>text-decoration</code> - Adds underlines, overlines, etc.</li>
+                                    <li><code>text-transform</code> - Changes text capitalization</li>
+                                    <li><code>letter-spacing</code> - Adjusts space between characters</li>
+                                    <li><code>line-height</code> - Sets the height of text lines</li>
+                                    <li><code>text-shadow</code> - Adds shadow effects to text</li>
+                                </ul>
+                            </div>
+                            
+                            <h4 class="font-semibold mt-6 mb-3">Text Alignment</h4>
+                            <p>The <code>text-align</code> property specifies the horizontal alignment of text:</p>
+                            <pre class="bg-gray-900 p-3 rounded text-sm overflow-x-auto">p {
+  text-align: center; /* left | right | justify */
+}</pre>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                                <div class="bg-gray-700 p-3 rounded-lg">
+                                    <p class="text-sm font-mono">text-align: left;</p>
+                                    <div class="css-preview mt-1" style="text-align: left;">
+                                        Left aligned text
+                                    </div>
+                                </div>
+                                <div class="bg-gray-700 p-3 rounded-lg">
+                                    <p class="text-sm font-mono">text-align: center;</p>
+                                    <div class="css-preview mt-1" style="text-align: center;">
+                                        Centered text
+                                    </div>
+                                </div>
+                                <div class="bg-gray-700 p-3 rounded-lg">
+                                    <p class="text-sm font-mono">text-align: right;</p>
+                                    <div class="css-preview mt-1" style="text-align: right;">
+                                        Right aligned text
+                                    </div>
+                                </div>
+                                <div class="bg-gray-700 p-3 rounded-lg">
+                                    <p class="text-sm font-mono">text-align: justify;</p>
+                                    <div class="css-preview mt-1" style="text-align: justify;">
+                                        Justified text fills the width by adjusting word spacing.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h4 class="font-semibold mt-6 mb-3">Text Decoration</h4>
+                            <p>The <code>text-decoration</code> property adds decoration to text:</p>
+                            <pre class="bg-gray-900 p-3 rounded text-sm overflow-x-auto">a {
+  text-decoration: none; /* Removes underline from links */
+}
+
+h1 {
+  text-decoration: underline wavy red; /* Multiple values */
+}</pre>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                                <div class="bg-gray-700 p-3 rounded-lg">
+                                    <p class="text-sm font-mono">text-decoration: underline;</p>
+                                    <div class="css-preview mt-1" style="text-decoration: underline;">
+                                        Underlined text
+                                    </div>
+                                </div>
+                                <div class="bg-gray-700 p-3 rounded-lg">
+                                    <p class="text-sm font-mono">text-decoration: overline;</p>
+                                    <div class="css-preview mt-1" style="text-decoration: overline;">
+                                        Overlined text
+                                    </div>
+                                </div>
+                                <div class="bg-gray-700 p-3 rounded-lg">
+                                    <p class="text-sm font-mono">text-decoration: line-through;</p>
+                                    <div class="css-preview mt-1" style="text-decoration: line-through;">
+                                        Line through text
+                                    </div>
+                                </div>
+                                <div class="bg-gray-700 p-3 rounded-lg">
+                                    <p class="text-sm font-mono">text-decoration: underline dotted;</p>
+                                    <div class="css-preview mt-1" style="text-decoration: underline dotted;">
+                                        Dotted underline
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 p-4 bg-blue-900 bg-opacity-30 rounded-lg border-l-4 border-blue-400">
+                                <h4 class="font-medium mb-2"><i class="fas fa-lightbulb mr-2"></i>Best Practice</h4>
+                                <p>Use text decorations sparingly. Overusing them can make your content harder to read. Also, remember that underlines are typically associated with links, so use alternative decorations for emphasis.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 flex justify-between border-t border-gray-700 pt-4">
+                            <button class="flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                Previous Lesson
+                            </button>
+                            <button class="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg">
+                                Next Lesson
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Practice Section -->
+                    <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                        <div class="bg-gray-700 px-4 py-3 border-b border-gray-600">
+                            <h3 class="font-semibold"><i class="fas fa-code mr-2"></i>Interactive Practice</h3>
+                        </div>
+                        <div class="p-4">
+                            <div class="mb-4">
+                                <div class="flex border-b border-gray-700">
+                                    <button class="tab-button active px-4 py-2 font-medium" data-tab="exercise1">Exercise 1</button>
+                                    <button class="tab-button px-4 py-2 font-medium" data-tab="exercise2">Exercise 2</button>
+                                    <button class="tab-button px-4 py-2 font-medium" data-tab="exercise3">Exercise 3</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Exercise 1 -->
+                            <div class="exercise-tab active" id="exercise1">
+                                <div class="mb-4">
+                                    <h4 class="font-medium mb-2">Task:</h4>
+                                    <p class="text-sm text-gray-300">Center align the heading and justify the paragraph text using CSS.</p>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <div class="h-64 bg-gray-900 rounded overflow-hidden">
+                                        <textarea id="codeEditor1" class="hidden">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;style&gt;
+        /* Write your CSS here */
+        
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Welcome to CSS&lt;/h1&gt;
+    &lt;p&gt;CSS is a stylesheet language used to describe the presentation of a document written in HTML. CSS describes how elements should be rendered on screen, on paper, in speech, or on other media.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+                                    </div>
+                                    <div class="bg-gray-900 rounded p-2">
+                                        <h4 class="font-medium mb-2 text-sm">Output:</h4>
+                                        <div class="output-iframe" id="output1"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex space-x-3 mb-4">
+                                    <button class="run-btn flex-1 bg-green-600 hover:bg-green-700 py-2 rounded font-medium flex items-center justify-center">
+                                        <i class="fas fa-play mr-2"></i> Run Code
+                                    </button>
+                                    <button class="reset-btn px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded">
+                                        <i class="fas fa-redo"></i>
+                                    </button>
+                                    <button class="hint-btn px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded">
+                                        <i class="fas fa-question"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="hint-box bg-gray-700 bg-opacity-50 rounded-lg p-3 border border-gray-600 mb-4">
+                                    <div class="flex items-start">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-info-circle text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Hint</h4>
+                                            <p class="text-sm text-gray-300">Use the <code>text-align</code> property with different values for the heading and paragraph.</p>
+                                            <pre class="bg-gray-800 p-2 rounded mt-2 text-xs overflow-x-auto">
+h1 {
+    text-align: center;
+}
+
+p {
+    text-align: justify;
+}</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="success-message bg-green-900 bg-opacity-30 rounded-lg p-3 border border-green-600 mb-4">
+                                    <div class="flex items-center">
+                                        <div class="bg-green-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-check text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Success!</h4>
+                                            <p class="text-sm text-gray-300">You've completed this exercise. Great job!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="check-btn w-full bg-purple-600 hover:bg-purple-700 py-2 rounded font-medium">
+                                    <i class="fas fa-check-circle mr-2"></i> Check Solution
+                                </button>
+                            </div>
+                            
+                            <!-- Exercise 2 -->
+                            <div class="exercise-tab" id="exercise2">
+                                <div class="mb-4">
+                                    <h4 class="font-medium mb-2">Task:</h4>
+                                    <p class="text-sm text-gray-300">Style the text with uppercase transformation, letter spacing, and a text shadow.</p>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <div class="h-64 bg-gray-900 rounded overflow-hidden">
+                                        <textarea id="codeEditor2" class="hidden">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;style&gt;
+        /* Write your CSS here */
+        
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Fancy Heading&lt;/h1&gt;
+    &lt;p&gt;This text should have some special styling.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+                                    </div>
+                                    <div class="bg-gray-900 rounded p-2">
+                                        <h4 class="font-medium mb-2 text-sm">Output:</h4>
+                                        <div class="output-iframe" id="output2"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex space-x-3 mb-4">
+                                    <button class="run-btn flex-1 bg-green-600 hover:bg-green-700 py-2 rounded font-medium flex items-center justify-center">
+                                        <i class="fas fa-play mr-2"></i> Run Code
+                                    </button>
+                                    <button class="reset-btn px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded">
+                                        <i class="fas fa-redo"></i>
+                                    </button>
+                                    <button class="hint-btn px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded">
+                                        <i class="fas fa-question"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="hint-box bg-gray-700 bg-opacity-50 rounded-lg p-3 border border-gray-600 mb-4">
+                                    <div class="flex items-start">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-info-circle text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Hint</h4>
+                                            <p class="text-sm text-gray-300">Combine multiple text properties for an enhanced effect.</p>
+                                            <pre class="bg-gray-800 p-2 rounded mt-2 text-xs overflow-x-auto">
+h1 {
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+p {
+    letter-spacing: 1px;
+}</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="success-message bg-green-900 bg-opacity-30 rounded-lg p-3 border border-green-600 mb-4">
+                                    <div class="flex items-center">
+                                        <div class="bg-green-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-check text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Success!</h4>
+                                            <p class="text-sm text-gray-300">You've completed this exercise. Well done!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="check-btn w-full bg-purple-600 hover:bg-purple-700 py-2 rounded font-medium">
+                                    <i class="fas fa-check-circle mr-2"></i> Check Solution
+                                </button>
+                            </div>
+                            
+                            <!-- Exercise 3 -->
+                            <div class="exercise-tab" id="exercise3">
+                                <div class="mb-4">
+                                    <h4 class="font-medium mb-2">Task:</h4>
+                                    <p class="text-sm text-gray-300">Create a styled quote with proper text formatting and decoration.</p>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <div class="h-64 bg-gray-900 rounded overflow-hidden">
+                                        <textarea id="codeEditor3" class="hidden">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;style&gt;
+        /* Write your CSS here */
+        
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;blockquote&gt;
+        "The only way to learn a new programming language is by writing programs in it."
+        &lt;footer&gt;- Dennis Ritchie&lt;/footer&gt;
+    &lt;/blockquote&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea>
+                                    </div>
+                                    <div class="bg-gray-900 rounded p-2">
+                                        <h4 class="font-medium mb-2 text-sm">Output:</h4>
+                                        <div class="output-iframe" id="output3"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex space-x-3 mb-4">
+                                    <button class="run-btn flex-1 bg-green-600 hover:bg-green-700 py-2 rounded font-medium flex items-center justify-center">
+                                        <i class="fas fa-play mr-2"></i> Run Code
+                                    </button>
+                                    <button class="reset-btn px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded">
+                                        <i class="fas fa-redo"></i>
+                                    </button>
+                                    <button class="hint-btn px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded">
+                                        <i class="fas fa-question"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="hint-box bg-gray-700 bg-opacity-50 rounded-lg p-3 border border-gray-600 mb-4">
+                                    <div class="flex items-start">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-info-circle text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Hint</h4>
+                                            <p class="text-sm text-gray-300">Style the blockquote with italic font, increased line height, and add a decorative left border.</p>
+                                            <pre class="bg-gray-800 p-2 rounded mt-2 text-xs overflow-x-auto">
+blockquote {
+    font-style: italic;
+    line-height: 1.6;
+    border-left: 4px solid #3b82f6;
+    padding-left: 1rem;
+    margin-left: 0;
+}
+
+footer {
+    font-style: normal;
+    font-weight: bold;
+}</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="success-message bg-green-900 bg-opacity-30 rounded-lg p-3 border border-green-600 mb-4">
+                                    <div class="flex items-center">
+                                        <div class="bg-green-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-check text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Success!</h4>
+                                            <p class="text-sm text-gray-300">You've completed all exercises in this lesson!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="check-btn w-full bg-purple-600 hover:bg-purple-700 py-2 rounded font-medium">
+                                    <i class="fas fa-check-circle mr-2"></i> Check Solution
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Resources -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Additional Resources</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <a href="#" class="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-start">
+                            <div class="bg-blue-600 rounded-lg p-3 mr-4">
+                                <i class="fas fa-video text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Video Tutorial</h4>
+                                <p class="text-sm text-gray-400">Advanced text styling techniques</p>
+                            </div>
+                        </a>
+                        <a href="#" class="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-start">
+                            <div class="bg-green-600 rounded-lg p-3 mr-4">
+                                <i class="fas fa-file-alt text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Cheat Sheet</h4>
+                                <p class="text-sm text-gray-400">CSS text properties reference</p>
+                            </div>
+                        </a>
+                        <a href="#" class="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-start">
+                            <div class="bg-purple-600 rounded-lg p-3 mr-4">
+                                <i class="fas fa-question-circle text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Quiz</h4>
+                                <p class="text-sm text-gray-400">Test your text styling knowledge</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Community Section -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4">Community Discussion</h3>
+                    <div class="mb-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
+                                <span class="font-bold">JS</span>
+                            </div>
+                            <div class="flex-1 bg-gray-700 rounded-lg p-3">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="font-medium">John Smith</span>
+                                    <span class="text-xs text-gray-400">2 hours ago</span>
+                                </div>
+                                <p class="text-sm">What's the best way to create a drop cap effect with CSS?</p>
+                                <div class="flex space-x-4 mt-2 text-xs text-gray-400">
+                                    <a href="#" class="hover:text-blue-400"><i class="far fa-thumbs-up mr-1"></i> 5</a>
+                                    <a href="#" class="hover:text-blue-400"><i class="far fa-comment mr-1"></i> Reply</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center">
+                            <span class="font-bold">AD</span>
+                        </div>
+                        <div class="flex-1">
+                            <textarea class="w-full bg-gray-700 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Add your comment or question..."></textarea>
+                            <div class="flex justify-end mt-2">
+                                <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm">Post</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center space-x-2">
+                        <i class="fab fa-css3-alt text-2xl text-blue-500"></i>
+                        <span class="font-bold">CSS Mastery</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mt-1">Master CSS styling with interactive lessons</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-github"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-discord"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-6 pt-6 text-sm text-gray-400 text-center">
+                <p>&copy; 2023 CSS Mastery. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closetag.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    <script>
+        // Initialize CodeMirror editors
+        const editor1 = CodeMirror.fromTextArea(document.getElementById('codeEditor1'), {
+            mode: 'htmlmixed',
+            theme: 'dracula',
+            lineNumbers: true,
+            indentUnit: 4,
+            tabSize: 4,
+            autoCloseTags: true,
+            autoCloseBrackets: true,
+            extraKeys: {"Ctrl-Space": "autocomplete"}
+        });
+        
+        const editor2 = CodeMirror.fromTextArea(document.getElementById('codeEditor2'), {
+            mode: 'htmlmixed',
+            theme: 'dracula',
+            lineNumbers: true,
+            indentUnit: 4,
+            tabSize: 4,
+            autoCloseTags: true,
+            autoCloseBrackets: true,
+            extraKeys: {"Ctrl-Space": "autocomplete"}
+        });
+        
+        const editor3 = CodeMirror.fromTextArea(document.getElementById('codeEditor3'), {
+            mode: 'htmlmixed',
+            theme: 'dracula',
+            lineNumbers: true,
+            indentUnit: 4,
+            tabSize: 4,
+            autoCloseTags: true,
+            autoCloseBrackets: true,
+            extraKeys: {"Ctrl-Space": "autocomplete"}
+        });
+        
+        // Set editor heights
+        editor1.setSize(null, '100%');
+        editor2.setSize(null, '100%');
+        editor3.setSize(null, '100%');
+        
+        // Track progress
+        let completedExercises = 0;
+        const totalExercises = 3;
+        
+        // Update progress function
+        function updateProgress() {
+            const progressPercentage = Math.round((completedExercises / totalExercises) * 100);
+            const progressCircle = document.querySelector('.progress-ring__circle');
+            const progressText = document.querySelector('.relative span');
+            
+            // Update progress circle
+            progressCircle.setAttribute('stroke-dasharray', `${progressPercentage}, 100`);
+            progressText.textContent = `${progressPercentage}%`;
+            
+            // Update module progress if all exercises are completed
+            if (completedExercises === totalExercises) {
+                const moduleProgress = document.querySelector('.sidebar div:nth-child(2) span.text-xs');
+                moduleProgress.textContent = '100%';
+                moduleProgress.classList.remove('text-gray-400');
+                moduleProgress.classList.add('text-green-400');
+            }
+        }
+        
+        // Tab functionality
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const exerciseTabs = document.querySelectorAll('.exercise-tab');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and tabs
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                exerciseTabs.forEach(tab => tab.classList.remove('active'));
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Show corresponding tab
+                const tabId = button.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Run button functionality
+        document.querySelectorAll('.run-btn').forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                const editor = [editor1, editor2, editor3][index];
+                const outputFrame = document.querySelectorAll('.output-iframe')[index];
+                const code = editor.getValue();
+                
+                // Flash the run button for feedback
+                btn.classList.add('flash');
+                setTimeout(() => btn.classList.remove('flash'), 500);
+                
+                // Display the output
+                outputFrame.innerHTML = '';
+                const iframe = document.createElement('iframe');
+                iframe.style.width = '100%';
+                iframe.style.height = '100%';
+                iframe.style.border = 'none';
+                outputFrame.appendChild(iframe);
+                
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                iframeDoc.open();
+                iframeDoc.write(code);
+                iframeDoc.close();
+            });
+        });
+        
+        // Check button functionality
+        document.querySelectorAll('.check-btn').forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                const successMessage = document.querySelectorAll('.success-message')[index];
+                const hintBox = document.querySelectorAll('.hint-box')[index];
+                
+                // Show success message
+                successMessage.classList.add('visible');
+                
+                // Hide hint box if visible
+                hintBox.classList.remove('visible');
+                
+                // Mark exercise as completed if not already
+                if (!btn.classList.contains('completed')) {
+                    btn.classList.add('completed');
+                    completedExercises++;
+                    updateProgress();
+                }
+                
+                // Disable the button after completion
+                btn.disabled = true;
+                btn.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+                btn.classList.add('bg-gray-600', 'cursor-not-allowed');
+            });
+        });
+        
+        // Hint button functionality
+        document.querySelectorAll('.hint-btn').forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                const hintBox = document.querySelectorAll('.hint-box')[index];
+                hintBox.classList.toggle('visible');
+            });
+        });
+        
+        // Reset button functionality
+        document.querySelectorAll('.reset-btn').forEach((btn, index) => {
+    btn.addEventListener('click', () => {
+        const editor = [editor1, editor2, editor3][index];
+        const outputFrame = document.querySelectorAll('.output-iframe')[index];
+        const checkBtn = document.querySelectorAll('.check-btn')[index];
+        const successMessage = document.querySelectorAll('.success-message')[index];
+        
+        // Reset to default code
+        if (index === 0) {
+            editor.setValue(`<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Write your CSS here */
+        
+    </style>
+</head>
+<body>
+    <h1>Welcome to CSS</h1>
+    <p>CSS is a stylesheet language used to describe the presentation of a document written in HTML. CSS describes how elements should be rendered on screen, on paper, in speech, or on other media.</p>
+</body>
+</html>`);
+        }
+    });
+});
