@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeX - Affiliate Program</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .affiliate-gradient {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .commission-tier-1 { background-color: #f0f9ff; }
+    .commission-tier-2 { background-color: #e0f2fe; }
+    .commission-tier-3 { background-color: #bae6fd; }
+    .commission-tier-4 { background-color: #7dd3fc; }
+    .commission-tier-5 { background-color: #38bdf8; }
+    .affiliate-card {
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .affiliate-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+    .referral-link-box {
+      background-color: #f8fafc;
+      border: 1px dashed #cbd5e1;
+    }
+    .copy-btn {
+      transition: all 0.2s ease;
+    }
+    .copy-btn:hover {
+      transform: scale(1.05);
+    }
+    .copy-btn.copied {
+      background-color: #10b981 !important;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.25em 0.6em;
+      font-size: 75%;
+      font-weight: 700;
+      line-height: 1;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: baseline;
+      border-radius: 0.25rem;
+    }
+    .badge-bronze { background-color: #cd7f32; color: white; }
+    .badge-silver { background-color: #c0c0c0; color: black; }
+    .badge-gold { background-color: #ffd700; color: black; }
+    .badge-platinum { background-color: #e5e4e2; color: black; }
+    .badge-diamond { background-color: #b9f2ff; color: black; }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <!-- Navigation -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center">
+          <div class="flex-shrink-0 flex items-center">
+            <img class="h-8 w-auto" src="https://via.placeholder.com/150x50?text=CodeX" alt="CodeX Logo">
+          </div>
+          <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+            <a href="#" class="border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Home</a>
+            <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Courses</a>
+            <a href="#affiliate" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Affiliate</a>
+            <a href="#" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Contact</a>
+          </div>
+        </div>
+        <div class="hidden sm:ml-6 sm:flex sm:items-center">
+          <button onclick="toggleAffiliateDashboard()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium flex items-center">
+            <i class="fas fa-wallet mr-2"></i> Affiliate Dashboard
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="affiliate-gradient text-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="lg:text-center">
+        <h2 class="text-base text-blue-200 font-semibold tracking-wide uppercase">Earn While You Learn</h2>
+        <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight sm:text-4xl">
+          CodeX Affiliate Program
+        </p>
+        <p class="mt-4 max-w-2xl text-xl text-blue-100 lg:mx-auto">
+          Refer students to our courses and earn up to 30% commission on every sale
+        </p>
+        <div class="mt-8 flex justify-center">
+          <div class="inline-flex rounded-md shadow">
+            <a href="#signup" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-white hover:bg-gray-50">
+              Join Now - It's Free
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- How It Works -->
+  <div class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="lg:text-center">
+        <h2 class="text-base text-blue-600 font-semibold tracking-wide uppercase">Simple Process</h2>
+        <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+          How Our Affiliate Program Works
+        </p>
+      </div>
+
+      <div class="mt-10">
+        <div class="space-y-10 md:space-y-0 md:grid md:grid-cols-3 md:gap-x-8 md:gap-y-10">
+          <div class="relative">
+            <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
+              <span class="text-xl font-bold">1</span>
+            </div>
+            <div class="ml-16">
+              <h3 class="text-lg leading-6 font-medium text-gray-900">Sign Up</h3>
+              <p class="mt-2 text-base text-gray-500">
+                Complete our simple affiliate application form. Approval is instant for existing students.
+              </p>
+            </div>
+          </div>
+
+          <div class="relative">
+            <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
+              <span class="text-xl font-bold">2</span>
+            </div>
+            <div class="ml-16">
+              <h3 class="text-lg leading-6 font-medium text-gray-900">Get Your Link</h3>
+              <p class="mt-2 text-base text-gray-500">
+                Receive your unique referral link to share with friends, on social media, or your website.
+              </p>
+            </div>
+          </div>
+
+          <div class="relative">
+            <div class="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
+              <span class="text-xl font-bold">3</span>
+            </div>
+            <div class="ml-16">
+              <h3 class="text-lg leading-6 font-medium text-gray-900">Earn Commissions</h3>
+              <p class="mt-2 text-base text-gray-500">
+                Get paid when someone purchases through your link. Track everything in your dashboard.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Commission Structure -->
+  <div class="py-12 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="lg:text-center">
+        <h2 class="text-base text-blue-600 font-semibold tracking-wide uppercase">Earning Potential</h2>
+        <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+          Commission Structure
+        </p>
+        <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+          Your commission rate increases as you refer more students
+        </p>
+      </div>
+
+      <div class="mt-10">
+        <div class="space-y-4 max-w-3xl mx-auto">
+          <!-- Tier 1 -->
+          <div class="commission-tier-1 rounded-lg overflow-hidden shadow">
+            <div class="px-6 py-4 flex justify-between items-center">
+              <div class="flex items-center">
+                <span class="badge badge-bronze mr-3">Bronze</span>
+                <div>
+                  <h3 class="font-medium">0-5 Referrals</h3>
+                  <p class="text-sm text-gray-600">Standard commission rate</p>
+                </div>
+              </div>
+              <span class="text-lg font-bold">20%</span>
+            </div>
+          </div>
+          
+          <!-- Tier 2 -->
+          <div class="commission-tier-2 rounded-lg overflow-hidden shadow">
+            <div class="px-6 py-4 flex justify-between items-center">
+              <div class="flex items-center">
+                <span class="badge badge-silver mr-3">Silver</span>
+                <div>
+                  <h3 class="font-medium">6-15 Referrals</h3>
+                  <p class="text-sm text-gray-600">Increased commission rate</p>
+                </div>
+              </div>
+              <span class="text-lg font-bold">22.5%</span>
+            </div>
+          </div>
+          
+          <!-- Tier 3 -->
+          <div class="commission-tier-3 rounded-lg overflow-hidden shadow">
+            <div class="px-6 py-4 flex justify-between items-center">
+              <div class="flex items-center">
+                <span class="badge badge-gold mr-3">Gold</span>
+                <div>
+                  <h3 class="font-medium">16-30 Referrals</h3>
+                  <p class="text-sm text-gray-600">Premium commission rate</p>
+                </div>
+              </div>
+              <span class="text-lg font-bold">25%</span>
+            </div>
+          </div>
+          
+          <!-- Tier 4 -->
+          <div class="commission-tier-4 rounded-lg overflow-hidden shadow">
+            <div class="px-6 py-4 flex justify-between items-center">
+              <div class="flex items-center">
+                <span class="badge badge-platinum mr-3">Platinum</span>
+                <div>
+                  <h3 class="font-medium">31-50 Referrals</h3>
+                  <p class="text-sm text-gray-600">Elite commission rate</p>
+                </div>
+              </div>
+              <span class="text-lg font-bold">27.5%</span>
+            </div>
+          </div>
+          
+          <!-- Tier 5 -->
+          <div class="commission-tier-5 rounded-lg overflow-hidden shadow">
+            <div class="px-6 py-4 flex justify-between items-center">
+              <div class="flex items-center">
+                <span class="badge badge-diamond mr-3">Diamond</span>
+                <div>
+                  <h3 class="font-medium">50+ Referrals</h3>
+                  <p class="text-sm text-gray-600">Maximum commission rate</p>
+                </div>
+              </div>
+              <span class="text-lg font-bold">30%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Affiliate Benefits -->
+  <div class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="lg:text-center">
+        <h2 class="text-base text-blue-600 font-semibold tracking-wide uppercase">Why Join?</h2>
+        <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+          Affiliate Benefits
+        </p>
+      </div>
+
+      <div class="mt-10">
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+          <!-- Benefit 1 -->
+          <div class="affiliate-card bg-white p-6 rounded-lg">
+            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white mb-4">
+              <i class="fas fa-money-bill-wave text-xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">High Commissions</h3>
+            <p class="text-gray-500">
+              Earn up to 30% commission on every course purchase. Our rates are among the highest in the industry.
+            </p>
+          </div>
+          
+          <!-- Benefit 2 -->
+          <div class="affiliate-card bg-white p-6 rounded-lg">
+            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white mb-4">
+              <i class="fas fa-chart-line text-xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Real-time Tracking</h3>
+            <p class="text-gray-500">
+              Our dashboard shows clicks, conversions, and earnings in real-time so you always know your performance.
+            </p>
+          </div>
+          
+          <!-- Benefit 3 -->
+          <div class="affiliate-card bg-white p-6 rounded-lg">
+            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white mb-4">
+              <i class="fas fa-gift text-xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Bonus Rewards</h3>
+            <p class="text-gray-500">
+              Hit referral milestones to unlock special bonuses, free courses, and exclusive resources.
+            </p>
+          </div>
+          
+          <!-- Benefit 4 -->
+          <div class="affiliate-card bg-white p-6 rounded-lg">
+            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white mb-4">
+              <i class="fas fa-clock text-xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">90-Day Cookie</h3>
+            <p class="text-gray-500">
+              We track referrals for 90 days, so you earn commissions even if they don't purchase immediately.
+            </p>
+          </div>
+          
+          <!-- Benefit 5 -->
+          <div class="affiliate-card bg-white p-6 rounded-lg">
+            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white mb-4">
+              <i class="fas fa-file-alt text-xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Marketing Materials</h3>
+            <p class="text-gray-500">
+              Access banners, email templates, and social media content to help promote our courses effectively.
+            </p>
+          </div>
+          
+          <!-- Benefit 6 -->
+          <div class="affiliate-card bg-white p-6 rounded-lg">
+            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white mb-4">
+              <i class="fas fa-calendar-check text-xl"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Monthly Payouts</h3>
+            <p class="text-gray-500">
+              Get paid reliably every month via PayPal, bank transfer, or course credit (minimum R500 payout).
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sign Up Section -->
+  <div id="signup" class="py-12 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="lg:text-center">
+        <h2 class="text-base text-blue-600 font-semibold tracking-wide uppercase">Ready to Earn?</h2>
+        <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+          Join Our Affiliate Program
+        </p>
+        <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+          Complete the form below to start earning commissions today
+        </p>
+      </div>
+
+      <div class="mt-10">
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <form id="affiliateSignupForm" class="space-y-6">
+              <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                <div class="sm:col-span-3">
+                  <label for="first-name" class="block text-sm font-medium text-gray-700">First name</label>
+                  <input type="text" name="first-name" id="first-name" autocomplete="given-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div class="sm:col-span-3">
+                  <label for="last-name" class="block text-sm font-medium text-gray-700">Last name</label>
+                  <input type="text" name="last-name" id="last-name" autocomplete="family-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div class="sm:col-span-4">
+                  <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+                  <input type="email" name="email" id="email" autocomplete="email" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div class="sm:col-span-4">
+                  <label for="website" class="block text-sm font-medium text-gray-700">Website or Blog (if applicable)</label>
+                  <input type="text" name="website" id="website" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="https://">
+                </div>
+
+                <div class="sm:col-span-6">
+                  <label for="promotion-methods" class="block text-sm font-medium text-gray-700">How do you plan to promote our courses?</label>
+                  <div class="mt-2 space-y-2">
+                    <div class="flex items-center">
+                      <input id="social-media" name="promotion-methods" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                      <label for="social-media" class="ml-3 block text-sm font-medium text-gray-700">Social Media</label>
+                    </div>
+                    <div class="flex items-center">
+                      <input id="blog" name="promotion-methods" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                      <label for="blog" class="ml-3 block text-sm font-medium text-gray-700">Blog/Website</label>
+                    </div>
+                    <div class="flex items-center">
+                      <input id="youtube" name="promotion-methods" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                      <label for="youtube" class="ml-3 block text-sm font-medium text-gray-700">YouTube</label>
+                    </div>
+                    <div class="flex items-center">
+                      <input id="email-marketing" name="promotion-methods" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                      <label for="email-marketing" class="ml-3 block text-sm font-medium text-gray-700">Email Marketing</label>
+                    </div>
+                    <div class="flex items-center">
+                      <input id="other" name="promotion-methods" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                      <label for="other" class="ml-3 block text-sm font-medium text-gray-700">Other</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="sm:col-span-6">
+                  <label for="experience" class="block text-sm font-medium text-gray-700">Do you have experience with affiliate marketing?</label>
+                  <select id="experience" name="experience" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                    <option>Yes, extensive experience</option>
+                    <option>Some experience</option>
+                    <option>No, this is my first time</option>
+                  </select>
+                </div>
+
+                <div class="sm:col-span-6">
+                  <div class="flex items-start">
+                    <div class="flex items-center h-5">
+                      <input id="terms" name="terms" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" required>
+                    </div>
+                    <div class="ml-3 text-sm">
+                      <label for="terms" class="font-medium text-gray-700">I agree to the <a href="#" class="text-blue-600 hover:text-blue-500">Affiliate Program Terms</a></label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex justify-end">
+                <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                  Submit Application
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Affiliate Dashboard Modal -->
+  <div id="affiliateDashboardModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+      </div>
+      <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+      <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+              <div class="flex justify-between items-center">
+                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                  Affiliate Dashboard
+                </h3>
+                <button onclick="toggleAffiliateDashboard()" class="text-gray-400 hover:text-gray-500">
+                  <span class="sr-only">Close</span>
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+              
+              <div class="mt-6">
+                <!-- Dashboard Tabs -->
+                <div class="border-b border-gray-200">
+                  <nav class="-mb-px flex space-x-8">
+                    <button onclick="switchTab('overview')" id="overviewTab" class="border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Overview</button>
+                    <button onclick="switchTab('referrals')" id="referralsTab" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Referrals</button>
+                    <button onclick="switchTab('commissions')" id="commissionsTab" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Commissions</button>
+                    <button onclick="switchTab('resources')" id="resourcesTab" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Resources</button>
+                    <button onclick="switchTab('settings')" id="settingsTab" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Settings</button>
+                  </nav>
+                </div>
+                
+                <!-- Tab Content -->
+                <div class="py-6">
+                  <!-- Overview Tab -->
+                  <div id="overviewContent" class="tab-content">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                      <div class="bg-blue-50 p-4 rounded-lg">
+                        <div class="text-blue-600 text-sm font-medium">Total Referrals</div>
+                        <div class="text-2xl font-bold mt-1">24</div>
+                        <div class="text-xs text-blue-500 mt-1">+3 this month</div>
+                      </div>
+                      <div class="bg-green-50 p-4 rounded-lg">
+                        <div class="text-green-600 text-sm font-medium">Total Earnings</div>
+                        <div class="text-2xl font-bold mt-1">R5,430.50</div>
+                        <div class="text-xs text-green-500 mt-1">R1,240.75 this month</div>
+                      </div>
+                      <div class="bg-purple-50 p-4 rounded-lg">
+                        <div class="text-purple-600 text-sm font-medium">Pending Payout</div>
+                        <div class="text-2xl font-bold mt-1">R1,240.75</div>
+                        <div class="text-xs text-purple-500 mt-1">Payout on 1st of next month</div>
+                      </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                      <h4 class="font-medium mb-2">Your Referral Link</h4>
+                      <div class="flex">
+                        <div class="referral-link-box flex-grow p-3 rounded-l-md">
+                          <span id="referralLink">https://codex.com/ref/aff12345</span>
+                        </div>
+                        <button onclick="copyReferralLink()" class="copy-btn bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700">
+                          Copy
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                      <h4 class="font-medium mb-2">Quick Stats</h4>
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white border border-gray-200 p-4 rounded-lg">
+                          <div class="flex justify-between items-center mb-2">
+                            <div class="text-sm font-medium">Conversion Rate</div>
+                            <div class="text-sm font-bold text-blue-600">8.3%</div>
+                          </div>
+                          <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 8.3%"></div>
+                          </div>
+                        </div>
+                        <div class="bg-white border border-gray-200 p-4 rounded-lg">
+                          <div class="flex justify-between items-center mb-2">
+                            <div class="text-sm font-medium">Current Tier</div>
+                            <div class="text-sm font-bold text-blue-600">Gold (25%)</div>
+                          </div>
+                          <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 60%"></div>
+                          </div>
+                          <div class="text-xs text-gray-500 mt-1">6 more referrals to reach Platinum</div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 class="font-medium mb-2">Recent Activity</h4>
+                      <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                        <table class="min-w-full divide-y divide-gray-200">
+                          <thead class="bg-gray-50">
+                            <tr>
+                              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Referral</th>
+                              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
+                              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Commission</th>
+                            </tr>
+                          </thead>
+                          <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-06-15</td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">john.doe@email.com</td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">SQL Database</td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">R269.70</td>
+                            </tr>
+                            <tr>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-06-10</td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">jane.smith@email.com</td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Web Development</td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">R149.85</td>
+                            </tr>
+                            <tr>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-06-05</td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">mike.johnson@email.com</td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Cybersecurity</td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">R239.70</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Referrals Tab -->
+                  <div id="referralsContent" class="tab-content hidden">
+                    <div class="mb-4 flex justify-between items-center">
+                      <h4 class="font-medium">Your Referrals (24)</h4>
+                      <div class="relative">
+                        <select class="appearance-none bg-white border border-gray-300 rounded-md pl-3 pr-8 py-2 text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                          <option>All Time</option>
+                          <option>This Month</option>
+                          <option>Last Month</option>
+                          <option>Custom Range</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                          <i class="fas fa-chevron-down text-xs"></i>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                      <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                          <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Referral</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Commission</th>
+                          </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                          <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-06-15</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">john.doe@email.com</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">SQL Database</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">R269.70</td>
+                          </tr>
+                          <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-06-10</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">jane.smith@email.com</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">In Progress</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Web Development</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">R149.85</td>
+                          </tr>
+                          <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-06-05</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">mike.johnson@email.com</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Pending</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Cybersecurity</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">R239.70</td>
+                          </tr>
+                          <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-05-28</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">sarah.williams@email.com</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Data Science</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">R359.55</td>
+                          </tr>
+                          <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-05-20</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">david.brown@email.com</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Mobile Development</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">R299.70</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    
+                    <div class="mt-4 flex items-center justify-between">
+                      <div class="text-sm text-gray-500">
+                        Showing <span class="font-medium">1</span> to <span class="font-medium">5</span> of <span class="font-medium">24</span> referrals
+                      </div>
+                      <div class="flex space-x-2">
+                        <button class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                          Previous
+                        </button>
+                        <button class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                          Next
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Commissions Tab -->
+                  <div id="commissionsContent" class="tab-content hidden">
+                    <div class="mb-4 flex justify-between items-center">
+                      <h4 class="font-medium">Your Commissions</h4>
+                      <div class="relative">
+                        <select class="appearance-none bg-white border border-gray-300 rounded-md pl-3 pr-8 py-2 text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                          <option>All Time</option>
+                          <option>This Month</option>
+                          <option>Last Month</option>
+                          <option>Custom Range</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                          <i class="fas fa-chevron-down text-xs"></i>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                      <div class="bg-white border border-gray-200 p-4 rounded-lg">
+                        <div class="text-sm font-medium text-gray-500 mb-1">Total Earnings</div>
+                        <div class="text-2xl font-bold">R5,430.50</div>
+                      </div>
+                      <div class="bg-white border border-gray-200 p-4 rounded-lg">
+                        <div class="text-sm font-medium text-gray-500 mb-1">Pending Payout</div>
+                        <div class="text-2xl font-bold">R1,240.75</div>
+                      </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                      <h5 class="font-medium mb-2">Payout History</h5>
+                      <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                        <table class="min-w-full divide-y divide-gray-200">
+                          <thead class="bg-gray-50">
+                            <tr>
+                              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Method</th>
+                              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reference</th>
+                            </tr>
+                          </thead>
+                          <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-06-01</td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">R1,189.95</td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">PayPal</td>
+                              <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                              </td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">PAY-12345</td>
+                            </tr>
+                            <tr>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-05-01</td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">R999.80</td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">PayPal</td>
+                              <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                              </td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">PAY-12344</td>
+                            </tr>
+                            <tr>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2023-04-01</td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">R1,050.00</td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Bank Transfer</td>
+                              <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Completed</span>
+                              </td>
+                              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">BANK-12343</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h5 class="font-medium mb-2">Next Payout</h5>
+                      <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+                        <div class="flex items-start">
+                          <div class="flex-shrink-0">
+                            <i class="fas fa-info-circle text-yellow-400"></i>
+                          </div>
+                          <div class="ml-3">
+                            <h3 class="text-sm font-medium text-yellow-800">Pending Payout: R1,240.75</h3>
+                            <div class="mt-2 text-sm text-yellow-700">
+                              <p>Your next payout will be processed on <span class="font-semibold">July 1, 2023</span>. The minimum payout amount is R500.</p>
+                            </div>
+                            <div class="mt-4">
+                              <div class="flex space-x-3">
+                                <button type="button" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                  Request Early Payout
+                                </button>
+                                <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                  Change Payment Method
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Resources Tab -->
+                  <div id="resourcesContent" class="tab-content hidden">
+                    <div class="mb-6">
+                      <h4 class="font-medium mb-3">Marketing Materials</h4>
+                      <p class="text-sm text-gray-500 mb-4">Use these resources to help promote CodeX courses and maximize your earnings.</p>
+                      
+                      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Banner 1 -->
+                        <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                          <div class="p-4">
+                            <div class="bg-gray-100 h-32 flex items-center justify-center mb-3">
+                              <span class="text-gray-400">Banner Preview</span>
+                            </div>
+                            <h5 class="font-medium text-sm mb-1">Leaderboard Banner (728x90)</h5>
+                            <div class="flex justify-between items-center">
+                              <div class="text-xs text-gray-500">PNG, JPG</div>
+                              <div class="flex space-x-2">
+                                <button class="text-xs text-blue-600 hover:text-blue-800">Download</button>
+                                <button class="text-xs text-blue-600 hover:text-blue-800">HTML Code</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <!-- Banner 2 -->
+                        <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                          <div class="p-4">
+                            <div class="bg-gray-100 h-32 flex items-center justify-center mb-3">
+                              <span class="text-gray-400">Banner Preview</span>
+                            </div>
+                            <h5 class="font-medium text-sm mb-1">Medium Rectangle (300x250)</h5>
+                            <div class="flex justify-between items-center">
+                              <div class="text-xs text-gray-500">PNG, JPG</div>
+                              <div class="flex space-x-2">
+                                <button class="text-xs text-blue-600 hover:text-blue-800">Download</button>
+                                <button class="text-xs text-blue-600 hover:text-blue-800">HTML Code</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <!-- Banner 3 -->
+                        <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                          <div class="p-4">
+                            <div class="bg-gray-100 h-32 flex items-center justify-center mb-3">
+                              <span class="text-gray-400">Banner Preview</span>
+                            </div>
+                            <h5 class="font-medium text-sm mb-1">Square (250x250)</h5>
+                            <div class="flex justify-between items-center">
+                              <div class="text-xs text-gray-500">PNG, JPG</div>
+                              <div class="flex space-x-2">
+                                <button class="text-xs text-blue-600 hover:text-blue-800">Download</button>
+                                <button class="text-xs text-blue-600 hover:text-blue-800">HTML Code</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                      <h4 class="font-medium mb-3">Email Templates</h4>
+                      <p class="text-sm text-gray-500 mb-4">Pre-written email templates you can use to promote CodeX to your audience.</p>
+                      
+                      <div class="space-y-3">
+                        <div class="bg-white border border-gray-200 rounded-lg p-4">
+                          <h5 class="font-medium text-sm mb-1">Course Recommendation</h5>
+                          <p class="text-xs text-gray-500 mb-2">A general email recommending CodeX courses to your subscribers</p>
+                          <div class="flex space-x-2">
+                            <button class="text-xs text-blue-600 hover:text-blue-800">View Template</button>
+                            <button class="text-xs text-blue-600 hover:text-blue-800">Copy Text</button>
+                          </div>
+                        </div>
+                        
+                        <div class="bg-white border border-gray-200 rounded-lg p-4">
+                          <h5 class="font-medium text-sm mb-1">Limited-Time Offer</h5>
+                          <p class="text-xs text-gray-500 mb-2">Promote seasonal discounts and special offers</p>
+                          <div class="flex space-x-2">
+                            <button class="text-xs text-blue-600 hover:text-blue-800">View Template</button>
+                            <button class="text-xs text-blue-600 hover:text-blue-800">Copy Text</button>
+                          </div>
+                        </div>
+                        
+                        <div class="bg-white border border-gray-200 rounded-lg p-4">
+                          <h5 class="font-medium text-sm mb-1">Personal Success Story</h5>
+                          <p class="text-xs text-gray-500 mb-2">Template for sharing your own experience with CodeX</p>
+                          <div class="flex space-x-2">
+                            <button class="text-xs text-blue-600 hover:text-blue-800">View Template</button>
+                            <button class="text-xs text-blue-600 hover:text-blue-800">Copy Text</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 class="font-medium mb-3">Social Media Content</h4>
+                      <p class="text-sm text-gray-500 mb-4">Ready-to-post content for your social media channels.</p>
+                      
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Twitter Post -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-4">
+                          <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                              <i class="fab fa-twitter text-blue-400"></i>
+                            </div>
+                            <div class="ml-3">
+                              <h5 class="font-medium text-sm mb-1">Twitter Post</h5>
+                              <p class="text-xs text-gray-500 mb-2">"Looking to boost your tech skills? Check out @CodeXCourses - I've been learning SQL and it's transformed my career! Use my link for 10% off: [your-link]"</p>
+                              <button class="text-xs text-blue-600 hover:text-blue-800">Copy Text</button>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <!-- Instagram Post -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-4">
+                          <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                              <i class="fab fa-instagram text-purple-500"></i>
+                            </div>
+                            <div class="ml-3">
+                              <h5 class="font-medium text-sm mb-1">Instagram Post</h5>
+                              <p class="text-xs text-gray-500 mb-2">"Coding changed my life 💻 And @CodeXCourses made it so easy to learn! Check out their courses (link in bio) #LearnToCode #CareerGrowth"</p>
+                              <button class="text-xs text-blue-600 hover:text-blue-800">Copy Text</button>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <!-- LinkedIn Post -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-4">
+                          <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                              <i class="fab fa-linkedin text-blue-600"></i>
+                            </div>
+                            <div class="ml-3">
+                              <h5 class="font-medium text-sm mb-1">LinkedIn Post</h5>
+                              <p class="text-xs text-gray-500 mb-2">"In today's digital economy, coding skills are becoming essential regardless of your role. I've been impressed with the quality of courses at CodeX - they offer practical, job-relevant training. If you're looking to upskill, check them out: [your-link]"</p>
+                              <button class="text-xs text-blue-600 hover:text-blue-800">Copy Text</button>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <!-- Facebook Post -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-4">
+                          <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                              <i class="fab fa-facebook text-blue-700"></i>
+                            </div>
+                            <div class="ml-3">
+                              <h5 class="font-medium text-sm mb-1">Facebook Post</h5>
+                              <p class="text-xs text-gray-500 mb-2">"Friends who are interested in tech - I've found an amazing learning platform! CodeX offers courses in everything from web development to data science. Use my link to get started: [your-link]"</p>
+                              <button class="text-xs text-blue-600 hover:text-blue-800">Copy Text</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Settings Tab -->
+                  <div id="settingsContent" class="tab-content hidden">
+                    <div class="mb-6">
+                      <h4 class="font-medium mb-3">Account Information</h4>
+                      
+                      <div class="bg-white border border-gray-200 rounded-lg p-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                          <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                            <input type="text" class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="John">
+                          </div>
+                          <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                            <input type="text" class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="Doe">
+                          </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                          <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                          <input type="email" class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="john.doe@example.com">
+                        </div>
+                        
+                        <div class="flex justify-end">
+                          <button type="button" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Update Profile
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                      <h4 class="font-medium mb-3">Payment Settings</h4>
+                      
+                      <div class="bg-white border border-gray-200 rounded-lg p-4">
+                        <div class="mb-4">
+                          <label class="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
+                          <select class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option>PayPal</option>
+                            <option>Bank Transfer</option>
+                            <option>Course Credit</option>
+                          </select>
+                        </div>
+                        
+                        <div id="paypalDetails" class="mb-4">
+                          <label class="block text-sm font-medium text-gray-700 mb-1">PayPal Email</label>
+                          <input type="email" class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="john.doe@example.com">
+                        </div>
+                        
+                        <div id="bankDetails" class="hidden">
+                          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                              <label class="block text-sm font-medium text-gray-700 mb-1">Bank Name</label>
+                              <input type="text" class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            </div>
+                            <div>
+                              <label class="block text-sm font-medium text-gray-700 mb-1">Account Type</label>
+                              <select class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <option>Checking</option>
+                                <option>Savings</option>
+                              </select>
+                            </div>
+                          </div>
+                          
+                          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                              <label class="block text-sm font-medium text-gray-700 mb-1">Account Number</label>
+                              <input type="text" class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            </div>
+                            <div>
+                              <label class="block text-sm font-medium text-gray-700 mb-1">Routing Number</label>
+                              <input type="text" class="block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div class="flex justify-end">
+                          <button type="button" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Update Payment Method
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 class="font-medium mb-3">Notification Preferences</h4>
+                      
+                      <div class="bg-white border border-gray-200 rounded-lg p-4">
+                        <div class="flex items-start mb-4">
+                          <div class="flex items-center h-5">
+                            <input id="new-referral" name="new-referral" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" checked>
+                          </div>
+                          <div class="ml-3 text-sm">
+                            <label for="new-referral" class="font-medium text-gray-700">New Referral</label>
+                            <p class="text-gray-500">Get notified when someone signs up through your link</p>
+                          </div>
+                        </div>
+                        
+                        <div class="flex items-start mb-4">
+                          <div class="flex items-center h-5">
+                            <input id="commission-earned" name="commission-earned" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" checked>
+                          </div>
+                          <div class="ml-3 text-sm">
+                            <label for="commission-earned" class="font-medium text-gray-700">Commission Earned</label>
+                            <p class="text-gray-500">Get notified when you earn a new commission</p>
+                          </div>
+                        </div>
+                        
+                        <div class="flex items-start mb-4">
+                          <div class="flex items-center h-5">
+                            <input id="payout-sent" name="payout-sent" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" checked>
+                          </div>
+                          <div class="ml-3 text-sm">
+                            <label for="payout-sent" class="font-medium text-gray-700">Payout Sent</label>
+                            <p class="text-gray-500">Get notified when your payout is processed</p>
+                          </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                          <div class="flex items-center h-5">
+                            <input id="promotions" name="promotions" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" checked>
+                          </div>
+                          <div class="ml-3 text-sm">
+                            <label for="promotions" class="font-medium text-gray-700">Promotions & Offers</label>
+                            <p class="text-gray-500">Get notified about special promotions you can share</p>
+                          </div>
+                        </div>
+                        
+                        <div class="mt-4 flex justify-end">
+                          <button type="button" class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            Update Preferences
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white pt-12 pb-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div>
+          <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase mb-4">CodeX</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-300 hover:text-white">About Us</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white">Careers</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white">Press</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white">Blog</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase mb-4">Courses</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-300 hover:text-white">Web Development</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white">Data Science</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white">Mobile Development</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white">Cybersecurity</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase mb-4">Support</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-300 hover:text-white">Help Center</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white">Contact Us</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white">Feedback</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white">Community</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase mb-4">Legal</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-300 hover:text-white">Terms</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white">Privacy</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white">Cookie Policy</a></li>
+            <li><a href="#" class="text-gray-300 hover:text-white">Affiliate Terms</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="mt-8 pt-8 border-t border-gray-700 flex flex-col md:flex-row justify-between items-center">
+        <div class="flex space-x-6 mb-4 md:mb-0">
+          <a href="#" class="text-gray-400 hover:text-white">
+            <span class="sr-only">Facebook</span>
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white">
+            <span class="sr-only">Instagram</span>
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white">
+            <span class="sr-only">Twitter</span>
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white">
+            <span class="sr-only">YouTube</span>
+            <i class="fab fa-youtube"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white">
+            <span class="sr-only">LinkedIn</span>
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+        </div>
+        <p class="text-gray-400 text-sm">&copy; 2023 CodeX. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Toggle affiliate dashboard modal
+    function toggleAffiliateDashboard() {
+      const modal = document.getElementById('affiliateDashboardModal');
+      modal.classList.toggle('hidden');
+    }
+    
+    // Switch between dashboard tabs
+    function switchTab(tabName) {
+      // Hide all tab contents
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.add('hidden');
+      });
+      
+      // Deactivate all tabs
+      document.querySelectorAll('nav button').forEach(tab => {
+        tab.classList.remove('border-blue-500', 'text-blue-600');
+        tab.classList.add('border-transparent', 'text-gray-500');
+      });
+      
+      // Show selected tab content
+      document.getElementById(tabName + 'Content').classList.remove('hidden');
+      
+      // Activate selected tab
+      document.getElementById(tabName + 'Tab').classList.remove('border-transparent', 'text-gray-500');
+      document.getElementById(tabName + 'Tab').classList.add('border-blue-500', 'text-blue-600');
+    }
+    
+    // Copy referral link to clipboard
+    function copyReferralLink() {
+      const referralLink = document.getElementById('referralLink').textContent;
+      navigator.clipboard.writeText(referralLink).then(() => {
+        const copyBtn = document.querySelector('.copy-btn');
+        copyBtn.textContent = 'Copied!';
+        copyBtn.classList.add('copied');
+        
+        setTimeout(() => {
+          copyBtn.textContent = 'Copy';
+          copyBtn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+    
+    // Handle affiliate signup form submission
+    document.getElementById('affiliateSignupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // In a real application, you would send this data to your server
+      alert('Thank you for applying to our affiliate program! Your application has been received and you will hear from us soon.');
+      
+      // Reset form
+      this.reset();
+      
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    
+    //
+</html>

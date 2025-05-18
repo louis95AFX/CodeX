@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdventMatch - Seventh-day Adventist Dating</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Noto+Serif:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .serif {
+            font-family: 'Noto Serif', serif;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #2c5aa0 0%, #4a8b48 100%);
+        }
+        
+        .sabbath-bg {
+            background-image: url('https://images.unsplash.com/photo-1517649763962-0c623066013b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+        }
+        
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-link:hover {
+            color: #4a8b48;
+        }
+        
+        .checkbox:checked {
+            background-color: #4a8b48;
+        }
+        
+        .checkbox:checked::after {
+            content: '✓';
+            color: white;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-heart text-2xl text-blue-800"></i>
+                <a href="#" class="text-2xl font-bold text-blue-800 serif">AdventMatch</a>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#" class="nav-link text-gray-700 hover:text-green-700 transition" onclick="showSection('home')">Home</a>
+                <a href="#" class="nav-link text-gray-700 hover:text-green-700 transition" onclick="showSection('browse')">Browse</a>
+                <a href="#" class="nav-link text-gray-700 hover:text-green-700 transition" onclick="showSection('stories')">Success Stories</a>
+                <a href="#" class="nav-link text-gray-700 hover:text-green-700 transition" onclick="showSection('resources')">Resources</a>
+            </div>
+            <div class="flex items-center space-x-4" id="auth-buttons">
+                <a href="#" class="px-4 py-2 text-gray-700 hover:text-green-700 transition" onclick="showLoginModal()">Login</a>
+                <a href="#" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition" onclick="showRegisterModal()">Sign Up</a>
+                <button class="md:hidden text-gray-700" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+            <div class="hidden items-center space-x-4" id="user-menu">
+                <span id="username-display" class="font-medium"></span>
+                <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition" onclick="logout()">Logout</button>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div class="hidden md:hidden bg-white py-2 px-4" id="mobile-menu">
+            <a href="#" class="block py-2 text-gray-700 hover:text-green-700 transition" onclick="showSection('home')">Home</a>
+            <a href="#" class="block py-2 text-gray-700 hover:text-green-700 transition" onclick="showSection('browse')">Browse</a>
+            <a href="#" class="block py-2 text-gray-700 hover:text-green-700 transition" onclick="showSection('stories')">Success Stories</a>
+            <a href="#" class="block py-2 text-gray-700 hover:text-green-700 transition" onclick="showSection('resources')">Resources</a>
+            <div class="border-t border-gray-200 mt-2 pt-2">
+                <a href="#" class="block py-2 text-gray-700 hover:text-green-700 transition" onclick="showLoginModal()">Login</a>
+                <a href="#" class="block py-2 text-gray-700 hover:text-green-700 transition" onclick="showRegisterModal()">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Sections -->
+    <main>
+        <!-- Home Section -->
+        <section id="home-section" class="section-content">
+            <!-- Hero Section -->
+            <section class="hero-gradient text-white py-16 md:py-24">
+                <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 mb-10 md:mb-0">
+                        <h1 class="text-4xl md:text-5xl font-bold mb-6 serif">Find Your Adventist Match</h1>
+                        <p class="text-xl mb-8">Connect with fellow Seventh-day Adventists who share your faith, values, and commitment to Christ.</p>
+                        <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                            <a href="#" class="px-8 py-3 bg-white text-blue-800 font-semibold rounded-md hover:bg-gray-100 transition text-center" onclick="showRegisterModal()">Join Free</a>
+                            <a href="#" class="px-8 py-3 border-2 border-white text-white font-semibold rounded-md hover:bg-white hover:text-blue-800 transition text-center" onclick="showSection('about')">Learn More</a>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 flex justify-center">
+                        <div class="bg-white rounded-lg shadow-xl p-4 max-w-md w-full">
+                            <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Create Your Free Profile</h3>
+                            <form id="quick-register-form">
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 mb-2">I am a</label>
+                                    <div class="flex space-x-4">
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="gender" class="form-radio text-green-600" value="male" checked>
+                                            <span class="ml-2 text-gray-700">Man</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="gender" class="form-radio text-green-600" value="female">
+                                            <span class="ml-2 text-gray-700">Woman</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 mb-2">Looking for a</label>
+                                    <div class="flex space-x-4">
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="looking_for" class="form-radio text-green-600" value="male">
+                                            <span class="ml-2 text-gray-700">Man</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="looking_for" class="form-radio text-green-600" value="female" checked>
+                                            <span class="ml-2 text-gray-700">Woman</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 mb-2">Email</label>
+                                    <input type="email" id="quick-email" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-gray-700 mb-2">Password</label>
+                                    <input type="password" id="quick-password" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                                </div>
+                                <div class="mb-6">
+                                    <label class="flex items-center">
+                                        <div class="relative">
+                                            <input type="checkbox" class="checkbox appearance-none w-6 h-6 border border-gray-300 rounded-md checked:border-transparent focus:outline-none" required>
+                                        </div>
+                                        <span class="ml-2 text-gray-700 text-sm">I agree to the <a href="#" class="text-green-600 hover:underline">Terms</a> and <a href="#" class="text-green-600 hover:underline">Privacy Policy</a></span>
+                                    </label>
+                                </div>
+                                <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-md hover:bg-green-700 transition">Get Started</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Why Choose Us -->
+            <section class="py-16 bg-white">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-3xl font-bold text-center mb-12 serif">Why Choose AdventMatch?</h2>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="text-center p-6 rounded-lg hover:shadow-lg transition">
+                            <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-bible text-2xl text-blue-800"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Shared Faith</h3>
+                            <p class="text-gray-600">Connect with fellow Seventh-day Adventists who understand and live by the same biblical principles.</p>
+                        </div>
+                        <div class="text-center p-6 rounded-lg hover:shadow-lg transition">
+                            <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-heart text-2xl text-green-600"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Values-Based Matching</h3>
+                            <p class="text-gray-600">Our matching system prioritizes Sabbath observance, health principles, and spiritual compatibility.</p>
+                        </div>
+                        <div class="text-center p-6 rounded-lg hover:shadow-lg transition">
+                            <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-shield-alt text-2xl text-purple-600"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Safe Community</h3>
+                            <p class="text-gray-600">Verified profiles and a commitment to creating a Christ-centered environment for meaningful connections.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sabbath Section -->
+            <section class="sabbath-bg bg-blue-900 bg-opacity-80 text-white py-16">
+                <div class="container mx-auto px-4">
+                    <div class="max-w-3xl mx-auto text-center">
+                        <i class="fas fa-church text-5xl mb-6"></i>
+                        <h2 class="text-3xl font-bold mb-6 serif">Honoring the Sabbath Together</h2>
+                        <p class="text-xl mb-8">At AdventMatch, we understand the importance of finding a partner who shares your commitment to Sabbath observance. Our platform helps you connect with individuals who cherish this sacred time as much as you do.</p>
+                        <a href="#" class="inline-block px-8 py-3 bg-white text-blue-800 font-semibold rounded-md hover:bg-gray-100 transition">Learn About Our Sabbath Features</a>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- Browse Section -->
+        <section id="browse-section" class="section-content hidden py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-8 serif">Meet Adventist Singles</h2>
+                
+                <!-- Search Filters -->
+                <div class="bg-gray-100 p-6 rounded-lg mb-8">
+                    <h3 class="text-xl font-bold mb-4">Filter Profiles</h3>
+                    <form id="search-form" class="grid md:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-gray-700 mb-2">Gender</label>
+                            <select class="w-full px-4 py-2 border rounded-md" id="filter-gender">
+                                <option value="">Any</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2">Age Range</label>
+                            <select class="w-full px-4 py-2 border rounded-md" id="filter-age">
+                                <option value="">Any</option>
+                                <option value="18-25">18-25</option>
+                                <option value="26-35">26-35</option>
+                                <option value="36-45">36-45</option>
+                                <option value="46+">46+</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2">Location</label>
+                            <select class="w-full px-4 py-2 border rounded-md" id="filter-location">
+                                <option value="">Any</option>
+                                <option value="north-america">North America</option>
+                                <option value="europe">Europe</option>
+                                <option value="africa">Africa</option>
+                                <option value="asia">Asia</option>
+                                <option value="south-america">South America</option>
+                                <option value="australia">Australia</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-2">Interests</label>
+                            <select class="w-full px-4 py-2 border rounded-md" id="filter-interests">
+                                <option value="">Any</option>
+                                <option value="music">Music</option>
+                                <option value="mission">Mission Work</option>
+                                <option value="health">Health Ministry</option>
+                                <option value="outdoors">Outdoors</option>
+                                <option value="education">Education</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-4 flex justify-end">
+                            <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">Search</button>
+                            <button type="reset" class="ml-2 px-6 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition">Reset</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Profiles Grid -->
+                <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="profiles-container">
+                    <!-- Profiles will be loaded here via JavaScript -->
+                </div>
+                
+                <div class="text-center mt-10">
+                    <button id="load-more" class="px-8 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition">Load More Profiles</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Success Stories Section -->
+        <section id="stories-section" class="section-content hidden py-16 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-12 serif">Success Stories</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-lg shadow-md">
+                        <div class="flex items-center mb-6">
+                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah" class="w-16 h-16 rounded-full object-cover">
+                            <div class="ml-4">
+                                <h4 class="font-bold">Sarah & Michael</h4>
+                                <p class="text-gray-600">Married June 2022</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-4">"We connected over our mutual love for mission work and plant-based cooking. Our first date was at a vegetarian restaurant after Sabbath services, and we knew right away there was something special."</p>
+                        <div class="flex space-x-2">
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Sabbath Keepers</span>
+                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Vegetarian</span>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-md">
+                        <div class="flex items-center mb-6">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="David" class="w-16 h-16 rounded-full object-cover">
+                            <div class="ml-4">
+                                <h4 class="font-bold">David & Rebecca</h4>
+                                <p class="text-gray-600">Engaged March 2023</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 mb-4">"AdventMatch helped us find each other across continents! We started with Bible study over video chat every Sabbath afternoon, and now we're planning our wedding and life together in ministry."</p>
+                        <div class="flex space-x-2">
+                            <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">Missionaries</span>
+                            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">Long Distance</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-10">
+                    <button class="px-8 py-3 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 transition" onclick="showSubmitStoryModal()">Share Your Story</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources Section -->
+        <section id="resources-section" class="section-content hidden py-16 bg-white">
+            <div class="container mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-12 serif">Adventist Dating Resources</h2>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Dating Advice -->
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-pink-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-heart text-pink-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold">Dating Advice</h3>
+                        </div>
+                        <ul class="space-y-3">
+                            <li><a href="#" class="text-gray-700 hover:text-green-600 transition flex items-center" onclick="showResourceModal('5 Tips for Christ-Centered Dating')">
+                                <i class="fas fa-chevron-right text-green-600 mr-2 text-sm"></i> 5 Tips for Christ-Centered Dating
+                            </a></li>
+                            <li><a href="#" class="text-gray-700 hover:text-green-600 transition flex items-center" onclick="showResourceModal('Sabbath Date Ideas')">
+                                <i class="fas fa-chevron-right text-green-600 mr-2 text-sm"></i> Sabbath Date Ideas
+                            </a></li>
+                            <li><a href="#" class="text-gray-700 hover:text-green-600 transition flex items-center" onclick="showResourceModal('Balancing Courtship and Ministry')">
+                                <i class="fas fa-chevron-right text-green-600 mr-2 text-sm"></i> Balancing Courtship and Ministry
+                            </a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Spiritual Growth -->
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-pray text-blue-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold">Spiritual Growth</h3>
+                        </div>
+                        <ul class="space-y-3">
+                            <li><a href="#" class="text-gray-700 hover:text-green-600 transition flex items-center" onclick="showResourceModal('Couples Devotional Guide')">
+                                <i class="fas fa-chevron-right text-green-600 mr-2 text-sm"></i> Couples Devotional Guide
+                            </a></li>
+                            <li><a href="#" class="text-gray-700 hover:text-green-600 transition flex items-center" onclick="showResourceModal('Praying Together as a Couple')">
+                                <i class="fas fa-chevron-right text-green-600 mr-2 text-sm"></i> Praying Together as a Couple
+                            </a></li>
+                            <li><a href="#" class="text-gray-700 hover:text-green-600 transition flex items-center" onclick="showResourceModal('Biblical Principles for Relationships')">
+                                <i class="fas fa-chevron-right text-green-600 mr-2 text-sm"></i> Biblical Principles for Relationships
+                            </a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Health & Lifestyle -->
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-green-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-apple-alt text-green-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold">Health & Lifestyle</h3>
+                        </div>
+                        <ul class="space-y-3">
+                            <li><a href="#" class="text-gray-700 hover:text-green-600 transition flex items-center" onclick="showResourceModal('Vegetarian Cooking for Dates')">
+                                <i class="fas fa-chevron-right text-green-600 mr-2 text-sm"></i> Vegetarian Cooking for Dates
+                            </a></li>
+                            <li><a href="#" class="text-gray-700 hover:text-green-600 transition flex items-center" onclick="showResourceModal('Active Adventist Lifestyle')">
+                                <i class="fas fa-chevron-right text-green-600 mr-2 text-sm"></i> Active Adventist Lifestyle
+                            </a></li>
+                            <li><a href="#" class="text-gray-700 hover:text-green-600 transition flex items-center" onclick="showResourceModal('Health Retreats for Couples')">
+                                <i class="fas fa-chevron-right text-green-600 mr-2 text-sm"></i> Health Retreats for Couples
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="mt-12 bg-blue-50 p-8 rounded-lg">
+                    <h3 class="text-2xl font-bold mb-4 text-center serif">Adventist Relationship Podcast</h3>
+                    <div class="flex flex-col md:flex-row items-center">
+                        <div class="md:w-1/3 mb-6 md:mb-0 flex justify-center">
+                            <img src="https://images.unsplash.com/photo-1571330735066-03aaa9429d89?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Podcast" class="w-64 h-64 object-cover rounded-lg shadow-md">
+                        </div>
+                        <div class="md:w-2/3 md:pl-8">
+                            <p class="text-gray-700 mb-6">Join Pastor Mark and his wife Sarah each week as they discuss Adventist relationships, biblical principles for dating and marriage, and practical tips for building Christ-centered relationships.</p>
+                            <div class="flex flex-wrap justify-center gap-4">
+                                <button class="px-6 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition flex items-center">
+                                    <i class="fab fa-spotify mr-2"></i> Spotify
+                                </button>
+                                <button class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition flex items-center">
+                                    <i class="fab fa-apple mr-2"></i> Apple Podcasts
+                                </button>
+                                <button class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition flex items-center">
+                                    <i class="fab fa-youtube mr-2"></i> YouTube
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('login-modal')">&times;</span>
+            <h2 class="text-2xl font-bold mb-6 text-center">Login to AdventMatch</h2>
+            <form id="login-form">
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Email</label>
+                    <input type="email" id="login-email" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Password</label>
+                    <input type="password" id="login-password" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                </div>
+                <div class="mb-6 flex justify-between items-center">
+                    <label class="flex items-center">
+                        <div class="relative">
+                            <input type="checkbox" class="checkbox appearance-none w-6 h-6 border border-gray-300 rounded-md checked:border-transparent focus:outline-none">
+                        </div>
+                        <span class="ml-2 text-gray-700 text-sm">Remember me</span>
+                    </label>
+                    <a href="#" class="text-sm text-green-600 hover:underline">Forgot password?</a>
+                </div>
+                <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-md hover:bg-green-700 transition mb-4">Login</button>
+                <p class="text-center text-gray-600">Don't have an account? <a href="#" class="text-green-600 hover:underline" onclick="showRegisterModal()">Sign up</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('register-modal')">&times;</span>
+            <h2 class="text-2xl font-bold mb-6 text-center">Create Your AdventMatch Account</h2>
+            <form id="register-form">
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2">First Name</label>
+                        <input type="text" id="first-name" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Last Name</label>
+                        <input type="text" id="last-name" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Email</label>
+                    <input type="email" id="register-email" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Password</label>
+                    <input type="password" id="register-password" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Gender</label>
+                    <div class="flex space-x-4">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="register-gender" class="form-radio text-green-600" value="male" checked>
+                            <span class="ml-2 text-gray-700">Male</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="register-gender" class="form-radio text-green-600" value="female">
+                            <span class="ml-2 text-gray-700">Female</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <label class="flex items-center">
+                        <div class="relative">
+                            <input type="checkbox" class="checkbox appearance-none w-6 h-6 border border-gray-300 rounded-md checked:border-transparent focus:outline-none" required>
+                        </div>
+                        <span class="ml-2 text-gray-700 text-sm">I agree to the <a href="#" class="text-green-600 hover:underline">Terms</a> and <a href="#" class="text-green-600 hover:underline">Privacy Policy</a></span>
+                    </label>
+                </div>
+                <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-md hover:bg-green-700 transition mb-4">Create Account</button>
+                <p class="text-center text-gray-600">Already have an account? <a href="#" class="text-green-600 hover:underline" onclick="showLoginModal()">Login</a></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Submit Story Modal -->
+    <div id="submit-story-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('submit-story-modal')">&times;</span>
+            <h2 class="text-2xl font-bold mb-6 text-center">Share Your Success Story</h2>
+            <form id="story-form">
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-gray-700 mb-2">Your Name</label>
+                        <input type="text" id="story-name" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-2">Partner's Name</label>
+                        <input type="text" id="partner-name" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Your Story</label>
+                    <textarea id="story-text" rows="5" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" required></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Upload Photo (Optional)</label>
+                    <input type="file" id="story-photo" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div class="mb-6">
+                    <label class="flex items-center">
+                        <div class="relative">
+                            <input type="checkbox" class="checkbox appearance-none w-6 h-6 border border-gray-300 rounded-md checked:border-transparent focus:outline-none" required>
+                        </div>
+                        <span class="ml-2 text-gray-700 text-sm">I agree to share my story publicly on AdventMatch</span>
+                    </label>
+                </div>
+                <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-md hover:bg-green-700 transition">Submit Story</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Resource Modal -->
+    <div id="resource-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('resource-modal')">&times;</span>
+            <h2 id="resource-title" class="text-2xl font-bold mb-6 text-center"></h2>
+            <div id="resource-content" class="prose max-w-none">
+                <!-- Content will be loaded here via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('profile-modal')">&times;</span>
+            <div id="profile-modal-content">
+                <!-- Profile content will be loaded here via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-heart text-2xl text-blue-400"></i>
+                        <a href="#" class="text-2xl font-bold text-white serif">AdventMatch</a>
+                    </div>
+                    <p class="text-gray-400">Connecting Seventh-day Adventists for Christ-centered relationships since 2010.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition" onclick="showSection('home')">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition" onclick="showSection('browse')">Browse Members</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition" onclick="showSection('stories')">Success Stories</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition" onclick="showSection('resources')">Dating Resources</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Adventist Dating Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Sabbath Date Ideas</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Relationship Advice</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Prayer Requests</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Contact Us</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope text-gray-400 mr-2"></i>
+                            <span>support@adventmatch.com</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone text-gray-400 mr-2"></i>
+                            <span>(800) 555-0182</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt text-gray-400 mr-2"></i>
+                            <span>Silver Spring, MD</span>
+                        </li>
+                    </ul>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">© 2023 AdventMatch. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // State management
+        let currentUser = null;
+        let profiles = [];
+        let likedProfiles = [];
+        
+        // Sample user data
+        const sampleUsers = [
+            {
+                id: 1,
+                name: "Jessica",
+                age: 28,
+                gender: "female",
+                location: "California",
+                photo: "https://randomuser.me/api/portraits/women/68.jpg",
+                bio: "Nurse looking for a partner who values health ministry and Sabbath fellowship.",
+                interests: ["church", "vegetarian", "music"],
+                lookingFor: "male"
+            },
+            {
+                id: 2,
+                name: "Daniel",
+                age: 32,
+                gender: "male",
+                location: "Texas",
+                photo: "https://randomuser.me/api/portraits/men/75.jpg",
+                bio: "Teacher passionate about Adventist education and finding someone to serve with.",
+                interests: ["education", "fitness", "travel"],
+                lookingFor: "female"
+            },
+            {
+                id: 3,
+                name: "Rachel",
+                age: 25,
+                gender: "female",
+                location: "New York",
+                photo: "https://randomuser.me/api/portraits/women/33.jpg",
+                bio: "Creative soul seeking a partner who loves art, nature, and Bible study.",
+                interests: ["art", "hiking", "prayer"],
+                lookingFor: "male"
+            },
+            {
+                id: 4,
+                name: "Mark",
+                age: 30,
+                gender: "male",
+                location: "Colorado",
+                photo: "https://randomuser.me/api/portraits/men/45.jpg",
+                bio: "Tech enthusiast who keeps the Sabbath holy and enjoys outdoor adventures.",
+                interests: ["technology", "camping", "cooking"],
+                lookingFor: "female"
+            },
+            {
+                id: 5,
+                name: "Sarah",
+                age: 27,
+                gender: "female",
+                location: "Florida",
+                photo: "https://randomuser.me/api/portraits/women/44.jpg",
+                bio: "Missionary nurse looking for a partner to serve in health evangelism.",
+                interests: ["mission", "health", "reading"],
+                lookingFor: "male"
+            },
+            {
+                id: 6,
+                name: "Michael",
+                age: 35,
+                gender: "male",
+                location: "Washington",
+                photo: "https://randomuser.me/api/portraits/men/32.jpg",
+                bio: "Pastor seeking a wife to join in ministry and build a Christ-centered home.",
+                interests: ["ministry", "preaching", "family"],
+                lookingFor: "female"
+            }
+        ];
+        
+        // Resource content
+        const resources = {
+            "5 Tips for Christ-Centered Dating": `
+                <h3 class="text-xl font-bold mb-4">5 Tips for Christ-Centered Dating</h3>
+                <ol class="list-decimal pl-5 space-y-3">
+                    <li><strong>Pray together from the start</strong> - Make prayer a foundation of your relationship.</li>
+                    <li><strong>Study the Bible together</strong> - Grow spiritually as you learn about each other.</li>
+                    <li><strong>Attend church and events together</strong> - See how you both interact in spiritual settings.</li>
+                    <li><strong>Discuss your values early</strong> - Be clear about Sabbath observance, health principles, and life goals.</li>
+                    <li><strong>Set boundaries</strong> - Establish physical and emotional boundaries that honor God.</li>
+                </ol>
+                <p class="mt-4">Remember, the goal of Adventist dating should be to determine if this is someone you could marry and serve God with.</p>
+            `,
+            "Sabbath Date Ideas": `
+                <h3 class="text-xl font-bold mb-4">Sabbath Date Ideas</h3>
+                <p>Here are some wonderful ways to spend quality time together while honoring the Sabbath:</p>
+                <ul class="list-disc pl-5 space-y-2 mt-3">
+                    <li>Sunset worship at a scenic location</li>
+                    <li>Potluck and fellowship with other Adventist couples</li>
+                    <li>Visit a nursing home or hospital for ministry together</li>
+                    <li>Nature walk with devotional stops</li>
+                    <li>Bible study and discussion</li>
+                    <li>Attend a concert or musical program at church</li>
+                    <li>Watch an inspirational film or documentary</li>
+                    <li>Serve together at a soup kitchen or homeless ministry</li>
+                </ul>
+                <p class="mt-4">The key is to focus on activities that draw you closer to God and each other.</p>
+            `,
+            "Balancing Courtship and Ministry": `
+                <h3 class="text-xl font-bold mb-4">Balancing Courtship and Ministry</h3>
+                <p>Finding equilibrium between your relationship and service to God can be challenging but rewarding:</p>
+                <div class="mt-4 space-y-4">
+                    <div>
+                        <h4 class="font-bold">1. Serve Together</h4>
+                        <p>Look for ministry opportunities you can participate in as a couple. This could be teaching Sabbath School, leading a small group, or volunteering for church events.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold">2. Support Each Other's Callings</h4>
+                        <p>Encourage each other's individual ministries while finding ways to occasionally serve together.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold">3. Schedule Quality Time</h4>
+                        <p>Protect regular time for just the two of you to connect without ministry distractions.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold">4. Pray for Guidance</h4>
+                        <p>Seek God's wisdom together about how to balance your relationship and service to Him.</p>
+                    </div>
+                </div>
+            `,
+            "Couples Devotional Guide": `
+                <h3 class="text-xl font-bold mb-4">Couples Devotional Guide</h3>
+                <p>Here's a simple framework for meaningful devotional time together:</p>
+                <div class="mt-4 space-y-4">
+                    <div>
+                        <h4 class="font-bold">1. Opening Prayer (5 minutes)</h4>
+                        <p>Begin by praying together, asking God to guide your time and speak to your hearts.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold">2. Scripture Reading (10 minutes)</h4>
+                        <p>Take turns reading a passage aloud. Consider working through a book of the Bible together.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold">3. Discussion (15 minutes)</h4>
+                        <p>Share what stood out to you from the passage and how it applies to your lives.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold">4. Application (5 minutes)</h4>
+                        <p>Decide on one practical way you'll apply what you've learned this week.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold">5. Closing Prayer (5 minutes)</h4>
+                        <p>Pray for each other, your relationship, and any needs you're facing.</p>
+                    </div>
+                </div>
+                <p class="mt-4">This 30-40 minute format provides structure while allowing flexibility based on your schedules.</p>
+            `,
+            "Vegetarian Cooking for Dates": `
+                <h3 class="text-xl font-bold mb-4">Vegetarian Cooking for Dates</h3>
+                <p>Sharing meals is a wonderful way to connect. Here are some Adventist-friendly date night cooking ideas:</p>
+                <div class="mt-4 space-y-4">
+                    <div>
+                        <h4 class="font-bold">1. Make-Your-Own Pizza Night</h4>
+                        <p>Prepare whole wheat dough and various vegetarian toppings for a fun, interactive meal.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold">2. International Cuisine Challenge</h4>
+                        <p>Pick a country and cook a vegetarian version of their traditional dishes together.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold">3. Sabbath Preparation Cooking</h4>
+                        <p>Prepare Sabbath meals together on Friday afternoon while listening to inspirational music.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold">4. Picnic Preparation</h4>
+                        <p>Make sandwiches, salads, and snacks together for a Sabbath afternoon picnic.</p>
+                    </div>
+                </div>
+                <p class="mt-4">Remember to focus on the experience of cooking together rather than perfection in the kitchen!</p>
+            `
+        };
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load sample profiles
+            profiles = [...sampleUsers];
+            renderProfiles();
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Check if user is logged in (from localStorage)
+            checkLoginStatus();
+        });
+        
+        // Set up event listeners
+        function setupEventListeners() {
+            // Quick register form
+            document.getElementById('quick-register-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('quick-email').value;
+                const password = document.getElementById('quick-password').value;
+                const gender = document.querySelector('input[name="gender"]:checked').value;
+                const lookingFor = document.querySelector('input[name="looking_for"]:checked').value;
+                
+                // In a real app, this would send to a server
+                registerUser(email, password, gender, lookingFor);
+            });
+            
+            // Login form
+            document.getElementById('login-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                
+                // In a real app, this would verify with a server
+                loginUser(email, password);
+            });
+            
+            // Register form
+            document.getElementById('register-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const firstName = document.getElementById('first-name').value;
+                const lastName = document.getElementById('last-name').value;
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                const gender = document.querySelector('input[name="register-gender"]:checked').value;
+                
+                // In a real app, this would send to a server
+                registerUser(email, password, gender, gender === 'male' ? 'female' : 'male', firstName, lastName);
+            });
+            
+            // Story form
+            document.getElementById('story-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('story-name').value;
+                const partnerName = document.getElementById('partner-name').value;
+                const story = document.getElementById('story-text').value;
+                
+                alert(`Thank you, ${name}, for sharing your story with ${partnerName}! Our team will review it and may contact you for more details.`);
+                closeModal('submit-story-modal');
+            });
+            
+            // Search form
+            document.getElementById('search-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                filterProfiles();
+            });
+            
+            // Load more button
+            document.getElementById('load-more').addEventListener('click', function() {
+                // In a real app, this would load more from a server
+                alert('Loading more profiles...');
+            });
+        }
+        
+        // User authentication functions
+        function registerUser(email, password, gender, lookingFor, firstName = "New", lastName = "User") {
+            // In a real app, this would create a user on the server
+            currentUser = {
+                id: Math.floor(Math.random() * 10000),
+                email,
+                firstName,
+                lastName,
+                gender,
+                lookingFor,
+                joined: new Date().toISOString()
+            };
+            
+            // Save to localStorage
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            // Update UI
+            updateLoginStatus();
+            
+            // Close modal and show browse section
+            closeModal('register-modal');
+            showSection('browse');
+            
+            alert(`Welcome to AdventMatch, ${firstName}! Your account has been created.`);
+        }
+        
+        function loginUser(email, password) {
+            // In a real app, this would verify with a server
+            // For demo purposes, we'll just create a user if email contains "advent"
+            if (email.includes('advent')) {
+                currentUser = {
+                    id: Math.floor(Math.random() * 10000),
+                    email,
+                    firstName: "Demo",
+                    lastName: "User",
+                    gender: email.includes('male') ? 'male' : 'female',
+                    lookingFor: email.includes('male') ? 'female' : 'male',
+                    joined: new Date().toISOString()
+                };
+                
+                // Save to localStorage
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                // Update UI
+                updateLoginStatus();
+                
+                // Close modal and show browse section
+                closeModal('login-modal');
+                showSection('browse');
+                
+                alert(`Welcome back to AdventMatch!`);
+            } else {
+                alert('Invalid login. For this demo, use an email containing "advent" (e.g., advent@example.com).');
+            }
+        }
+        
+        function logout() {
+            // Clear current user
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            
+            // Update UI
+            updateLoginStatus();
+            
+            // Show home section
+            showSection('home');
+        }
+        
+        function checkLoginStatus() {
+            const user = localStorage.getItem('currentUser');
+            if (user) {
+                currentUser = JSON.parse(user);
+                updateLoginStatus();
+            }
+        }
+        
+        function updateLoginStatus() {
+            const authButtons = document.getElementById('auth-buttons');
+            const userMenu = document.getElementById('user-menu');
+            const usernameDisplay = document.getElementById('username-display');
+            
+            if (currentUser) {
+                authButtons.classList.add('hidden');
+                userMenu.classList.remove('hidden');
+                usernameDisplay.textContent = currentUser.firstName;
+            } else {
+                authButtons.classList.remove('hidden');
+                userMenu.classList.add('hidden');
+            }
+        }
+        
+        // Profile functions
+        function renderProfiles() {
+            const container = document.getElementById('profiles-container');
+            container.innerHTML = '';
+            
+            profiles.forEach(profile => {
+                const profileCard = document.createElement('div');
+                profileCard.className = 'profile-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300';
+                profileCard.innerHTML = `
+                    <div class="relative">
+                        <img src="${profile.photo}" alt="${profile.name}" class="w-full h-64 object-cover">
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                            <h3 class="text-white font-bold text-xl">${profile.name}, ${profile.age}</h3>
+                            <p class="text-white text-sm">${profile.location}</p>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-gray-600 text-sm mb-3">"${profile.bio}"</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex space-x-1">
+                                ${profile.interests.map(int => `<i class="fas fa-${getInterestIcon(int)} text-green-600"></i>`).join('')}
+                            </div>
+                            <button class="text-green-600 hover:text-green-800" onclick="likeProfile(${profile.id})">
+                                <i class="fas fa-heart text-xl ${likedProfiles.includes(profile.id) ? 'text-red-500' : ''}"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add click event to view profile
+                profileCard.addEventListener('click', function(e) {
+                    if (!e.target.closest('button')) {
+                        showProfileModal(profile.id);
+                    }
+                });
+                
+                container.appendChild(profileCard);
+            });
+        }
+        
+        function getInterestIcon(interest) {
+            const icons = {
+                'church': 'church',
+                'vegetarian': 'leaf',
+                'music': 'music',
+                'education': 'book',
+                'fitness': 'running',
+                'travel': 'globe-americas',
+                'art': 'paint-brush',
+                'hiking': 'hiking',
+                'prayer': 'praying-hands',
+                'technology': 'laptop-code',
+                'camping': 'campground',
+                'cooking': 'utensils',
+                'mission': 'globe',
+                'health': 'heartbeat',
+                'reading': 'book-open',
+                'ministry': 'hands-helping',
+                'preaching': 'bullhorn',
+                'family': 'home'
+            };
+            
+            return icons[interest] || 'heart';
+        }
+        
+        function filterProfiles() {
+            const gender = document.getElementById('filter-gender').value;
+            const age = document.getElementById('filter-age').value;
+            const location = document.getElementById('filter-location').value;
+            const interests = document.getElementById('filter-interests').value;
+            
+            let filtered = [...sampleUsers];
+            
+            if (gender) {
+                filtered = filtered.filter(p => p.gender === gender);
+            }
+            
+            if (age) {
+                const [min, max] = age.split('-').map(Number);
+                if (max) {
+                    filtered = filtered.filter(p => p.age >= min && p.age <= max);
+                } else {
+                    filtered = filtered.filter(p => p.age >= min);
+                }
+            }
+            
+            if (location) {
+                // In a real app, this would filter by actual location
+                filtered = filtered.filter((_, i) => i % 2 === 0); // Just a demo filter
+            }
+            
+            if (interests) {
+                filtered = filtered.filter(p => p.interests.includes(interests));
+            }
+            
+            profiles = filtered;
+            renderProfiles();
+        }
+        
+        // Modal functions
+        function showLoginModal() {
+            document.getElementById('login-modal').style.display = 'block';
+        }
+        
+        function showRegisterModal() {
+            document.getElementById('register-modal').style.display = 'block';
+        }
+        
+        function showSubmitStoryModal() {
+            if (!currentUser) {
+                alert('Please login to share your story.');
+                showLoginModal();
+                return;
+            }
+            document.getElementById('submit-story-modal').style.display = 'block';
+        }
+        
+        function showResourceModal(title) {
+            document.getElementById('resource-title').textContent = title;
+            document.getElementById('resource-content').innerHTML = resources[title] || '<p>Content not found.</p>';
+            document.getElementById('resource-modal').style.display = 'block';
+        }
+        
+        function showProfileModal(id) {
+            const profile = profiles.find(p => p.id === id);
+            if (!profile) return;
+            
+            const modalContent = document.getElementById('profile-modal-content');
+            modalContent.innerHTML = `
+                <div class="flex flex-col md:flex-row">
+                    <div class="md:w-1/3 mb-6 md:mb-0">
+                        <img src="${profile.photo}" alt="${profile.name}" class="w-full h-auto rounded-lg">
+                        <div class="mt-4 flex justify-center space-x-4">
+                            <button class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition" onclick="likeProfile(${profile.id}); closeModal('profile-modal')">
+                                <i class="fas fa-heart mr-2"></i> Like
+                            </button>
+                            <button class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
+                                <i class="fas fa-envelope mr-2"></i> Message
+                            </button>
+                        </div>
+                    </div>
+                    <div class="md:w-2/3 md:pl-8">
+                        <h2 class="text-2xl font-bold">${profile.name}, ${profile.age}</h2>
+                        <p class="text-gray-600 mb-4">${profile.location}</p>
+                        
+                        <div class="mb-6">
+                            <h3 class="text-lg font-bold mb-2">About Me</h3>
+                            <p class="text-gray-700">${profile.bio}</p>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h3 class="text-lg font-bold mb-2">Interests</h3>
+                            <div class="flex flex-wrap gap-2">
+                                ${profile.interests.map(int => `
+                                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+                                        <i class="fas fa-${getInterestIcon(int)} mr-1"></i> ${int.charAt(0).toUpperCase() + int.slice(1)}
+                                    </span>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h3 class="text-lg font-bold mb-2">Looking For</h3>
+                            <p class="text-gray-700">A ${profile.lookingFor === 'male' ? 'godly man' : 'godly woman'} who shares my Adventist values and commitment to Christ.</p>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-lg font-bold mb-2">Faith Journey</h3>
+                            <p class="text-gray-700">I was raised in an Adventist home and have been actively involved in church ministry for many years. My faith is the foundation of my life.</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('profile-modal').style.display = 'block';
+        }
+        
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+        
+        // UI functions
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(`${sectionId}-section`).classList.remove('hidden');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+        
+        // Global functions for HTML onclick
+        window.likeProfile = function(id) {
+            if (!currentUser) {
+                showLoginModal();
+                return;
+            }
+            
+            const index = likedProfiles.indexOf(id);
+            if (index === -1) {
+                likedProfiles.push(id);
+                alert('Profile added to your favorites!');
+            } else {
+                likedProfiles.splice(index, 1);
+            }
+            
+            renderProfiles();
+        };
+        
+        window.showLoginModal = showLoginModal;
+        window.showRegisterModal = showRegisterModal;
+        window.showSubmitStoryModal = showSubmitStoryModal;
+        window.showResourceModal = showResourceModal;
+        window.showProfileModal = showProfileModal;
+        window.closeModal = closeModal;
+        window.showSection = showSection;
+        window.toggleMobileMenu = toggleMobileMenu;
+        window.logout = logout;
+    </script>
+</body>
+</html>

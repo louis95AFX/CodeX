@@ -3,444 +3,958 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CodeX</title>
+  <title>CodeX | Professional Coding Education</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* Add smooth scrolling */
-    html {
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #10b981;
+      --dark: #1e293b;
+      --light: #f8fafc;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
       scroll-behavior: smooth;
     }
-
+    
+    .hero-gradient {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #bae6fd 100%);
+    }
+    
+    .course-card {
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      transform: translateY(0);
+    }
+    
+    .course-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .badge-pulse {
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(37, 99, 235, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+      }
+    }
+    
+    .nav-link {
+      position: relative;
+    }
+    
+    .nav-link:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background-color: var(--primary);
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover:after {
+      width: 100%;
+    }
+    
+    .modal-enter {
+      animation: modalEnter 0.3s ease-out forwards;
+    }
+    
+    @keyframes modalEnter {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .input-focus {
+      transition: all 0.3s ease;
+    }
+    
+    .input-focus:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+    
+    .tv-off-animation {
+      animation: tvOff 0.6s forwards;
+    }
+    
     @keyframes tvOff {
-    0% {
-      opacity: 1;
-      transform: scaleY(1) scaleX(1);
+      0% { opacity: 1; transform: scaleY(1) scaleX(1); }
+      50% { transform: scaleY(0.05); opacity: 0.7; }
+      100% { transform: scaleY(0.01) scaleX(0); opacity: 0; }
     }
-    50% {
-      transform: scaleY(0.05);
-      opacity: 0.7;
-    }
-    100% {
-      transform: scaleY(0.01) scaleX(0);
-      opacity: 0;
-    }
-  }
-
-  .tv-off-animation {
-    animation: tvOff 0.6s forwards;
-  }
-  
-  .input {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 0.375rem;
-    margin-top: 0.25rem;
-    width: 100%;
-    outline: none;
-    transition: border-color 0.3s;
-  }
-
-  .input:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 1px #2563eb;
-  }
-  #loaderOverlay {
+    
+    #loaderOverlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.6); /* semi-transparent overlay */
-      display: none; /* Change from hidden to none */
+      background-color: rgba(0, 0, 0, 0.8);
+      display: none;
       align-items: center;
       justify-content: center;
       z-index: 9999;
     }
-  
+    
     .loaderContent {
       text-align: center;
       background: #fff;
-      padding: 30px 40px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      padding: 40px 50px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
-  
+    
     .computerIcon {
       font-size: 48px;
       animation: bounce 1.2s infinite;
     }
-  
+    
     .loadingText {
-      margin-top: 15px;
-      font-size: 16px;
-      font-weight: bold;
-      color: #333;
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--dark);
     }
-  
-    /* Animation */
+    
     @keyframes bounce {
-      0%, 100% {
-          transform: translateY(0);
-      }
-      50% {
-          transform: translateY(-10px);
-      }
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
-  
+    
     .hidden {
       display: none;
     }
+    
+    .section-divider {
+      width: 100px;
+      height: 4px;
+      background: var(--primary);
+      margin: 30px auto;
+      border-radius: 2px;
+    }
+    
+    .testimonial-card {
+      background: white;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .testimonial-card:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--primary);
+    }
+    
+    .stats-item {
+      background: white;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+    
+    .stats-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
-    <header class="bg-white text-gray-800 p-4 fixed w-full z-10 top-0 shadow-md">
-        <div class="container mx-auto flex items-center justify-between">
-          <!-- Logo and Slogan -->
-            <div class="flex items-center space-x-4 pl-4">
-                <img src="codexbg.png" alt="Code Academy Logo" class="h-20">
-                <span class="text-sm font-light text-gray-700 italic tracking-wide">Learn. Code. Succeed.</span>
-            </div>
-            
+<body class="bg-gray-50 text-gray-800 antialiased">
+    <!-- Header -->
+    <header class="bg-white text-gray-800 py-4 fixed w-full z-50 top-0 shadow-sm">
+        <div class="container mx-auto px-6 flex items-center justify-between">
+          <!-- Logo -->
+          <div class="flex items-center space-x-4">
+              <div class="flex items-center">
+                <div class="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl mr-3">CX</div>
+                <span class="text-xl font-bold text-gray-800">Code<span class="text-blue-600">X</span></span>
+              </div>
+              <span class="text-sm font-light text-gray-600 hidden md:block">Learn. Code. Succeed.</span>
+          </div>
           
-          <!-- Centralized Navigation with Padding -->
-          <nav style="padding-right: 240px;" class="flex space-x-8">
-            <a href="purchase.html" class="hover:text-blue-600 hover:font-bold transition">Courses</a>
-            <a href="#certification" class="hover:text-blue-600 hover:font-bold transition">Certification</a>
-            <a href="#contact" class="hover:text-blue-600 hover:font-bold transition">Contact</a>
+          <!-- Navigation -->
+          <nav class="hidden md:flex space-x-8">
+            <a href="purchase.html" class="nav-link text-gray-700 hover:text-blue-600 transition">Courses</a>
+            <a href="#certification" class="nav-link text-gray-700 hover:text-blue-600 transition">Certification</a>
+            <a href="#testimonials" class="nav-link text-gray-700 hover:text-blue-600 transition">Success Stories</a>
+            <a href="#contact" class="nav-link text-gray-700 hover:text-blue-600 transition">Contact</a>
           </nav>
           
+          <!-- Sign In Button -->
+          <button onclick="toggleModal()" class="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition shadow-md hover:shadow-lg">
+            <i class="fas fa-laptop-code"></i>
+            <span>Sign In</span>
+          </button>
           
-          <!-- Sign In Icon and Text -->
-          <a href="javascript:void(0);" onclick="toggleModal()" class="text-center flex flex-col items-center pr-4">
-            <i class="fas fa-laptop-code text-2xl text-blue-600 hover:text-blue-700 transition duration-300"></i>
-            <span class="text-sm text-blue-600 hover:text-blue-700 mt-0.5">Sign In</span>
-          </a>
+          <!-- Mobile Menu Button -->
+          <button id="mobileMenuButton" class="md:hidden text-gray-700">
+            <i class="fas fa-bars text-2xl"></i>
+          </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white py-4 px-6 shadow-lg">
+          <div class="flex flex-col space-y-4">
+            <a href="purchase.html" class="text-gray-700 hover:text-blue-600">Courses</a>
+            <a href="#certification" class="text-gray-700 hover:text-blue-600">Certification</a>
+            <a href="#testimonials" class="text-gray-700 hover:text-blue-600">Success Stories</a>
+            <a href="#contact" class="text-gray-700 hover:text-blue-600">Contact</a>
+            <button onclick="toggleModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
+              Sign In
+            </button>
+          </div>
         </div>
       </header>
       
       <!-- Sign In Modal -->
-<div id="signinModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-semibold text-gray-700">Sign In</h2>
-        <button onclick="toggleModal()" class="text-gray-500 hover:text-red-500 text-xl">&times;</button>
-      </div>
-      <form onsubmit="event.preventDefault(); signInUser();">
-        <div class="mb-4">
-          <label class="block text-gray-600 text-sm mb-2">Email</label>
-          <input id="emailInput" type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300" placeholder="Enter email">
-        </div>
-        <div class="mb-4">
-          <label class="block text-gray-600 text-sm mb-2">Password</label>
-          <input id="passwordInput" type="password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300" placeholder="Enter password">
-        </div>
-        <button type="button" onclick="handleLogin()" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
-            Sign In
-          </button>
-  
-        <div class="text-center mt-4 space-y-2">
-          <a href="#" class="text-sm text-blue-600 hover:underline block">Forgot password?</a>
-          <a href="register.html" class="text-sm text-gray-600 hover:underline block">New here? Create an account</a>
-        </div>
-      </form>
-    </div>
-  </div>
-  
-
-  <section class="bg-gradient-to-r from-blue-50 via-white to-blue-50 py-24 mt-12">
-    <div class="container mx-auto text-center px-6">
-      <h2 class="text-4xl font-bold text-gray-800 mb-4">Unlock Your Future with CodeX</h2>
-      <p class="text-lg text-gray-700 mb-6 max-w-xl mx-auto">
-        Master essential skills in <span class="font-semibold text-blue-600">Web Development</span>, <span class="font-semibold text-green-600">Cybersecurity</span>, <span class="font-semibold text-yellow-500">Data Science</span>, and more! 
-        <br class="sm:hidden">Earn certifications to boost your career in today's digital world.
-      </p>
-      <a href="purchase.html" class="inline-block bg-blue-600 text-white text-lg font-medium px-8 py-3 rounded-lg shadow hover:bg-blue-700 transition duration-300">
-         Explore Courses & Start Learning
-      </a>
-    </div>
-  </section>
-
-  <section id="courses" class="container mx-auto my-12">
-    <h3 class="text-2xl font-semibold mb-6 text-center">Courses</h3>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-           <!-- Web Development Card -->
-           <div class="bg-white p-6 rounded shadow hover:shadow-lg transition cursor-pointer flex flex-col items-center relative">
-            <img src="codexweb.jpg" alt="Web Development" class="w-full h-40 object-cover rounded mb-4">
-            <span class="absolute top-2 right-2 bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded-full">With Certification</span>
-            <h4 class="text-xl font-bold mb-2">Web Development</h4>
-            <p class="mb-2 text-center">Learn how to build websites using HTML, CSS, and JavaScript and get certified.</p>
-            <span class="bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full mt-4">R499</span>
-            <button class="bg-blue-600 text-white px-4 py-2 rounded mt-4" onclick="setCourse('Web Development'); openModal();">Enroll Now</button>
+      <div id="signinModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md modal-enter">
+          <div class="flex justify-between items-center mb-6">
+            <div>
+              <h2 class="text-2xl font-bold text-gray-800">Welcome Back</h2>
+              <p class="text-gray-600">Sign in to continue learning</p>
+            </div>
+            <button onclick="toggleModal()" class="text-gray-500 hover:text-gray-700 text-2xl transition">
+              &times;
+            </button>
           </div>
-  
-        <!-- Cybersecurity -->
-        <div class="bg-white p-6 rounded shadow hover:shadow-lg transition cursor-pointer flex flex-col items-center relative">
-            <img src="cyber.jpg" alt="Cybersecurity" class="w-full h-40 object-cover rounded mb-4">
-            <h4 class="text-xl font-bold mb-2">Cybersecurity</h4>
-            <p class="mb-2 text-center">Protect web applications and systems from threats and vulnerabilities.</p>
-            <span class="bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full mt-4">R799</span>
-            <div class="absolute top-0 right-0 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded-bl-lg mt-2 mr-2">With Certification</div>
-            <button class="bg-blue-600 text-white px-6 py-2 rounded mt-4 hover:bg-blue-700 transition" onclick="setCourse('Cybersecurity'); openModal();">Enroll Now</button>
+          <form onsubmit="event.preventDefault(); signInUser();">
+            <div class="mb-5">
+              <label class="block text-gray-700 text-sm font-medium mb-2">Email Address</label>
+              <input id="emailInput" type="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus" placeholder="your@email.com">
+            </div>
+            <div class="mb-6">
+              <label class="block text-gray-700 text-sm font-medium mb-2">Password</label>
+              <input id="passwordInput" type="password" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus" placeholder="••••••••">
+            </div>
+            <button type="button" onclick="handleLogin()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition shadow-md hover:shadow-lg">
+              Sign In
+            </button>
+            <div class="mt-6 text-center space-y-3">
+              <a href="forgotpass.html" class="text-sm text-blue-600 hover:underline">Forgot password?</a>
+              <p class="text-sm text-gray-600">
+                New here? <a href="register.html" class="text-blue-600 hover:underline font-medium">Create an account</a>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      <!-- Hero Section -->
+      <section class="hero-gradient pt-32 pb-24">
+        <div class="container mx-auto px-6">
+          <div class="flex flex-col lg:flex-row items-center">
+            <div class="lg:w-1/2 mb-12 lg:mb-0">
+              <h1 class="text-4xl md:text-5xl font-bold text-gray-800 leading-tight mb-6">
+                Transform Your Career with <span class="text-blue-600">CodeX</span>
+              </h1>
+              <p class="text-lg text-gray-700 mb-8 max-w-lg">
+                Master in-demand tech skills with our industry-leading courses. 
+                Learn from experts, build real projects, and get certified to 
+                boost your career in today's digital economy.
+              </p>
+              <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                <a href="purchase.html" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition text-center">
+                  Explore Courses
+                </a>
+                <a href="#courses" class="bg-white hover:bg-gray-100 text-gray-800 font-medium px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition text-center border border-gray-200">
+                  Learn More
+                </a>
+              </div>
+            </div>
+            <div class="lg:w-1/2">
+              <div class="relative">
+                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                     alt="Coding on laptop" 
+                     class="rounded-xl shadow-2xl w-full h-auto border-8 border-white">
+                <div class="absolute -bottom-6 -right-6 bg-white p-4 rounded-lg shadow-lg">
+                  <div class="flex items-center">
+                    <div class="bg-blue-100 p-3 rounded-full mr-3">
+                      <i class="fas fa-certificate text-blue-600 text-xl"></i>
+                    </div>
+                    <div>
+                      <p class="font-bold text-gray-800">Industry Recognized</p>
+                      <p class="text-sm text-gray-600">Certifications</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Stats Section -->
+      <section class="py-12 bg-white">
+        <div class="container mx-auto px-6">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="stats-item p-6 text-center">
+              <div class="text-4xl font-bold text-blue-600 mb-2">10,000+</div>
+              <p class="text-gray-600">Students Enrolled</p>
+            </div>
+            <div class="stats-item p-6 text-center">
+              <div class="text-4xl font-bold text-blue-600 mb-2">94%</div>
+              <p class="text-gray-600">Completion Rate</p>
+            </div>
+            <div class="stats-item p-6 text-center">
+              <div class="text-4xl font-bold text-blue-600 mb-2">85%</div>
+              <p class="text-gray-600">Career Advancement</p>
+            </div>
+            <div class="stats-item p-6 text-center">
+              <div class="text-4xl font-bold text-blue-600 mb-2">24/7</div>
+              <p class="text-gray-600">Mentor Support</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Courses Section -->
+      <section id="courses" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-6">
+          <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Our Featured Courses</h2>
+            <div class="section-divider"></div>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+              Choose from our industry-leading courses designed to give you the skills employers want
+            </p>
           </div>
           
-        <!-- Data Science -->
-        <div class="bg-white p-6 rounded shadow hover:shadow-lg transition cursor-pointer flex flex-col items-center">
-            <img src="data2.jpg" alt="Data Science" class="w-full h-40 object-cover rounded mb-4">
-            <h4 class="text-xl font-bold mb-2">Data Science</h4>
-            <p class="mb-2 text-center">Explore data analysis, machine learning, and data visualization techniques.</p>
-            <span class="bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full mt-4">R1199</span>
-            <button class="bg-blue-600 text-white px-6 py-2 rounded mt-4 hover:bg-blue-700 transition" onclick="setCourse('Data Science'); openModal();">Enroll Now</button>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Web Development Card -->
+            <div class="course-card bg-white rounded-xl overflow-hidden shadow-md">
+              <div class="relative">
+                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1472&q=80" 
+                     alt="Web Development" 
+                     class="w-full h-48 object-cover">
+                <div class="absolute top-4 right-4 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full badge-pulse">
+                  Popular
+                </div>
+              </div>
+              <div class="p-6">
+                <div class="flex justify-between items-start mb-3">
+                  <h3 class="text-xl font-bold text-gray-800">Web Development</h3>
+                  <span class="bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full">R499</span>
+                </div>
+                <p class="text-gray-600 mb-4">
+                  Master HTML, CSS, JavaScript and modern frameworks to build responsive websites and web applications.
+                </p>
+                <div class="flex justify-between items-center">
+                  <div class="flex items-center">
+                    <i class="fas fa-star text-yellow-400 mr-1"></i>
+                    <span class="text-gray-700 font-medium">4.9</span>
+                    <span class="text-gray-500 mx-2">|</span>
+                    <span class="text-gray-500">120 hours</span>
+                  </div>
+                  <button onclick="setCourse('Web Development')" class="text-blue-600 hover:text-blue-800 font-medium flex items-center">
+                    Enroll Now <i class="fas fa-chevron-right ml-1 text-sm"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Cybersecurity Card -->
+            <div class="course-card bg-white rounded-xl overflow-hidden shadow-md">
+              <div class="relative">
+                <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                     alt="Cybersecurity" 
+                     class="w-full h-48 object-cover">
+                <div class="absolute top-4 right-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                  Hot
+                </div>
+              </div>
+              <div class="p-6">
+                <div class="flex justify-between items-start mb-3">
+                  <h3 class="text-xl font-bold text-gray-800">Cybersecurity</h3>
+                  <span class="bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full">R799</span>
+                </div>
+                <p class="text-gray-600 mb-4">
+                  Learn to protect systems, networks, and programs from digital attacks and vulnerabilities.
+                </p>
+                <div class="flex justify-between items-center">
+                  <div class="flex items-center">
+                    <i class="fas fa-star text-yellow-400 mr-1"></i>
+                    <span class="text-gray-700 font-medium">4.8</span>
+                    <span class="text-gray-500 mx-2">|</span>
+                    <span class="text-gray-500">150 hours</span>
+                  </div>
+                  <button onclick="setCourse('Cybersecurity')" class="text-blue-600 hover:text-blue-800 font-medium flex items-center">
+                    Enroll Now <i class="fas fa-chevron-right ml-1 text-sm"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Data Science Card -->
+            <div class="course-card bg-white rounded-xl overflow-hidden shadow-md">
+              <div class="relative">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                     alt="Data Science" 
+                     class="w-full h-48 object-cover">
+                <div class="absolute top-4 right-4 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                  New
+                </div>
+              </div>
+              <div class="p-6">
+                <div class="flex justify-between items-start mb-3">
+                  <h3 class="text-xl font-bold text-gray-800">Data Science</h3>
+                  <span class="bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full">R1199</span>
+                </div>
+                <p class="text-gray-600 mb-4">
+                  Master Python, SQL, machine learning and data visualization to extract insights from complex data.
+                </p>
+                <div class="flex justify-between items-center">
+                  <div class="flex items-center">
+                    <i class="fas fa-star text-yellow-400 mr-1"></i>
+                    <span class="text-gray-700 font-medium">4.7</span>
+                    <span class="text-gray-500 mx-2">|</span>
+                    <span class="text-gray-500">200 hours</span>
+                  </div>
+                  <button onclick="setCourse('Data Science')" class="text-blue-600 hover:text-blue-800 font-medium flex items-center">
+                    Enroll Now <i class="fas fa-chevron-right ml-1 text-sm"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="text-center mt-12">
+            <a href="purchase.html" class="inline-block bg-white hover:bg-gray-100 text-gray-800 font-medium px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition border border-gray-200">
+              View All Courses
+            </a>
+          </div>
         </div>
-       
-  </section>
-
-<!-- Your Existing Enrollment Modal -->
-<div id="enrollmentModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-50">
-    <div class="bg-white p-8 rounded shadow-lg w-96 relative">
-      <button onclick="closeModal()" class="absolute top-2 right-2 text-xl text-gray-600 hover:text-gray-800 transition">&times;</button>
-      <h3 class="text-2xl font-semibold mb-6 text-center">Enroll Now</h3>
-  
-      <form id="enrollmentForm" class="space-y-6">
-        <input type="hidden" id="selectedCourse" name="course" value="">
-        
-        <div class="flex flex-col">
-          <label for="fullName">Full Name</label>
-          <input type="text" id="fullName" required placeholder="Enter your full name" class="input" />
+      </section>
+      
+      <!-- Certification Section -->
+      <section id="certification" class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+          <div class="flex flex-col lg:flex-row items-center">
+            <div class="lg:w-1/2 mb-12 lg:mb-0 lg:pr-12">
+              <img src="https://images.unsplash.com/photo-1531545514256-b1400bc00f36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" 
+                   alt="Certificate" 
+                   class="rounded-xl shadow-lg w-full h-auto border-8 border-white">
+            </div>
+            <div class="lg:w-1/2">
+              <h2 class="text-3xl font-bold text-gray-800 mb-6">Earn Industry-Recognized Certifications</h2>
+              <p class="text-gray-600 mb-8">
+                Our certifications are designed in collaboration with industry leaders to ensure they meet current 
+                job market demands. Showcase your skills to employers with credentials that matter.
+              </p>
+              <ul class="space-y-4 mb-8">
+                <li class="flex items-start">
+                  <div class="bg-blue-100 p-2 rounded-full mr-4">
+                    <i class="fas fa-check text-blue-600"></i>
+                  </div>
+                  <span class="text-gray-700">Digital certificates you can share on LinkedIn</span>
+                </li>
+                <li class="flex items-start">
+                  <div class="bg-blue-100 p-2 rounded-full mr-4">
+                    <i class="fas fa-check text-blue-600"></i>
+                  </div>
+                  <span class="text-gray-700">Verifiable credentials with unique ID</span>
+                </li>
+                <li class="flex items-start">
+                  <div class="bg-blue-100 p-2 rounded-full mr-4">
+                    <i class="fas fa-check text-blue-600"></i>
+                  </div>
+                  <span class="text-gray-700">Skills-based assessments to prove your knowledge</span>
+                </li>
+              </ul>
+              <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition">
+                Learn About Certification
+              </button>
+            </div>
+          </div>
         </div>
-  
-        <div class="flex flex-col">
-          <label for="email">Email Address</label>
-          <input type="email" id="email" required placeholder="Enter your email" class="input" />
+      </section>
+      
+      <!-- Testimonials Section -->
+      <section id="testimonials" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-6">
+          <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Success Stories</h2>
+            <div class="section-divider"></div>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+              Hear from our students who transformed their careers with CodeX
+            </p>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="testimonial-card p-6">
+              <div class="flex items-center mb-4">
+                <img src="https://randomuser.me/api/portraits/women/43.jpg" 
+                     alt="Sarah M." 
+                     class="w-12 h-12 rounded-full mr-4">
+                <div>
+                  <h4 class="font-bold text-gray-800">Sarah M.</h4>
+                  <p class="text-sm text-gray-600">Web Developer at TechCorp</p>
+                </div>
+              </div>
+              <p class="text-gray-700">
+                "CodeX's Web Development course gave me the skills and confidence to land my dream job. The projects were real-world and the instructors were incredibly supportive."
+              </p>
+              <div class="flex mt-4">
+                <i class="fas fa-star text-yellow-400"></i>
+                <i class="fas fa-star text-yellow-400"></i>
+                <i class="fas fa-star text-yellow-400"></i>
+                <i class="fas fa-star text-yellow-400"></i>
+                <i class="fas fa-star text-yellow-400"></i>
+              </div>
+            </div>
+            
+            <div class="testimonial-card p-6">
+              <div class="flex items-center mb-4">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" 
+                     alt="James T." 
+                     class="w-12 h-12 rounded-full mr-4">
+                <div>
+                  <h4 class="font-bold text-gray-800">James T.</h4>
+                  <p class="text-sm text-gray-600">Security Analyst at SecureNet</p>
+                </div>
+              </div>
+              <p class="text-gray-700">
+                "The Cybersecurity program was comprehensive and practical. Within 3 months of completing the course, I received two job offers with a 40% salary increase."
+              </p>
+              <div class="flex mt-4">
+                <i class="fas fa-star text-yellow-400"></i>
+                <i class="fas fa-star text-yellow-400"></i>
+                <i class="fas fa-star text-yellow-400"></i>
+                <i class="fas fa-star text-yellow-400"></i>
+                <i class="fas fa-star text-yellow-400"></i>
+              </div>
+            </div>
+            
+            <div class="testimonial-card p-6">
+              <div class="flex items-center mb-4">
+                <img src="https://randomuser.me/api/portraits/women/68.jpg" 
+                     alt="Priya K." 
+                     class="w-12 h-12 rounded-full mr-4">
+                <div>
+                  <h4 class="font-bold text-gray-800">Priya K.</h4>
+                  <p class="text-sm text-gray-600">Data Scientist at DataInsights</p>
+                </div>
+              </div>
+              <p class="text-gray-700">
+                "As a career changer, I was nervous about breaking into tech. CodeX's Data Science curriculum and career support made my transition seamless and successful."
+              </p>
+              <div class="flex mt-4">
+                <i class="fas fa-star text-yellow-400"></i>
+                <i class="fas fa-star text-yellow-400"></i>
+                <i class="fas fa-star text-yellow-400"></i>
+                <i class="fas fa-star text-yellow-400"></i>
+                <i class="fas fa-star text-yellow-400"></i>
+              </div>
+            </div>
+          </div>
         </div>
-  
-        <div class="flex flex-col">
-          <label for="phone">Phone Number</label>
-          <input type="tel" id="phone" required placeholder="e.g. 071 234 5678" class="input" />
+      </section>
+      
+      <!-- CTA Section -->
+      <section class="py-16 bg-blue-600 text-white">
+        <div class="container mx-auto px-6 text-center">
+          <h2 class="text-3xl font-bold mb-6">Ready to Transform Your Career?</h2>
+          <p class="text-xl mb-8 max-w-2xl mx-auto">
+            Join thousands of students who have accelerated their careers with CodeX
+          </p>
+          <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+            <a href="purchase.html" class="bg-white hover:bg-gray-100 text-blue-600 font-medium px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition">
+              Browse Courses
+            </a>
+            <a href="#contact" class="bg-transparent hover:bg-blue-700 text-white font-medium px-8 py-3 rounded-lg shadow-md hover:shadow-lg transition border border-white">
+              Contact Us
+            </a>
+          </div>
         </div>
-  
-        <div class="flex flex-col">
-          <label for="paymentMethod">Payment Method</label>
-          <select id="paymentMethod" required class="input">
-            <option value="" disabled selected>Select a payment method</option>
-            <option value="card">Credit/Debit Card</option>
-            <option value="paypal">PayPal</option>
-            <option value="Crypto">Crypto</option>
-          </select>
+      </section>
+      
+      <!-- Contact Section -->
+      <section id="contact" class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+          <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Get In Touch</h2>
+            <div class="section-divider"></div>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+              Have questions? Our team is here to help you on your learning journey
+            </p>
+          </div>
+          
+          <div class="flex flex-col lg:flex-row">
+            <div class="lg:w-1/2 mb-12 lg:mb-0 lg:pr-12">
+              <div class="bg-gray-50 p-8 rounded-xl">
+                <h3 class="text-xl font-bold text-gray-800 mb-6">Contact Information</h3>
+                
+                <div class="space-y-6">
+                  <div class="flex items-start">
+                    <div class="bg-blue-100 p-3 rounded-full mr-4">
+                      <i class="fas fa-envelope text-blue-600"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-medium text-gray-800">Email Us</h4>
+                      <p class="text-gray-600">support@codex.co.za</p>
+                    </div>
+                  </div>
+                  
+                  <div class="flex items-start">
+                    <div class="bg-blue-100 p-3 rounded-full mr-4">
+                      <i class="fas fa-phone-alt text-blue-600"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-medium text-gray-800">Call Us</h4>
+                      <p class="text-gray-600">+27 12 345 6789</p>
+                    </div>
+                  </div>
+                  
+                  <div class="flex items-start">
+                    <div class="bg-blue-100 p-3 rounded-full mr-4">
+                      <i class="fas fa-map-marker-alt text-blue-600"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-medium text-gray-800">Visit Us</h4>
+                      <p class="text-gray-600">123 Tech Street, Johannesburg, South Africa</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="mt-8">
+                  <h4 class="font-medium text-gray-800 mb-4">Follow Us</h4>
+                  <div class="flex space-x-4">
+                    <a href="#" class="bg-blue-100 hover:bg-blue-200 text-blue-600 p-3 rounded-full transition">
+                      <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="bg-blue-100 hover:bg-blue-200 text-blue-600 p-3 rounded-full transition">
+                      <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="bg-blue-100 hover:bg-blue-200 text-blue-600 p-3 rounded-full transition">
+                      <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="bg-blue-100 hover:bg-blue-200 text-blue-600 p-3 rounded-full transition">
+                      <i class="fab fa-instagram"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="lg:w-1/2">
+              <div class="bg-gray-50 p-8 rounded-xl">
+                <h3 class="text-xl font-bold text-gray-800 mb-6">Send Us a Message</h3>
+                <form>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                      <label for="name" class="block text-gray-700 font-medium mb-2">First Name</label>
+                      <input type="text" id="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus" placeholder="Your name">
+                    </div>
+                    <div>
+                      <label for="lastname" class="block text-gray-700 font-medium mb-2">Last Name</label>
+                      <input type="text" id="lastname" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus" placeholder="Your last name">
+                    </div>
+                  </div>
+                  <div class="mb-6">
+                    <label for="email" class="block text-gray-700 font-medium mb-2">Email Address</label>
+                    <input type="email" id="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus" placeholder="your@email.com">
+                  </div>
+                  <div class="mb-6">
+                    <label for="subject" class="block text-gray-700 font-medium mb-2">Subject</label>
+                    <input type="text" id="subject" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus" placeholder="How can we help?">
+                  </div>
+                  <div class="mb-6">
+                    <label for="message" class="block text-gray-700 font-medium mb-2">Message</label>
+                    <textarea id="message" rows="5" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus" placeholder="Your message..."></textarea>
+                  </div>
+                  <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition shadow-md hover:shadow-lg">
+                    Send Message
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
-  
-        <div class="flex flex-col">
-          <label for="course">Course</label>
-          <input type="text" id="course" readonly value="My Awesome Course" class="input bg-gray-100" />
+      </section>
+      
+      <!-- Enrollment Modal -->
+      <div id="enrollmentModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-50">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md modal-enter">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold text-gray-800">Enroll Now</h3>
+            <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 text-2xl transition">
+              &times;
+            </button>
+          </div>
+          
+          <form id="enrollmentForm" class="space-y-6">
+            <input type="hidden" id="selectedCourse" name="course" value="">
+            
+            <div>
+              <label for="fullName" class="block text-gray-700 font-medium mb-2">Full Name</label>
+              <input type="text" id="fullName" required placeholder="Enter your full name" 
+                     class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus" />
+            </div>
+            
+            <div>
+              <label for="email" class="block text-gray-700 font-medium mb-2">Email Address</label>
+              <input type="email" id="email" required placeholder="Enter your email" 
+                     class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus" />
+            </div>
+            
+            <div>
+              <label for="phone" class="block text-gray-700 font-medium mb-2">Phone Number</label>
+              <input type="tel" id="phone" required placeholder="e.g. 071 234 5678" 
+                     class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus" />
+            </div>
+            
+            <div>
+              <label for="paymentMethod" class="block text-gray-700 font-medium mb-2">Payment Method</label>
+              <select id="paymentMethod" required 
+                      class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus">
+                <option value="" disabled selected>Select a payment method</option>
+                <option value="card">Credit/Debit Card</option>
+                <option value="paypal">PayPal</option>
+                <option value="Crypto">Crypto</option>
+              </select>
+            </div>
+            
+            <div>
+              <label for="course" class="block text-gray-700 font-medium mb-2">Course</label>
+              <input type="text" id="course" readonly 
+                     class="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus" />
+            </div>
+            
+            <div>
+              <label for="message" class="block text-gray-700 font-medium mb-2">Additional Message</label>
+              <textarea id="message" rows="4" placeholder="Any additional details?" 
+                        class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 input-focus"></textarea>
+            </div>
+            
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition shadow-md hover:shadow-lg">
+              Complete Enrollment
+            </button>
+          </form>
         </div>
-  
-        <div class="flex flex-col">
-          <label for="message">Additional Message</label>
-          <textarea id="message" rows="4" placeholder="Any additional details?" class="input"></textarea>
-        </div>
-  
-        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">Submit Enrollment</button>
+      </div>
+      
+      <!-- Hidden PayFast Form -->
+      <form id="payfastForm" action="https://www.payfast.co.za/eng/process" method="post" style="display: none;">
+        <input type="hidden" name="merchant_id" value="19032115" />
+        <input type="hidden" name="merchant_key" value="rdifn4ynyzjfm" />
+        <input type="hidden" name="return_url" value="https://yourwebsite.com/thank-you" />
+        <input type="hidden" name="cancel_url" value="https://yourwebsite.com/payment-cancelled" />
+        <input type="hidden" name="notify_url" value="https://yourwebsite.com/payfast-ipn" />
+        <input type="hidden" name="amount" value="500.00" />
+        <input type="hidden" name="item_name" value="Course Enrollment" />
+        <input type="hidden" name="name_first" id="pf_name" />
+        <input type="hidden" name="email_address" id="pf_email" />
+        <input type="hidden" name="cell_number" id="pf_phone" />
       </form>
-    </div>
-  </div>
-  
-  <!-- Hidden PayFast Form -->
-  <form id="payfastForm" action="https://www.payfast.co.za/eng/process" method="post" style="display: none;">
-    <input type="hidden" name="merchant_id" value="19032115" />
-    <input type="hidden" name="merchant_key" value="rdifn4ynyzjfm" />
-    <input type="hidden" name="return_url" value="https://yourwebsite.com/thank-you" />
-    <input type="hidden" name="cancel_url" value="https://yourwebsite.com/payment-cancelled" />
-    <input type="hidden" name="notify_url" value="https://yourwebsite.com/payfast-ipn" />
-  
-    <input type="hidden" name="amount" value="500.00" />
-    <input type="hidden" name="item_name" value="Course Enrollment" />
-    <input type="hidden" name="name_first" id="pf_name" />
-    <input type="hidden" name="email_address" id="pf_email" />
-    <input type="hidden" name="cell_number" id="pf_phone" />
-  </form>
 
-  <div class="my-12 text-center">
-    <hr class="border-t-2 border-blue-600 w-1/2 mx-auto mb-6">
-  </div>
-
-  <section id="certification" class="container mx-auto my-12 text-center">
-    <h3 class="text-2xl font-semibold mb-4">Get Certified</h3>
-    <p>Complete all courses and pass the final quiz to earn your certificate.</p>
-    <button class="mt-4 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">Claim Certificate</button>
-  </section>
-
-  <div class="my-12 text-center">
-    <hr class="border-t-2 border-blue-600 w-1/2 mx-auto mb-6">
-  </div>
-
-  <section id="contact" class="container mx-auto my-12 text-center">
-    <h3 class="text-2xl font-semibold mb-4">Contact Us</h3>
-    <p>Email: info@codeacademy.co.za</p>
-    <p>Phone: +27 00 123 4567</p>
-  </section>
-  <div id="loaderOverlay" class="hidden">
-    <div class="loaderContent">
-        <div class="computerIcon">
-            💻
+      <!-- Loader Overlay -->
+      <div id="loaderOverlay" class="hidden">
+        <div class="loaderContent">
+          <div class="computerIcon">
+            <i class="fas fa-laptop-code text-blue-600"></i>
+          </div>
+          <div class="loadingText">Signing in... Please wait</div>
         </div>
-        <div class="loadingText">Signing in... Please wait</div>
-    </div>
-</div>
-  <footer class="bg-gray-800 text-white text-center py-4">
-    <div class="mb-2">
-      <a href="https://facebook.com" target="_blank" class="mx-2 hover:text-blue-500 transition">
-        <i class="fab fa-facebook-f"></i>
-      </a>
-      <a href="https://instagram.com" target="_blank" class="mx-2 hover:text-pink-500 transition">
-        <i class="fab fa-instagram"></i>
-      </a>
-      <a href="https://twitter.com" target="_blank" class="mx-2 hover:text-blue-400 transition">
-        <i class="fab fa-x-twitter"></i>
-      </a>
-    </div>
-    &copy; 2025 Code Academy. All rights reserved.
-  </footer>
+      </div>
+      
+      <!-- Footer -->
+      <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <div class="flex items-center mb-4">
+                <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-lg mr-3">CX</div>
+                <span class="text-xl font-bold">Code<span class="text-blue-400">X</span></span>
+              </div>
+              <p class="text-gray-400">
+                Empowering the next generation of tech professionals through quality education and hands-on learning.
+              </p>
+            </div>
+            
+            <div>
+              <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+              <ul class="space-y-2">
+                <li><a href="purchase.html" class="text-gray-400 hover:text-white transition">Courses</a></li>
+                <li><a href="#certification" class="text-gray-400 hover:text-white transition">Certification</a></li>
+                <li><a href="#testimonials" class="text-gray-400 hover:text-white transition">Success Stories</a></li>
+                <li><a href="#contact" class="text-gray-400 hover:text-white transition">Contact Us</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 class="text-lg font-semibold mb-4">Support</h4>
+              <ul class="space-y-2">
+                <li><a href="#" class="text-gray-400 hover:text-white transition">Help Center</a></li>
+                <li><a href="#" class="text-gray-400 hover:text-white transition">FAQs</a></li>
+                <li><a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>
+                <li><a href="#" class="text-gray-400 hover:text-white transition">Terms of Service</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 class="text-lg font-semibold mb-4">Newsletter</h4>
+              <p class="text-gray-400 mb-4">
+                Subscribe to get updates on new courses and special offers.
+              </p>
+              <form class="flex">
+                <input type="email" placeholder="Your email" 
+                       class="px-4 py-2 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 w-full">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-r-lg transition">
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+          
+          <div class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <p class="text-gray-400 mb-4 md:mb-0">
+              &copy; 2025 CodeX. All rights reserved.
+            </p>
+            <div class="flex space-x-6">
+              <a href="#" class="text-gray-400 hover:text-white transition">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white transition">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white transition">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-white transition">
+                <i class="fab fa-instagram"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
 
-  <script>
-   document.addEventListener('DOMContentLoaded', function () {
-  function showCourseInfo(course) {
-    document.querySelectorAll('.course-info').forEach(function (section) {
-      section.classList.add('hidden');
-      section.classList.remove('tv-off-animation');
-    });
-
-    const selectedSection = document.getElementById(course);
-    selectedSection.classList.remove('hidden');
-    selectedSection.classList.remove('tv-off-animation');
-
-    setTimeout(() => {
-      selectedSection.classList.add('tv-off-animation');
-      setTimeout(() => {
-        selectedSection.classList.add('hidden');
-        selectedSection.classList.remove('tv-off-animation');
-      }, 600);
-    }, 10000);
-  }
-
-  function openModal() {
-    document.getElementById('enrollmentModal').classList.remove('hidden');
-  }
-
-  function closeModal() {
-    document.getElementById('enrollmentModal').classList.add('hidden');
-  }
-
-  function setCourse(courseName) {
-    document.getElementById('selectedCourse').value = courseName;
-    document.getElementById('course').value = courseName;
-    openModal();
-  }
-
-  // ✅ Attach event listener safely after DOM is ready
-  const form = document.getElementById('enrollmentForm');
-  form.addEventListener('submit', function (event) {
-    event.preventDefault();
-
-    const paymentMethod = document.getElementById('paymentMethod').value;
-
-    if (paymentMethod === 'card') {
-      // Build a hidden form for Payfast redirect
-      const pfForm = document.createElement('form');
-      pfForm.method = 'POST';
-      pfForm.action = 'https://www.payfast.co.za/eng/process';
-
-      const fullName = document.getElementById('fullName').value.trim().split(' ');
-      const firstName = fullName[0];
-      const lastName = fullName.slice(1).join(' ') || '';
-
-      const payfastFields = {
-        merchant_id: '19032115',
-        merchant_key: 'rdifn4ynyzjfm',
-        return_url: 'https://yourdomain.com/thank-you',   // 🔁 change this
-        cancel_url: 'https://yourdomain.com/cancelled',   // 🔁 change this
-        notify_url: 'https://yourdomain.com/payfast-notify', // optional
-        name_first: firstName,
-        name_last: lastName,
-        email_address: document.getElementById('email').value,
-        amount: '100.00', // 🔁 update with your actual course price if needed
-        item_name: document.getElementById('course').value
-      };
-
-      for (const key in payfastFields) {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = key;
-        input.value = payfastFields[key];
-        pfForm.appendChild(input);
-      }
-
-      document.body.appendChild(pfForm);
-      pfForm.submit();
-    } else {
-      alert('Thank you for enrolling! We will contact you with next steps.');
-    }
-  });
-
-  // Optionally expose functions globally
-  window.showCourseInfo = showCourseInfo;
-  window.openModal = openModal;
-  window.closeModal = closeModal;
-  window.setCourse = setCourse;
-});
-
-window.addEventListener('DOMContentLoaded', () => {
-    if (localStorage.getItem('showSigninModal') === 'true') {
-      toggleModal(); // Assuming toggleModal() is defined and visible at this point
-      localStorage.removeItem('showSigninModal');
-    }
-  });
-
-  function toggleModal() {
-    const modal = document.getElementById("signinModal");
-    modal.classList.toggle("hidden");
-    modal.classList.toggle("flex");
-  }
-
-  async function handleLogin() {
-  const email = document.querySelector('input[placeholder="Enter email"]').value;
-  const password = document.querySelector('input[placeholder="Enter password"]').value;
-
-  // Show the loading indicator
-  const loadingIndicator = document.getElementById('loadingIndicator');
-  loaderOverlay.style.display = 'flex'; // Show overlay & loader
-
-  try {
-    const response = await fetch("http://localhost:5000/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      // Save userId to localStorage
-      localStorage.setItem("userID", data.userId);
-
-      // Redirect to profile with user ID in query string
-      window.location.href = `myprofile.html?userId=${data.userId}`;
-    } else {
-      alert(data.message || "Login failed");
-    }
-  } catch (error) {
-    console.error("Login request error:", error);
-    alert("An error occurred. Please try again.");
-  } finally {
-    // Hide the loading indicator after the operation
-    loaderOverlay.style.display = 'none'; // Hide loader 
-  }
-}
-
-  </script>
-  
+      <script>
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuButton').addEventListener('click', function() {
+          const menu = document.getElementById('mobileMenu');
+          menu.classList.toggle('hidden');
+        });
+        
+        // Modal Functions
+        function toggleModal() {
+          const modal = document.getElementById("signinModal");
+          modal.classList.toggle("hidden");
+          modal.classList.toggle("flex");
+        }
+        
+        function openModal() {
+          document.getElementById('enrollmentModal').classList.remove('hidden');
+        }
+        
+        function closeModal() {
+          document.getElementById('enrollmentModal').classList.add('hidden');
+        }
+        
+        function setCourse(courseName) {
+          document.getElementById('selectedCourse').value = courseName;
+          document.getElementById('course').value = courseName;
+          openModal();
+        }
+        
+        // Login Handler
+        async function handleLogin() {
+          const email = document.getElementById('emailInput').value;
+          const password = document.getElementById('passwordInput').value;
+          const loaderOverlay = document.getElementById('loaderOverlay');
+          
+          // Show loader
+          loaderOverlay.style.display = 'flex';
+          
+          try {
+            const response = await fetch("http://localhost:5000/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password })
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+              // Save user data to localStorage
+              localStorage.setItem("userID", data.user.id);
+              localStorage.setItem("userEmail", email);
+              
+              // Redirect to profile
+              window.location.href = `myprofile.html?userId=${data.user.id}`;
+            } else {
+              alert(data.message || "Login failed. Please check your credentials.");
+            }
+          } catch (error) {
+            console.error("Login error:", error);
+            alert("An error occurred. Please try again.");
+          } finally {
+            // Hide loader
+            loaderOverlay.style.display = 'none';
+          }
+        }
+        
+        // Enrollment Form Submission
+        document.getElementById('enrollmentForm').addEventListener('submit', function(e) {
+          e.preventDefault();
+          
+          // Get form values
+          const fullName = document.getElementById('fullName').value;
+          const email = document.getElementById('email').value;
+          const phone = document.getElementById('phone').value;
+          const course = document.getElementById('course').value;
+          const paymentMethod = document.getElementById('paymentMethod').value;
+          
+          // Prepare PayFast data
+          document.getElementById('pf_name').value = fullName;
+          document.getElementById('pf_email').value = email;
+          document.getElementById('pf_phone').value = phone;
+          
+          // Set course price based on selection
+          let amount = 0;
+          if (course === "Web Development") amount = 499;
+          else if (course === "Cybersecurity") amount = 799;
+          else if (course === "Data Science") amount = 1199;
+          
+          document.querySelector('input[name="amount"]').value = amount.toFixed(2);
+          document.querySelector('input[name="item_name"]').value = course + " Course Enrollment";
+          
+          // Submit to PayFast
+          document.getElementById('payfastForm').submit();
+        });
+        
+        // Check if modal should be shown on page load
+        window.addEventListener('DOMContentLoaded', () => {
+          if (localStorage.getItem('showSigninModal') === 'true') {
+            toggleModal();
+            localStorage.removeItem('showSigninModal');
+          }
+        });
+      </script>
 </body>
 </html>

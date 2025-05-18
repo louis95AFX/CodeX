@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Computing Mastery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .lesson-card:hover .lesson-icon {
+            transform: scale(1.1);
+            transition: all 0.3s ease;
+        }
+        .sidebar {
+            scrollbar-width: thin;
+            scrollbar-color: #4b5563 #1f2937;
+        }
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sidebar::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: #4b5563;
+            border-radius: 6px;
+        }
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        .tab-button.active {
+            border-bottom: 3px solid #3b82f6;
+            color: #3b82f6;
+        }
+        .flash {
+            animation: flash 0.5s;
+        }
+        @keyframes flash {
+            0% { background-color: rgba(59, 130, 246, 0.3); }
+            100% { background-color: transparent; }
+        }
+        .exercise-tab {
+            display: none;
+        }
+        .exercise-tab.active {
+            display: block;
+        }
+        .hint-box {
+            display: none;
+        }
+        .hint-box.visible {
+            display: block;
+        }
+        .success-message {
+            display: none;
+        }
+        .success-message.visible {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .module-toggle {
+            cursor: pointer;
+        }
+        .module-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .module-content.expanded {
+            max-height: 1000px;
+        }
+        .module-toggle i {
+            transition: transform 0.3s ease;
+        }
+        .module-toggle.expanded i {
+            transform: rotate(90deg);
+        }
+        .cloud-icon {
+            color: #60a5fa;
+        }
+        .active-lesson {
+            background-color: #1e40af;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-gray-800 shadow-lg">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-cloud cloud-icon text-3xl"></i>
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+                    Cloud Computing Mastery
+                </h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <div class="w-12 h-12">
+                        <svg class="w-full h-full" viewBox="0 0 36 36">
+                            <path 
+                                d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none"
+                                stroke="#4b5563",
+                                stroke-width="2",
+                                stroke-dasharray="100, 100"
+                            />
+                            <path 
+                                class="progress-ring__circle"
+                                d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none"
+                                stroke="#3b82f6",
+                                stroke-width="2",
+                                stroke-dasharray="15, 100"
+                            />
+                        </svg>
+                    </div>
+                    <span class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs font-bold">15%</span>
+                </div>
+                <button class="profile-btn bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-medium flex items-center space-x-2">
+                    <i class="fas fa-user-tie"></i>
+                    <span>My Profile</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar w-64 bg-gray-800 overflow-y-auto flex-shrink-0">
+            <div class="p-4">
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold mb-2 text-gray-300">Course Content</h2>
+                    <div class="space-y-1">
+                        <!-- Module 1 -->
+                        <div class="mb-2">
+                            <div class="module-toggle flex items-center justify-between px-2 py-1 bg-gray-700 rounded">
+                                <span class="font-medium">Module 1: Cloud Fundamentals</span>
+                                <div class="flex items-center">
+                                    <span class="text-xs text-green-400 mr-2">15%</span>
+                                    <i class="fas fa-chevron-right text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="module-content ml-4 mt-1 space-y-1">
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-blue-400 font-medium">
+                                    <i class="fas fa-check-circle text-green-400 mr-2"></i>
+                                    Introduction to Cloud Computing
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-blue-400">
+                                    <i class="fas fa-check-circle text-green-400 mr-2"></i>
+                                    Cloud Service Models
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded active-lesson flash">
+                                    <i class="fas fa-play-circle text-blue-400 mr-2"></i>
+                                    Cloud Deployment Models
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Virtualization Basics
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Cloud Security Fundamentals
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Module 2 -->
+                        <div class="mb-2">
+                            <div class="module-toggle flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 2: AWS Essentials</span>
+                                <div class="flex items-center">
+                                    <span class="text-xs text-gray-400 mr-2">0%</span>
+                                    <i class="fas fa-chevron-right text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="module-content ml-4 mt-1 space-y-1">
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    AWS Global Infrastructure
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    EC2 Instances
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    S3 Storage
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    VPC Networking
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    IAM Security
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Module 3 -->
+                        <div class="mb-2">
+                            <div class="module-toggle flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 3: Azure Services</span>
+                                <div class="flex items-center">
+                                    <span class="text-xs text-gray-400 mr-2">0%</span>
+                                    <i class="fas fa-chevron-right text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="module-content ml-4 mt-1 space-y-1">
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Azure Architecture
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Virtual Machines
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Blob Storage
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Azure AD
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    ARM Templates
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Module 4 -->
+                        <div class="mb-2">
+                            <div class="module-toggle flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 4: Google Cloud</span>
+                                <div class="flex items-center">
+                                    <span class="text-xs text-gray-400 mr-2">0%</span>
+                                    <i class="fas fa-chevron-right text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="module-content ml-4 mt-1 space-y-1">
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    GCP Core Services
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Compute Engine
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Cloud Storage
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    VPC Networks
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    IAM & Policies
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Module 5 -->
+                        <div class="mb-2">
+                            <div class="module-toggle flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 5: Cloud DevOps</span>
+                                <div class="flex items-center">
+                                    <span class="text-xs text-gray-400 mr-2">0%</span>
+                                    <i class="fas fa-chevron-right text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="module-content ml-4 mt-1 space-y-1">
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    CI/CD Pipelines
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Infrastructure as Code
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Containerization
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Kubernetes Basics
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Monitoring & Logging
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold mb-2 text-gray-300">Quick Links</h2>
+                    <div class="space-y-2">
+                        <a href="#" class="quick-link flex items-center px-3 py-2 rounded-lg bg-gray-700 hover:bg-gray-600">
+                            <i class="fas fa-trophy text-yellow-400 mr-3"></i>
+                            <span>Cloud Challenges</span>
+                        </a>
+                        <a href="#" class="quick-link flex items-center px-3 py-2 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-book text-blue-400 mr-3"></i>
+                            <span>Cloud Cheat Sheets</span>
+                        </a>
+                        <a href="#" class="quick-link flex items-center px-3 py-2 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-question-circle text-green-400 mr-3"></i>
+                            <span>Cloud FAQ</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="daily-challenge p-4 bg-gray-700 rounded-lg">
+                    <h3 class="font-medium mb-2">Daily Cloud Challenge</h3>
+                    <p class="text-sm text-gray-300 mb-3">Deploy a simple web app to any cloud platform.</p>
+                    <button class="challenge-btn w-full bg-blue-600 hover:bg-blue-700 py-1 rounded text-sm">
+                        Start Challenge
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto bg-gray-900">
+            <div class="container mx-auto px-4 py-6">
+                <!-- Breadcrumbs -->
+                <div class="flex items-center text-sm text-gray-400 mb-6">
+                    <a href="#" class="hover:text-blue-400">Home</a>
+                    <span class="mx-2">/</span>
+                    <a href="#" class="hover:text-blue-400">Module 1</a>
+                    <span class="mx-2">/</span>
+                    <span class="text-blue-400">Cloud Deployment Models</span>
+                </div>
+                
+                <!-- Lesson Header -->
+                <div class="bg-gray-800 rounded-lg p-6 mb-6 shadow-lg">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h2 class="text-2xl font-bold mb-2">Cloud Deployment Models</h2>
+                            <p class="text-gray-400 mb-4">Understand the different ways to deploy cloud services and choose the right model for your needs.</p>
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <span class="ml-2 text-gray-400">4.0</span>
+                                </div>
+                                <span class="text-gray-400"><i class="fas fa-clock mr-1"></i> 30 min</span>
+                                <span class="text-gray-400"><i class="fas fa-tasks mr-1"></i> 2 exercises</span>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="bookmark-btn p-2 rounded-full bg-gray-700 hover:bg-gray-600">
+                                <i class="fas fa-bookmark"></i>
+                            </button>
+                            <button class="share-btn p-2 rounded-full bg-gray-700 hover:bg-gray-600">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Lesson Content -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <!-- Theory Section -->
+                    <div class="lg:col-span-2 bg-gray-800 rounded-lg p-6 shadow-lg">
+                        <div class="prose prose-invert max-w-none">
+                            <h3 class="text-xl font-semibold mb-4">Understanding Deployment Models</h3>
+                            <p>Cloud deployment models define how cloud services are provisioned and managed. The four primary models are public, private, hybrid, and community clouds, each with distinct characteristics and use cases.</p>
+                            
+                            <div class="my-6 p-4 bg-gray-700 rounded-lg border-l-4 border-blue-500">
+                                <h4 class="font-medium mb-2">Key Concepts:</h4>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>Public Cloud: Services delivered over the public internet</li>
+                                    <li>Private Cloud: Exclusive cloud environment for a single organization</li>
+                                    <li>Hybrid Cloud: Combination of public and private clouds</li>
+                                    <li>Community Cloud: Shared infrastructure for specific communities</li>
+                                </ul>
+                            </div>
+                            
+                            <h4 class="font-semibold mt-6 mb-3">Public Cloud</h4>
+                            <p>The public cloud is the most common deployment model where services are delivered over the public internet and shared across multiple organizations. Examples include AWS, Azure, and Google Cloud.</p>
+                            <div class="bg-gray-700 p-3 rounded-lg my-4">
+                                <p class="font-medium mb-2">Advantages:</p>
+                                <ul class="list-disc pl-5 space-y-1 text-sm">
+                                    <li>Cost-effective (pay-as-you-go)</li>
+                                    <li>No maintenance required</li>
+                                    <li>Nearly unlimited scalability</li>
+                                    <li>High reliability</li>
+                                </ul>
+                            </div>
+                            
+                            <h4 class="font-semibold mt-6 mb-3">Private Cloud</h4>
+                            <p>A private cloud is dedicated to a single organization, offering greater control and security. It can be hosted on-premises or by a third-party provider.</p>
+                            <div class="bg-gray-700 p-3 rounded-lg my-4">
+                                <p class="font-medium mb-2">Advantages:</p>
+                                <ul class="list-disc pl-5 space-y-1 text-sm">
+                                    <li>Enhanced security and privacy</li>
+                                    <li>Customizable infrastructure</li>
+                                    <li>Better compliance control</li>
+                                    <li>Predictable performance</li>
+                                </ul>
+                            </div>
+                            
+                            <h4 class="font-semibold mt-6 mb-3">Hybrid Cloud</h4>
+                            <p>Hybrid cloud combines public and private clouds, allowing data and applications to be shared between them. This provides greater flexibility and deployment options.</p>
+                            <div class="bg-gray-700 p-3 rounded-lg my-4">
+                                <p class="font-medium mb-2">Advantages:</p>
+                                <ul class="list-disc pl-5 space-y-1 text-sm">
+                                    <li>Flexibility to choose optimal environment</li>
+                                    <li>Cost optimization</li>
+                                    <li>Improved security and compliance</li>
+                                    <li>Business continuity</li>
+                                </ul>
+                            </div>
+                            
+                            <h4 class="font-semibold mt-6 mb-3">Community Cloud</h4>
+                            <p>A community cloud is shared by several organizations with common concerns (security, compliance, jurisdiction, etc.). It may be managed internally or by a third-party.</p>
+                            <div class="bg-gray-700 p-3 rounded-lg my-4">
+                                <p class="font-medium mb-2">Advantages:</p>
+                                <ul class="list-disc pl-5 space-y-1 text-sm">
+                                    <li>Cost sharing</li>
+                                    <li>Collaboration benefits</li>
+                                    <li>Shared security model</li>
+                                    <li>Industry-specific compliance</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="mt-6 p-4 bg-blue-900 bg-opacity-30 rounded-lg border-l-4 border-blue-400">
+                                <h4 class="font-medium mb-2"><i class="fas fa-lightbulb mr-2"></i>Best Practice</h4>
+                                <p>When choosing a deployment model, consider your security requirements, compliance needs, budget constraints, and technical capabilities. Many organizations find hybrid solutions offer the best balance.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 flex justify-between border-t border-gray-700 pt-4">
+                            <button class="prev-lesson flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                Previous Lesson
+                            </button>
+                            <button class="next-lesson flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg">
+                                Next Lesson
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Practice Section -->
+                    <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                        <div class="bg-gray-700 px-4 py-3 border-b border-gray-600">
+                            <h3 class="font-semibold"><i class="fas fa-laptop-code mr-2"></i>Interactive Practice</h3>
+                        </div>
+                        <div class="p-4">
+                            <div class="mb-4">
+                                <div class="flex border-b border-gray-700">
+                                    <button class="tab-button active px-4 py-2 font-medium" data-tab="exercise1">Exercise 1</button>
+                                    <button class="tab-button px-4 py-2 font-medium" data-tab="exercise2">Exercise 2</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Exercise 1 -->
+                            <div class="exercise-tab active" id="exercise1">
+                                <div class="mb-4">
+                                    <h4 class="font-medium mb-2">Task:</h4>
+                                    <p class="text-sm text-gray-300">Match each cloud deployment model with its correct description.</p>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <div class="grid grid-cols-1 gap-3">
+                                        <div class="bg-gray-700 p-3 rounded-lg">
+                                            <p class="font-medium mb-2">Public Cloud</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm" data-correct="3">Shared infrastructure for multiple organizations</button>
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Dedicated infrastructure for a single organization</button>
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Combination of public and private clouds</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-gray-700 p-3 rounded-lg">
+                                            <p class="font-medium mb-2">Private Cloud</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Shared infrastructure for multiple organizations</button>
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm" data-correct="2">Dedicated infrastructure for a single organization</button>
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Combination of public and private clouds</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-gray-700 p-3 rounded-lg">
+                                            <p class="font-medium mb-2">Hybrid Cloud</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Shared infrastructure for multiple organizations</button>
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Dedicated infrastructure for a single organization</button>
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm" data-correct="3">Combination of public and private clouds</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="hint-box bg-gray-700 bg-opacity-50 rounded-lg p-3 border border-gray-600 mb-4">
+                                    <div class="flex items-start">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-info-circle text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Hint</h4>
+                                            <p class="text-sm text-gray-300">Review the definitions in the lesson content. Public clouds are shared, private clouds are dedicated, and hybrid clouds combine both.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="success-message bg-green-900 bg-opacity-30 rounded-lg p-3 border border-green-600 mb-4">
+                                    <div class="flex items-center">
+                                        <div class="bg-green-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-check text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Success!</h4>
+                                            <p class="text-sm text-gray-300">You've correctly matched all deployment models!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="check-btn w-full bg-purple-600 hover:bg-purple-700 py-2 rounded font-medium">
+                                    <i class="fas fa-check-circle mr-2"></i> Check Answers
+                                </button>
+                            </div>
+                            
+                            <!-- Exercise 2 -->
+                            <div class="exercise-tab" id="exercise2">
+                                <div class="mb-4">
+                                    <h4 class="font-medium mb-2">Task:</h4>
+                                    <p class="text-sm text-gray-300">Select the most appropriate cloud deployment model for each scenario.</p>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <div class="grid grid-cols-1 gap-3">
+                                        <div class="bg-gray-700 p-3 rounded-lg">
+                                            <p class="font-medium mb-2">A startup wants to minimize upfront infrastructure costs while being able to scale rapidly:</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm" data-correct="1">Public Cloud</button>
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Private Cloud</button>
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Hybrid Cloud</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-gray-700 p-3 rounded-lg">
+                                            <p class="font-medium mb-2">A bank needs to process sensitive customer data while complying with strict regulations:</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Public Cloud</button>
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm" data-correct="2">Private Cloud</button>
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Hybrid Cloud</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-gray-700 p-3 rounded-lg">
+                                            <p class="font-medium mb-2">An e-commerce company wants to keep customer data private but handle seasonal traffic spikes:</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Public Cloud</button>
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Private Cloud</button>
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm" data-correct="3">Hybrid Cloud</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="hint-box bg-gray-700 bg-opacity-50 rounded-lg p-3 border border-gray-600 mb-4">
+                                    <div class="flex items-start">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-info-circle text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Hint</h4>
+                                            <p class="text-sm text-gray-300">Consider the trade-offs between cost, security, and flexibility for each scenario. Public clouds are great for cost-sensitive startups, private for regulated industries, and hybrid for variable workloads.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="success-message bg-green-900 bg-opacity-30 rounded-lg p-3 border border-green-600 mb-4">
+                                    <div class="flex items-center">
+                                        <div class="bg-green-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-check text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Success!</h4>
+                                            <p class="text-sm text-gray-300">Excellent choices! You understand when to use each deployment model.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="check-btn w-full bg-purple-600 hover:bg-purple-700 py-2 rounded font-medium">
+                                    <i class="fas fa-check-circle mr-2"></i> Check Answers
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Resources -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Additional Resources</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <a href="#" class="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-start">
+                            <div class="bg-blue-600 rounded-lg p-3 mr-4">
+                                <i class="fas fa-video text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Video Tutorial</h4>
+                                <p class="text-sm text-gray-400">Watch cloud deployment models explained</p>
+                            </div>
+                        </a>
+                        <a href="#" class="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-start">
+                            <div class="bg-green-600 rounded-lg p-3 mr-4">
+                                <i class="fas fa-file-alt text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Case Studies</h4>
+                                <p class="text-sm text-gray-400">Real-world deployment examples</p>
+                            </div>
+                        </a>
+                        <a href="#" class="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-start">
+                            <div class="bg-purple-600 rounded-lg p-3 mr-4">
+                                <i class="fas fa-question-circle text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Quiz</h4>
+                                <p class="text-sm text-gray-400">Test your knowledge with 5 questions</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Community Section -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4">Community Discussion</h3>
+                    <div class="mb-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
+                                <span class="font-bold">JS</span>
+                            </div>
+                            <div class="flex-1 bg-gray-700 rounded-lg p-3">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="font-medium">John Smith</span>
+                                    <span class="text-xs text-gray-400">2 hours ago</span>
+                                </div>
+                                <p class="text-sm">Which deployment model would you recommend for a healthcare startup handling sensitive patient data?</p>
+                                <div class="flex space-x-2 mt-2">
+                                    <button class="text-xs text-gray-400 hover:text-blue-400"><i class="far fa-thumbs-up mr-1"></i>Like</button>
+                                    <button class="text-xs text-gray-400 hover:text-blue-400"><i class="far fa-comment mr-1"></i>Reply</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center">
+                            <span class="font-bold">AM</span>
+                        </div>
+                        <div class="flex-1">
+                            <textarea class="w-full bg-gray-700 rounded-lg p-3 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Add to the discussion..."></textarea>
+                            <button class="mt-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded text-sm">Post Comment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Toggle module content
+        document.querySelectorAll('.module-toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const content = toggle.nextElementSibling;
+                content.classList.toggle('expanded');
+                toggle.classList.toggle('expanded');
+            });
+        });
+
+        // Tab switching
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                
+                // Remove active class from all tabs and buttons
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.exercise-tab').forEach(tab => tab.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding tab
+                button.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Hint toggles
+        document.querySelectorAll('.hint-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const hintBox = button.closest('.exercise-tab').querySelector('.hint-box');
+                hintBox.classList.toggle('visible');
+            });
+        });
+
+        // Check buttons for exercises
+        document.querySelectorAll('.check-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const successMessage = button.closest('.exercise-tab').querySelector('.success-message');
+                successMessage.classList.add('visible');
+                
+                // Scroll to show the success message
+                successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+        });
+
+        // Option selection for exercise 1
+        document.querySelectorAll('.option-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove highlight from all options in this question
+                button.parentElement.querySelectorAll('.option-btn').forEach(btn => {
+                    btn.classList.remove('bg-blue-600', 'text-white');
+                });
+                
+                // Highlight selected option
+                button.classList.add('bg-blue-600', 'text-white');
+            });
+        });
+
+        // Scenario selection for exercise 2
+        document.querySelectorAll('.scenario-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove highlight from all options in this question
+                button.parentElement.querySelectorAll('.scenario-btn').forEach(btn => {
+                    btn.classList.remove('bg-blue-600', 'text-white');
+                });
+                
+                // Highlight selected option
+                button.classList.add('bg-blue-600', 'text-white');
+                
+                // If correct, add special styling
+                if (button.hasAttribute('data-correct')) {
+                    setTimeout(() => {
+                        button.classList.remove('bg-blue-600');
+                        button.classList.add('bg-green-600');
+                    }, 500);
+                }
+            });
+        });
+
+        // Navigation buttons
+        document.querySelector('.next-lesson').addEventListener('click', () => {
+            alert('Moving to the next lesson: Virtualization Basics');
+            // In a real app, this would load the next lesson content
+        });
+
+        document.querySelector('.prev-lesson').addEventListener('click', () => {
+            alert('Moving to the previous lesson: Cloud Service Models');
+            // In a real app, this would load the previous lesson content
+        });
+
+        // Bookmark button
+        document.querySelector('.bookmark-btn').addEventListener('click', function() {
+            const icon = this.querySelector('i');
+            if (icon.classList.contains('fas')) {
+                icon.classList.replace('fas', 'far');
+                alert('Lesson removed from bookmarks');
+            } else {
+                icon.classList.replace('far', 'fas');
+                alert('Lesson added to bookmarks');
+            }
+        });
+
+        // Expand the first module by default
+        document.querySelector('.module-toggle').click();
+    </script>
+</body>
+</html>

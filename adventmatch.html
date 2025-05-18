@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdventMatch - Seventh-day Adventist Dating</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Noto+Serif:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .serif {
+            font-family: 'Noto Serif', serif;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #2c5aa0 0%, #4a8b48 100%);
+        }
+        
+        .sabbath-bg {
+            background-image: url('https://images.unsplash.com/photo-1517649763962-0c623066013b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+        }
+        
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-link:hover {
+            color: #4a8b48;
+        }
+        
+        .checkbox:checked {
+            background-color: #4a8b48;
+        }
+        
+        .checkbox:checked::after {
+            content: '✓';
+            color: white;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-heart text-2xl text-blue-800"></i>
+                <a href="#" class="text-2xl font-bold text-blue-800 serif">AdventMatch</a>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#" class="nav-link text-gray-700 hover:text-green-700 transition">Home</a>
+                <a href="#" class="nav-link text-gray-700 hover:text-green-700 transition">Browse</a>
+                <a href="#" class="nav-link text-gray-700 hover:text-green-700 transition">Success Stories</a>
+                <a href="#" class="nav-link text-gray-700 hover:text-green-700 transition">Resources</a>
+                <a href="#" class="nav-link text-gray-700 hover:text-green-700 transition">About</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="#" class="px-4 py-2 text-gray-700 hover:text-green-700 transition">Login</a>
+                <a href="#" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">Sign Up</a>
+                <button class="md:hidden text-gray-700">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient text-white py-16 md:py-24">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6 serif">Find Your Adventist Match</h1>
+                <p class="text-xl mb-8">Connect with fellow Seventh-day Adventists who share your faith, values, and commitment to Christ.</p>
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="#" class="px-8 py-3 bg-white text-blue-800 font-semibold rounded-md hover:bg-gray-100 transition text-center">Join Free</a>
+                    <a href="#" class="px-8 py-3 border-2 border-white text-white font-semibold rounded-md hover:bg-white hover:text-blue-800 transition text-center">Learn More</a>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <div class="bg-white rounded-lg shadow-xl p-4 max-w-md w-full">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">Create Your Free Profile</h3>
+                    <form>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 mb-2">I am a</label>
+                            <div class="flex space-x-4">
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="gender" class="form-radio text-green-600" checked>
+                                    <span class="ml-2 text-gray-700">Man</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="gender" class="form-radio text-green-600">
+                                    <span class="ml-2 text-gray-700">Woman</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 mb-2">Looking for a</label>
+                            <div class="flex space-x-4">
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="looking_for" class="form-radio text-green-600">
+                                    <span class="ml-2 text-gray-700">Man</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="looking_for" class="form-radio text-green-600" checked>
+                                    <span class="ml-2 text-gray-700">Woman</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 mb-2">Email</label>
+                            <input type="email" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 mb-2">Password</label>
+                            <input type="password" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                        </div>
+                        <div class="mb-6">
+                            <label class="flex items-center">
+                                <div class="relative">
+                                    <input type="checkbox" class="checkbox appearance-none w-6 h-6 border border-gray-300 rounded-md checked:border-transparent focus:outline-none">
+                                </div>
+                                <span class="ml-2 text-gray-700 text-sm">I agree to the <a href="#" class="text-green-600 hover:underline">Terms</a> and <a href="#" class="text-green-600 hover:underline">Privacy Policy</a></span>
+                            </label>
+                        </div>
+                        <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-md hover:bg-green-700 transition">Get Started</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 serif">Why Choose AdventMatch?</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center p-6 rounded-lg hover:shadow-lg transition">
+                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-bible text-2xl text-blue-800"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Shared Faith</h3>
+                    <p class="text-gray-600">Connect with fellow Seventh-day Adventists who understand and live by the same biblical principles.</p>
+                </div>
+                <div class="text-center p-6 rounded-lg hover:shadow-lg transition">
+                    <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-heart text-2xl text-green-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Values-Based Matching</h3>
+                    <p class="text-gray-600">Our matching system prioritizes Sabbath observance, health principles, and spiritual compatibility.</p>
+                </div>
+                <div class="text-center p-6 rounded-lg hover:shadow-lg transition">
+                    <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shield-alt text-2xl text-purple-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Safe Community</h3>
+                    <p class="text-gray-600">Verified profiles and a commitment to creating a Christ-centered environment for meaningful connections.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sabbath Section -->
+    <section class="sabbath-bg bg-blue-900 bg-opacity-80 text-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center">
+                <i class="fas fa-church text-5xl mb-6"></i>
+                <h2 class="text-3xl font-bold mb-6 serif">Honoring the Sabbath Together</h2>
+                <p class="text-xl mb-8">At AdventMatch, we understand the importance of finding a partner who shares your commitment to Sabbath observance. Our platform helps you connect with individuals who cherish this sacred time as much as you do.</p>
+                <a href="#" class="inline-block px-8 py-3 bg-white text-blue-800 font-semibold rounded-md hover:bg-gray-100 transition">Learn About Our Sabbath Features</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Stories -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 serif">Success Stories</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <div class="flex items-center mb-6">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Sarah" class="w-16 h-16 rounded-full object-cover">
+                        <div class="ml-4">
+                            <h4 class="font-bold">Sarah & Michael</h4>
+                            <p class="text-gray-600">Married June 2022</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4">"We connected over our mutual love for mission work and plant-based cooking. Our first date was at a vegetarian restaurant after Sabbath services, and we knew right away there was something special."</p>
+                    <div class="flex space-x-2">
+                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">Sabbath Keepers</span>
+                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Vegetarian</span>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <div class="flex items-center mb-6">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="David" class="w-16 h-16 rounded-full object-cover">
+                        <div class="ml-4">
+                            <h4 class="font-bold">David & Rebecca</h4>
+                            <p class="text-gray-600">Engaged March 2023</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mb-4">"AdventMatch helped us find each other across continents! We started with Bible study over video chat every Sabbath afternoon, and now we're planning our wedding and life together in ministry."</p>
+                    <div class="flex space-x-2">
+                        <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">Missionaries</span>
+                        <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">Long Distance</span>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-10">
+                <a href="#" class="inline-block px-8 py-3 bg-green-600 text-white font-semibold rounded-md hover:bg-green-700 transition">Read More Stories</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Members -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 serif">Featured Adventist Singles</h2>
+            <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Profile Card 1 -->
+                <div class="profile-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
+                    <div class="relative">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Profile" class="w-full h-64 object-cover">
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                            <h3 class="text-white font-bold text-xl">Jessica, 28</h3>
+                            <p class="text-white text-sm">Nurse • California</p>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-gray-600 text-sm mb-3">"Looking for a partner who values health ministry and Sabbath fellowship."</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex space-x-1">
+                                <i class="fas fa-church text-green-600"></i>
+                                <i class="fas fa-leaf text-green-600"></i>
+                                <i class="fas fa-music text-green-600"></i>
+                            </div>
+                            <button class="text-green-600 hover:text-green-800">
+                                <i class="fas fa-heart text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Profile Card 2 -->
+                <div class="profile-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
+                    <div class="relative">
+                        <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Profile" class="w-full h-64 object-cover">
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                            <h3 class="text-white font-bold text-xl">Daniel, 32</h3>
+                            <p class="text-white text-sm">Teacher • Texas</p>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-gray-600 text-sm mb-3">"Passionate about Adventist education and finding someone to serve with."</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex space-x-1">
+                                <i class="fas fa-book text-green-600"></i>
+                                <i class="fas fa-running text-green-600"></i>
+                                <i class="fas fa-globe-americas text-green-600"></i>
+                            </div>
+                            <button class="text-green-600 hover:text-green-800">
+                                <i class="fas fa-heart text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Profile Card 3 -->
+                <div class="profile-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
+                    <div class="relative">
+                        <img src="https://randomuser.me/api/portraits/women/33.jpg" alt="Profile" class="w-full h-64 object-cover">
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                            <h3 class="text-white font-bold text-xl">Rachel, 25</h3>
+                            <p class="text-white text-sm">Graphic Designer • New York</p>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-gray-600 text-sm mb-3">"Creative soul seeking a partner who loves art, nature, and Bible study."</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex space-x-1">
+                                <i class="fas fa-paint-brush text-green-600"></i>
+                                <i class="fas fa-hiking text-green-600"></i>
+                                <i class="fas fa-praying-hands text-green-600"></i>
+                            </div>
+                            <button class="text-green-600 hover:text-green-800">
+                                <i class="fas fa-heart text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Profile Card 4 -->
+                <div class="profile-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
+                    <div class="relative">
+                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Profile" class="w-full h-64 object-cover">
+                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
+                            <h3 class="text-white font-bold text-xl">Mark, 30</h3>
+                            <p class="text-white text-sm">IT Professional • Colorado</p>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-gray-600 text-sm mb-3">"Tech enthusiast who keeps the Sabbath holy and enjoys outdoor adventures."</p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex space-x-1">
+                                <i class="fas fa-laptop-code text-green-600"></i>
+                                <i class="fas fa-campground text-green-600"></i>
+                                <i class="fas fa-utensils text-green-600"></i>
+                            </div>
+                            <button class="text-green-600 hover:text-green-800">
+                                <i class="fas fa-heart text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-10">
+                <a href="#" class="inline-block px-8 py-3 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition">Browse All Members</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Adventist Values -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 serif">Our Adventist Values</h2>
+            <div class="max-w-4xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-bible text-blue-800 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold">Bible-Based Relationships</h3>
+                        </div>
+                        <p class="text-gray-600">We encourage connections rooted in Scripture, with Christ at the center of every relationship.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-green-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-heartbeat text-green-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold">Health & Wellness</h3>
+                        </div>
+                        <p class="text-gray-600">Our community embraces the Adventist health message, supporting vegetarian lifestyles and clean living.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-purple-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-globe-americas text-purple-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold">Mission & Service</h3>
+                        </div>
+                        <p class="text-gray-600">Find partners who share your passion for spreading the gospel and serving others.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-yellow-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-family text-yellow-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold">Family-Oriented</h3>
+                        </div>
+                        <p class="text-gray-600">Build relationships with marriage and family in mind, grounded in Adventist principles.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-16 bg-green-700 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6 serif">Ready to Meet Your Adventist Match?</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">Join thousands of Seventh-day Adventists who have found meaningful connections through our faith-based platform.</p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <a href="#" class="px-8 py-3 bg-white text-green-700 font-semibold rounded-md hover:bg-gray-100 transition">Create Free Profile</a>
+                <a href="#" class="px-8 py-3 border-2 border-white text-white font-semibold rounded-md hover:bg-white hover:text-green-700 transition">Take Our Compatibility Quiz</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-heart text-2xl text-blue-400"></i>
+                        <a href="#" class="text-2xl font-bold text-white serif">AdventMatch</a>
+                    </div>
+                    <p class="text-gray-400">Connecting Seventh-day Adventists for Christ-centered relationships since 2010.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Browse Members</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Success Stories</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Dating Resources</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Pricing</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Adventist Dating Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Sabbath Date Ideas</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Relationship Advice</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Prayer Requests</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Contact Us</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope text-gray-400 mr-2"></i>
+                            <span>support@adventmatch.com</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone text-gray-400 mr-2"></i>
+                            <span>(800) 555-0182</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt text-gray-400 mr-2"></i>
+                            <span>Silver Spring, MD</span>
+                        </li>
+                    </ul>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">© 2023 AdventMatch. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple JavaScript for demonstration
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle (would need more JS for full functionality)
+            const mobileMenuButton = document.querySelector('.md\\:hidden');
+            mobileMenuButton.addEventListener('click', function() {
+                alert('Mobile menu would open here in a full implementation');
+            });
+            
+            // Like button functionality
+            const likeButtons = document.querySelectorAll('.fa-heart');
+            likeButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (this.classList.contains('text-green-600')) {
+                        this.classList.remove('text-green-600');
+                        this.classList.add('text-red-500');
+                    } else {
+                        this.classList.remove('text-red-500');
+                        this.classList.add('text-green-600');
+                    }
+                });
+            });
+            
+            // Profile card hover effects
+            const profileCards = document.querySelectorAll('.profile-card');
+            profileCards.forEach(card => {
+                card.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
+            });
+        });
+    </script>
+</body>
+</html>
