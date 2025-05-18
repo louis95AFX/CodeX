@@ -4,68 +4,292 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Final Quiz - Code Academy</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+    }
+    
+    .question-card {
+      transition: all 0.3s ease;
+      border-left: 4px solid #4f46e5;
+    }
+    
+    .question-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .radio-option {
+      transition: all 0.2s ease;
+    }
+    
+    .radio-option:hover {
+      background-color: #f3f4f6;
+    }
+    
+    .certificate {
+      background: url('https://images.unsplash.com/photo-1579547945413-497e1b99dac0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') no-repeat center center;
+      background-size: cover;
+      position: relative;
+    }
+    
+    .certificate::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.9);
+    }
+    
+    .certificate-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .progress-bar {
+      height: 6px;
+      background-color: #e5e7eb;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background-color: #4f46e5;
+      transition: width 0.5s ease;
+    }
+  </style>
 </head>
 <body class="bg-gray-50">
-  <header class="bg-blue-600 text-white p-4">
-    <div class="container mx-auto flex justify-between">
-      <h1 class="text-xl font-bold">Final Quiz</h1>
-      <nav>
-        <a href="dashboard.html" class="hover:underline">Dashboard</a>
-      </nav>
+  <header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg">
+    <div class="container mx-auto px-4 py-6">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <i class="fas fa-laptop-code text-2xl"></i>
+          <h1 class="text-2xl font-bold">Code Academy</h1>
+        </div>
+        <nav>
+          <a href="webdev.html" class="flex items-center space-x-1 hover:text-indigo-200 transition-colors">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </a>
+        </nav>
+      </div>
     </div>
   </header>
 
-  <main class="container mx-auto py-10">
-    <form id="quiz-form" class="bg-white p-6 rounded shadow">
-      <h2 class="text-xl font-bold mb-6">Answer the following questions:</h2>
-
-      <div class="mb-4">
-        <label class="font-semibold">1. What tag is used to define a hyperlink in HTML?</label><br>
-        <input type="text" name="q1" class="mt-2 border p-2 w-full">
+  <main class="container mx-auto px-4 py-10">
+    <div class="max-w-3xl mx-auto">
+      <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Final Assessment</h2>
+            <span class="bg-indigo-100 text-indigo-800 text-sm font-medium px-3 py-1 rounded-full">5 Questions</span>
+          </div>
+          
+          <div class="mb-6">
+            <div class="flex justify-between text-sm text-gray-600 mb-1">
+              <span>Progress</span>
+              <span id="progress-text">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+          </div>
+          
+          <form id="quiz-form">
+            <div class="space-y-6">
+              <!-- Question 1 -->
+              <div class="question-card bg-white p-6 rounded-lg shadow-sm">
+                <div class="flex items-start space-x-3">
+                  <div class="bg-indigo-100 text-indigo-800 font-bold rounded-full w-8 h-8 flex items-center justify-center">1</div>
+                  <div class="flex-1">
+                    <label class="block text-lg font-medium text-gray-800 mb-3">What tag is used to define a hyperlink in HTML?</label>
+                    <div class="relative">
+                      <input type="text" name="q1" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Your answer...">
+                      <i class="fas fa-link absolute right-3 top-3 text-gray-400"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Question 2 -->
+              <div class="question-card bg-white p-6 rounded-lg shadow-sm">
+                <div class="flex items-start space-x-3">
+                  <div class="bg-indigo-100 text-indigo-800 font-bold rounded-full w-8 h-8 flex items-center justify-center">2</div>
+                  <div class="flex-1">
+                    <label class="block text-lg font-medium text-gray-800 mb-3">How do you include a CSS file in HTML?</label>
+                    <div class="relative">
+                      <input type="text" name="q2" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Your answer...">
+                      <i class="fas fa-code absolute right-3 top-3 text-gray-400"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Question 3 -->
+              <div class="question-card bg-white p-6 rounded-lg shadow-sm">
+                <div class="flex items-start space-x-3">
+                  <div class="bg-indigo-100 text-indigo-800 font-bold rounded-full w-8 h-8 flex items-center justify-center">3</div>
+                  <div class="flex-1">
+                    <label class="block text-lg font-medium text-gray-800 mb-3">What does <code class="bg-gray-100 px-1 py-0.5 rounded">flex-direction: column;</code> do?</label>
+                    <div class="relative">
+                      <input type="text" name="q3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Your answer...">
+                      <i class="fas fa-layer-group absolute right-3 top-3 text-gray-400"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Question 4 -->
+              <div class="question-card bg-white p-6 rounded-lg shadow-sm">
+                <div class="flex items-start space-x-3">
+                  <div class="bg-indigo-100 text-indigo-800 font-bold rounded-full w-8 h-8 flex items-center justify-center">4</div>
+                  <div class="flex-1">
+                    <label class="block text-lg font-medium text-gray-800 mb-3">Which of the following is used to declare a JavaScript variable?</label>
+                    <div class="space-y-2">
+                      <label class="radio-option flex items-center space-x-3 p-3 rounded-lg cursor-pointer">
+                        <input type="radio" name="q4" value="var" class="h-5 w-5 text-indigo-600 focus:ring-indigo-500">
+                        <span class="text-gray-700">var</span>
+                      </label>
+                      <label class="radio-option flex items-center space-x-3 p-3 rounded-lg cursor-pointer">
+                        <input type="radio" name="q4" value="let" class="h-5 w-5 text-indigo-600 focus:ring-indigo-500">
+                        <span class="text-gray-700">let</span>
+                      </label>
+                      <label class="radio-option flex items-center space-x-3 p-3 rounded-lg cursor-pointer">
+                        <input type="radio" name="q4" value="const" class="h-5 w-5 text-indigo-600 focus:ring-indigo-500">
+                        <span class="text-gray-700">const</span>
+                      </label>
+                      <label class="radio-option flex items-center space-x-3 p-3 rounded-lg cursor-pointer">
+                        <input type="radio" name="q4" value="all" class="h-5 w-5 text-indigo-600 focus:ring-indigo-500">
+                        <span class="text-gray-700">All of the above</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Question 5 -->
+              <div class="question-card bg-white p-6 rounded-lg shadow-sm">
+                <div class="flex items-start space-x-3">
+                  <div class="bg-indigo-100 text-indigo-800 font-bold rounded-full w-8 h-8 flex items-center justify-center">5</div>
+                  <div class="flex-1">
+                    <label class="block text-lg font-medium text-gray-800 mb-3">What does CSS stand for?</label>
+                    <div class="space-y-2">
+                      <label class="radio-option flex items-center space-x-3 p-3 rounded-lg cursor-pointer">
+                        <input type="radio" name="q5" value="Creative Style Sheets" class="h-5 w-5 text-indigo-600 focus:ring-indigo-500">
+                        <span class="text-gray-700">Creative Style Sheets</span>
+                      </label>
+                      <label class="radio-option flex items-center space-x-3 p-3 rounded-lg cursor-pointer">
+                        <input type="radio" name="q5" value="Cascading Style Sheets" class="h-5 w-5 text-indigo-600 focus:ring-indigo-500">
+                        <span class="text-gray-700">Cascading Style Sheets</span>
+                      </label>
+                      <label class="radio-option flex items-center space-x-3 p-3 rounded-lg cursor-pointer">
+                        <input type="radio" name="q5" value="Computer Style Sheets" class="h-5 w-5 text-indigo-600 focus:ring-indigo-500">
+                        <span class="text-gray-700">Computer Style Sheets</span>
+                      </label>
+                      <label class="radio-option flex items-center space-x-3 p-3 rounded-lg cursor-pointer">
+                        <input type="radio" name="q5" value="Colorful Style Sheets" class="h-5 w-5 text-indigo-600 focus:ring-indigo-500">
+                        <span class="text-gray-700">Colorful Style Sheets</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-8 flex justify-end">
+              <button type="submit" class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-3 rounded-lg font-medium hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl flex items-center space-x-2">
+                <i class="fas fa-paper-plane"></i>
+                <span>Submit Quiz</span>
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-
-      <div class="mb-4">
-        <label class="font-semibold">2. How do you include a CSS file in HTML?</label><br>
-        <input type="text" name="q2" class="mt-2 border p-2 w-full">
+      
+      <div id="result" class="hidden bg-white rounded-xl shadow-md overflow-hidden">
+        <div class="p-8 text-center">
+          <div class="mb-6">
+            <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-check-circle text-5xl text-green-600"></i>
+            </div>
+            <h2 class="text-3xl font-bold text-green-600 mb-2">Congratulations!</h2>
+            <p class="text-gray-600">You've successfully completed the Final Assessment</p>
+          </div>
+          
+          <div class="certificate bg-white border-2 border-indigo-200 rounded-lg p-8 mb-8">
+            <div class="certificate-content">
+              <div class="mb-6">
+                <i class="fas fa-certificate text-5xl text-indigo-600 mb-4"></i>
+                <h3 class="text-2xl font-bold text-indigo-800 mb-1">Certificate of Completion</h3>
+                <p class="text-gray-600">This certificate is proudly presented to</p>
+              </div>
+              
+              <div class="py-4 mb-6 border-t-2 border-b-2 border-indigo-100">
+                <h4 id="student-name" class="text-3xl font-bold text-indigo-700">Student Name</h4>
+              </div>
+              
+              <p class="text-gray-600 mb-4">For successfully completing the</p>
+              <p class="text-xl font-medium text-indigo-700 mb-6">HTML, CSS & JavaScript Fundamentals Course</p>
+              
+              <div class="flex justify-between text-sm text-gray-500">
+                <div>
+                  <p class="font-medium">Date</p>
+                  <p id="cert-date" class="text-gray-700"></p>
+                </div>
+                <div>
+                  <p class="font-medium">Instructor</p>
+                  <p class="text-gray-700">Code Academy Team</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <button onclick="generateCertificate()" class="bg-gradient-to-r from-green-500 to-green-600 text-white px-8 py-3 rounded-lg font-medium hover:from-green-600 hover:to-green-700 transition-all shadow-lg hover:shadow-xl flex items-center space-x-2 mx-auto">
+            <i class="fas fa-download"></i>
+            <span>Download Certificate</span>
+          </button>
+        </div>
       </div>
-
-      <div class="mb-4">
-        <label class="font-semibold">3. What does <code>flex-direction: column;</code> do?</label><br>
-        <input type="text" name="q3" class="mt-2 border p-2 w-full">
-      </div>
-
-      <div class="mb-4">
-        <label class="font-semibold block mb-2">4. Which of the following is used to declare a JavaScript variable?</label>
-        <label class="block"><input type="radio" name="q4" value="var" class="mr-2">var</label>
-        <label class="block"><input type="radio" name="q4" value="let" class="mr-2">let</label>
-        <label class="block"><input type="radio" name="q4" value="const" class="mr-2">const</label>
-        <label class="block"><input type="radio" name="q4" value="all" class="mr-2">All of the above</label>
-      </div>
-
-      <div class="mb-4">
-        <label class="font-semibold block mb-2">5. What does CSS stand for?</label>
-        <label class="block"><input type="radio" name="q5" value="Creative Style Sheets" class="mr-2">Creative Style Sheets</label>
-        <label class="block"><input type="radio" name="q5" value="Cascading Style Sheets" class="mr-2">Cascading Style Sheets</label>
-        <label class="block"><input type="radio" name="q5" value="Computer Style Sheets" class="mr-2">Computer Style Sheets</label>
-        <label class="block"><input type="radio" name="q5" value="Colorful Style Sheets" class="mr-2">Colorful Style Sheets</label>
-      </div>
-
-      <div class="text-right">
-        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded">Submit Quiz</button>
-      </div>
-    </form>
-
-    <div id="result" class="hidden mt-6 text-center">
-      <h2 class="text-2xl font-bold text-green-600">Congratulations!</h2>
-      <p class="mt-2">You've passed the quiz and completed the course.</p>
-      <button onclick="generateCertificate()" class="mt-4 bg-green-600 text-white px-6 py-2 rounded">Download Certificate</button>
     </div>
   </main>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
-    document.getElementById('quiz-form').addEventListener('submit', function (e) {
+    // Track progress
+    const form = document.getElementById('quiz-form');
+    const progressFill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+    
+    form.addEventListener('input', function() {
+      const totalQuestions = 5;
+      let answered = 0;
+      
+      // Check text inputs
+      for (let i = 1; i <= 3; i++) {
+        if (form[`q${i}`].value.trim() !== '') answered++;
+      }
+      
+      // Check radio buttons
+      if (form.q4.value) answered++;
+      if (form.q5.value) answered++;
+      
+      const percentage = (answered / totalQuestions) * 100;
+      progressFill.style.width = `${percentage}%`;
+      progressText.textContent = `${Math.round(percentage)}%`;
+    });
+    
+    // Form submission
+    form.addEventListener('submit', function (e) {
       e.preventDefault();
 
       const answers = new FormData(this);
@@ -85,27 +309,54 @@
       if (answers.get('q5') === correct.q5) score++;
 
       if (score >= 3) {
-        document.getElementById('quiz-form').classList.add('hidden');
+        form.classList.add('hidden');
         document.getElementById('result').classList.remove('hidden');
+        
+        // Set certificate details
+        document.getElementById('cert-date').textContent = new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
       } else {
-        alert('You need at least 3 correct answers to pass. Try again!');
+        // Show error message with animation
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded animate-bounce';
+        errorDiv.innerHTML = `
+          <div class="flex items-center">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            <p>You need at least 3 correct answers to pass. Try again!</p>
+          </div>
+        `;
+        
+        const existingError = document.querySelector('.bg-red-100');
+        if (existingError) {
+          existingError.replaceWith(errorDiv);
+        } else {
+          form.insertBefore(errorDiv, form.firstChild);
+        }
       }
     });
 
     function generateCertificate() {
-      const element = document.createElement('div');
-      element.innerHTML = `
-        <div style="text-align: center; padding: 50px; border: 5px solid #4F46E5; font-family: sans-serif">
-          <h1 style="font-size: 2.5em; color: #4F46E5;">Certificate of Completion</h1>
-          <p style="margin-top: 30px; font-size: 1.2em">This certifies that</p>
-          <h2 style="font-size: 2em; font-weight: bold; margin: 10px 0;">Student Name</h2>
-          <p>has successfully completed the Code Academy HTML, CSS & JS Basics Course</p>
-          <p style="margin-top: 20px;">Date: ${new Date().toLocaleDateString()}</p>
-        </div>
-      `;
-
-      html2pdf().from(element).save('certificate.pdf');
+      const element = document.querySelector('.certificate');
+      
+      const opt = {
+        margin: 10,
+        filename: 'code-academy-certificate.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+      };
+      
+      html2pdf().set(opt).from(element).save();
     }
+    
+    // Prompt for student name
+    window.addEventListener('DOMContentLoaded', () => {
+      const name = prompt("Please enter your name for the certificate:", "Student Name");
+      document.getElementById('student-name').textContent = name || "Student Name";
+    });
   </script>
 </body>
 </html>

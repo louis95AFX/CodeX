@@ -3,457 +3,852 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CodeX - Courses</title>
+  <title>CodeX - Premium Tech Courses</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <script src="https://js.paystack.co/v1/inline.js"></script>
 
   <style>
+    :root {
+      --primary: #2563eb;
+      --secondary: #1e40af;
+      --accent: #3b82f6;
+    }
+    
     html {
       scroll-behavior: smooth;
     }
-    .input {
-      padding: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 0.375rem;
-      margin-top: 0.25rem;
-      width: 100%;
-      outline: none;
-      transition: border-color 0.3s;
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
     }
-    .input:focus {
-      border-color: #2563eb;
-      box-shadow: 0 0 0 1px #2563eb;
-    }
+    
     .course-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      transition: box-shadow 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      transform: translateY(0);
+      border: 1px solid rgba(203, 213, 225, 0.3);
     }
+    
     .course-card:hover {
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      border-color: var(--accent);
+    }
+    
+    .badge-certified {
+      background: linear-gradient(45deg, #f59e0b, #ef4444);
+      color: white;
+    }
+    
+    .search-bar {
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(5px);
+    }
+    
+    .search-bar:focus {
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+    }
+    
+    .modal-enter {
+      animation: fadeIn 0.3s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .price-tag {
+      background: linear-gradient(45deg, #10b981, #059669);
+      color: white;
+    }
+    
+    .nav-shadow {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    .enroll-btn {
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      transition: all 0.3s ease;
+    }
+    
+    .enroll-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3), 0 2px 4px -1px rgba(37, 99, 235, 0.2);
+    }
+    
+    .course-image {
+      height: 180px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    .course-card:hover .course-image {
+      transform: scale(1.03);
+    }
+    
+    .category-chip {
+      transition: all 0.2s ease;
+    }
+    
+    .category-chip:hover {
+      transform: translateY(-2px);
+    }
+    
+    .progress-bar {
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      width: 0;
+      transition: width 0.6s ease;
+    }
+    
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      background: var(--primary);
+      z-index: 1000;
     }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+  <!-- Scroll Progress Indicator -->
+  <div class="scroll-progress" id="scrollProgress"></div>
 
-  <header class="bg-white text-gray-800 p-4 fixed w-full z-10 top-0 shadow-md">
+  <!-- Header -->
+  <header class="bg-white text-gray-800 p-4 fixed w-full z-50 nav-shadow">
     <div class="container mx-auto flex items-center justify-between">
-      <!-- Back Button -->
-      <button onclick="window.history.back()" class="text-gray-800 text-lg font-medium flex items-center space-x-2">
-        <i class="fas fa-arrow-left"></i>
-        <span>Back</span>
-      </button>
-
-      <!-- Search Bar Centered with Fixed Width -->
-      <div class="container mx-auto mt-10 mb-6 flex justify-center">
-        <input 
-          type="text" 
-          id="courseSearch" 
-          placeholder="Search courses..." 
-          class="w-80 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" 
-          onkeyup="filterCourses()" />
+      <!-- Logo -->
+      <div class="flex items-center space-x-2">
+        <img src="codexbg.png" alt="CodeX Logo" class="h-10">
+        <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">CodeX</span>
       </div>
 
-      <!-- Logo on the Right -->
-      <div class="flex items-center space-x-4 pl-4">
-        <img src="codexbg.png" alt="Code Academy Logo" class="h-20">
+      <!-- Search Bar -->
+      <div class="hidden md:flex mx-4 flex-1 max-w-xl">
+        <div class="relative w-full">
+          <input 
+            type="text" 
+            id="courseSearch" 
+            placeholder="Search 50+ courses..." 
+            class="search-bar w-full px-4 py-2 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" 
+            onkeyup="filterCourses()" />
+          <button class="absolute right-3 top-2 text-gray-400 hover:text-blue-500">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
       </div>
+
+      <!-- User Actions -->
+      <div class="flex items-center space-x-4">
+        <button class="md:hidden text-gray-600 hover:text-blue-500">
+          <i class="fas fa-search"></i>
+        </button>
+        <button class="hidden md:flex items-center space-x-1 text-gray-700 hover:text-blue-500">
+          <i class="fas fa-user-circle"></i>
+          <span>My Learning</span>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Mobile Search (hidden by default) -->
+    <div class="md:hidden mt-3">
+      <input 
+        type="text" 
+        id="mobileCourseSearch" 
+        placeholder="Search courses..." 
+        class="search-bar w-full px-4 py-2 border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500" 
+        onkeyup="filterCourses()" />
     </div>
   </header>
 
-  <section class="bg-gradient-to-r from-blue-50 via-white to-blue-50 py-24 mt-12">
-    <div class="container mx-auto text-center px-6">
-      <h2 class="text-4xl font-bold text-gray-800 mb-4">Unlock Your Future with CodeX</h2>
-      <p class="text-lg text-gray-700 mb-6 max-w-xl mx-auto">
-        Master essential skills in <span class="font-semibold text-blue-600">Web Development</span>, <span class="font-semibold text-green-600">Cybersecurity</span>, <span class="font-semibold text-yellow-500">Data Science</span>, and more! <br class="sm:hidden">Earn certifications to boost your career in today's digital world.
+  <!-- Hero Section -->
+  <section class="gradient-bg pt-32 pb-20">
+    <div class="container mx-auto px-6 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6 animate__animated animate__fadeIn">
+        <span class="bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">Master In-Demand Tech Skills</span>
+      </h1>
+      <p class="text-lg md:text-xl text-gray-700 mb-8 max-w-3xl mx-auto animate__animated animate__fadeIn animate__delay-1s">
+        Join 50,000+ learners who have transformed their careers with our industry-leading courses. Get certified and future-proof your career.
       </p>
+      
+      <div class="flex flex-wrap justify-center gap-3 mb-8 animate__animated animate__fadeIn animate__delay-1s">
+        <span class="category-chip px-4 py-2 bg-white rounded-full shadow-sm text-sm font-medium cursor-pointer hover:bg-blue-50 hover:text-blue-600">Web Development</span>
+        <span class="category-chip px-4 py-2 bg-white rounded-full shadow-sm text-sm font-medium cursor-pointer hover:bg-blue-50 hover:text-blue-600">Data Science</span>
+        <span class="category-chip px-4 py-2 bg-white rounded-full shadow-sm text-sm font-medium cursor-pointer hover:bg-blue-50 hover:text-blue-600">Cybersecurity</span>
+        <span class="category-chip px-4 py-2 bg-white rounded-full shadow-sm text-sm font-medium cursor-pointer hover:bg-blue-50 hover:text-blue-600">AI & ML</span>
+        <span class="category-chip px-4 py-2 bg-white rounded-full shadow-sm text-sm font-medium cursor-pointer hover:bg-blue-50 hover:text-blue-600">Cloud Computing</span>
+      </div>
+      
+      <div class="animate__animated animate__fadeIn animate__delay-2s">
+        <button class="enroll-btn px-8 py-3 rounded-full text-white font-semibold shadow-lg">
+          Explore All Courses <i class="fas fa-arrow-right ml-2"></i>
+        </button>
+      </div>
     </div>
   </section>
 
-  <section id="courses" class="container mx-auto my-12 courses-section">
-    <h3 class="text-2xl font-semibold mb-6 text-center">Courses</h3>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="courseList">
+  <!-- Stats Section -->
+  <section class="bg-white py-12">
+    <div class="container mx-auto px-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div class="p-4">
+          <div class="text-3xl md:text-4xl font-bold text-blue-600 mb-2">50+</div>
+          <div class="text-gray-600">Courses</div>
+        </div>
+        <div class="p-4">
+          <div class="text-3xl md:text-4xl font-bold text-green-600 mb-2">50K+</div>
+          <div class="text-gray-600">Students</div>
+        </div>
+        <div class="p-4">
+          <div class="text-3xl md:text-4xl font-bold text-purple-600 mb-2">100+</div>
+          <div class="text-gray-600">Instructors</div>
+        </div>
+        <div class="p-4">
+          <div class="text-3xl md:text-4xl font-bold text-yellow-600 mb-2">95%</div>
+          <div class="text-gray-600">Completion Rate</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <!-- Courses Section -->
+  <section id="courses" class="container mx-auto my-12 px-6">
+    <div class="flex justify-between items-center mb-8">
+      <h2 class="text-3xl font-bold text-gray-800">
+        <span class="border-b-4 border-blue-500 pb-2">Featured Courses</span>
+      </h2>
+      <div class="flex space-x-2">
+        <button class="px-4 py-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
+          <i class="fas fa-filter mr-2"></i> Filter
+        </button>
+        <button class="px-4 py-2 bg-white border border-gray-200 rounded-lg hover:bg-gray-50">
+          <i class="fas fa-sort mr-2"></i> Sort
+        </button>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="courseList">
       <!-- Web Development Card -->
-<div class="bg-white p-6 rounded shadow hover:shadow-lg transition cursor-pointer flex flex-col items-center relative course-card">
-    <img src="codexweb.jpg" alt="Web Development" class="w-full h-40 object-cover rounded mb-4">
-    <span class="absolute top-2 right-2 bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded-full">With Certification</span>
-    <h4 class="text-xl font-bold mb-2">Web Development</h4>
-    <p class="mb-2 text-center">Learn how to build websites using HTML, CSS, and JavaScript and get certified.</p>
-    <span class="bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full mt-4">R499</span>
-  
-    <!-- ✅ Move the data attributes here -->
-    <button 
-      class="bg-blue-600 text-white px-4 py-2 rounded mt-4" 
-      data-course="Web Development" 
-      data-price="499"
-      onclick="setCourse(this);">
-      Enroll Now
-    </button>
-  </div>
-  
+      <div class="course-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center relative overflow-hidden">
+        <div class="absolute top-2 right-2 badge-certified text-xs font-bold px-2 py-1 rounded-full">
+          <i class="fas fa-certificate mr-1"></i> Certified
+        </div>
+        <img src="codexweb.jpg" alt="Web Development" class="course-image w-full rounded-lg mb-4">
+        <div class="w-full">
+          <div class="flex items-center mb-1">
+            <span class="text-yellow-400 text-sm">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </span>
+            <span class="text-gray-500 text-xs ml-1">(4.8)</span>
+          </div>
+          <h4 class="text-lg font-bold mb-2">Web Development</h4>
+          <p class="text-gray-600 text-sm mb-4">Master HTML, CSS, JavaScript and modern frameworks to build responsive websites.</p>
+          <div class="flex justify-between items-center">
+            <span class="price-tag text-sm font-bold px-3 py-1 rounded-full">R499</span>
+            <button 
+              class="enroll-btn px-4 py-2 rounded-lg text-white text-sm font-medium"
+              data-course="Web Development" 
+              data-price="499" 
+              onclick="setCourse(this)">
+              Enroll Now
+            </button>
+          </div>
+        </div>
+      </div>
 
       <!-- Cybersecurity Card -->
-<div class="bg-white p-6 rounded shadow hover:shadow-lg transition cursor-pointer flex flex-col items-center relative course-card">
-    <img src="cyber.jpg" alt="Cybersecurity" class="w-full h-40 object-cover rounded mb-4">
-    <h4 class="text-xl font-bold mb-2">Cybersecurity</h4>
-    <p class="mb-2 text-center">Protect web applications and systems from threats and vulnerabilities.</p>
-    <span class="bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full mt-4">R799</span>
-    <div class="absolute top-0 right-0 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded-bl-lg mt-2 mr-2">With Certification</div>
-  
-    <!-- ✅ Updated button with data attributes -->
-    <button 
-      class="bg-blue-600 text-white px-6 py-2 rounded mt-4 hover:bg-blue-700 transition" 
-      data-course="Cybersecurity" 
-      data-price="799" 
-      onclick="setCourse(this);">
-      Enroll Now
-    </button>
-  </div>
-  
+      <div class="course-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center relative overflow-hidden">
+        <div class="absolute top-2 right-2 badge-certified text-xs font-bold px-2 py-1 rounded-full">
+          <i class="fas fa-certificate mr-1"></i> Certified
+        </div>
+        <img src="cyber.jpg" alt="Cybersecurity" class="course-image w-full rounded-lg mb-4">
+        <div class="w-full">
+          <div class="flex items-center mb-1">
+            <span class="text-yellow-400 text-sm">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </span>
+            <span class="text-gray-500 text-xs ml-1">(5.0)</span>
+          </div>
+          <h4 class="text-lg font-bold mb-2">Cybersecurity</h4>
+          <p class="text-gray-600 text-sm mb-4">Learn to protect systems and networks from digital attacks and vulnerabilities.</p>
+          <div class="flex justify-between items-center">
+            <span class="price-tag text-sm font-bold px-3 py-1 rounded-full">R799</span>
+            <button 
+              class="enroll-btn px-4 py-2 rounded-lg text-white text-sm font-medium"
+              data-course="Cybersecurity" 
+              data-price="799" 
+              onclick="setCourse(this)">
+              Enroll Now
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- Data Science Card -->
-<div class="bg-white p-6 rounded shadow hover:shadow-lg transition cursor-pointer flex flex-col items-center course-card">
-    <img src="data2.jpg" alt="Data Science" class="w-full h-40 object-cover rounded mb-4">
-    <h4 class="text-xl font-bold mb-2">Data Science</h4>
-    <p class="mb-2 text-center">Explore data analysis, machine learning, and data visualization techniques.</p>
-    <span class="bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full mt-4">R1199</span>
-  
-    <!-- ✅ Updated button with data attributes -->
-    <button 
-      class="bg-blue-600 text-white px-6 py-2 rounded mt-4 hover:bg-blue-700 transition" 
-      data-course="Data Science" 
-      data-price="1199" 
-      onclick="setCourse(this);">
-      Enroll Now
-    </button>
-  </div>
-  
+      <div class="course-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center relative overflow-hidden">
+        <div class="absolute top-2 right-2 badge-certified text-xs font-bold px-2 py-1 rounded-full">
+          <i class="fas fa-certificate mr-1"></i> Certified
+        </div>
+        <img src="data2.jpg" alt="Data Science" class="course-image w-full rounded-lg mb-4">
+        <div class="w-full">
+          <div class="flex items-center mb-1">
+            <span class="text-yellow-400 text-sm">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </span>
+            <span class="text-gray-500 text-xs ml-1">(4.9)</span>
+          </div>
+          <h4 class="text-lg font-bold mb-2">Data Science</h4>
+          <p class="text-gray-600 text-sm mb-4">Master Python, machine learning, and data visualization for impactful insights.</p>
+          <div class="flex justify-between items-center">
+            <span class="price-tag text-sm font-bold px-3 py-1 rounded-full">R1199</span>
+            <button 
+              class="enroll-btn px-4 py-2 rounded-lg text-white text-sm font-medium"
+              data-course="Data Science" 
+              data-price="1199" 
+              onclick="setCourse(this)">
+              Enroll Now
+            </button>
+          </div>
+        </div>
+      </div>
 
-      <!-- Course Card: Mobile App Development -->
-<div class="bg-white p-6 rounded shadow hover:shadow-lg transition cursor-pointer flex flex-col items-center relative course-card">
-    <img src="mobile_app.jpg" alt="Mobile App Development" class="w-full h-40 object-cover rounded mb-4">
-    <h4 class="text-xl font-bold mb-2">Mobile App Development</h4>
-    <p class="mb-2 text-center">Learn how to build native and hybrid mobile applications for Android and iOS.</p>
-    <span class="bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full mt-4">R999</span>
-  
-    <!-- ✅ Corrected button -->
-    <button 
-      class="bg-blue-600 text-white px-6 py-2 rounded mt-4 hover:bg-blue-700 transition" 
-      data-course="Mobile App Development" 
-      data-price="999" 
-      onclick="setCourse(this);">
-      Enroll Now
-    </button>
-  </div>
-  
-  
-  <!-- Course Card: UI/UX Design -->
-<div class="bg-white p-6 rounded shadow hover:shadow-lg transition cursor-pointer flex flex-col items-center relative course-card">
-    <img src="uiux.jpg" alt="UI/UX Design" class="w-full h-40 object-cover rounded mb-4">
-    <h4 class="text-xl font-bold mb-2">UI/UX Design</h4>
-    <p class="mb-2 text-center">Master the art of designing user interfaces and experiences that delight users.</p>
-    <span class="bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full mt-4">R749</span>
-  
-    <!-- ✅ Corrected button -->
-    <button 
-      class="bg-blue-600 text-white px-6 py-2 rounded mt-4 hover:bg-blue-700 transition" 
-      data-course="UI/UX Design" 
-      data-price="749" 
-      onclick="setCourse(this);">
-      Enroll Now
-    </button>
-  </div>
-  
-  
-  <!-- Course Card: Digital Marketing -->
-<div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 cursor-pointer flex flex-col items-center relative course-card" data-course="Digital Marketing" data-price="849">
-    <img src="digital_marketing.jpg" alt="Digital Marketing" class="w-full h-40 object-cover rounded-lg mb-4">
-    <h4 class="text-xl font-semibold mb-2 text-center">Digital Marketing</h4>
-    <p class="mb-4 text-center text-gray-600">Learn strategies to grow your business online using SEO, content marketing, and social media.</p>
-    <span class="bg-green-100 text-green-800 text-sm font-semibold px-4 py-1 rounded-full mt-2">R849</span>
+      <!-- AI & Machine Learning Card -->
+      <div class="course-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center relative overflow-hidden">
+        <div class="absolute top-2 right-2 badge-certified text-xs font-bold px-2 py-1 rounded-full">
+          <i class="fas fa-certificate mr-1"></i> Certified
+        </div>
+        <img src="ai.jpg" alt="AI & Machine Learning" class="course-image w-full rounded-lg mb-4">
+        <div class="w-full">
+          <div class="flex items-center mb-1">
+            <span class="text-yellow-400 text-sm">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </span>
+            <span class="text-gray-500 text-xs ml-1">(4.7)</span>
+          </div>
+          <h4 class="text-lg font-bold mb-2">AI & Machine Learning</h4>
+          <p class="text-gray-600 text-sm mb-4">Build intelligent systems using TensorFlow, PyTorch and modern AI techniques.</p>
+          <div class="flex justify-between items-center">
+            <span class="price-tag text-sm font-bold px-3 py-1 rounded-full">R1799</span>
+            <button 
+              class="enroll-btn px-4 py-2 rounded-lg text-white text-sm font-medium"
+              data-course="AI & Machine Learning" 
+              data-price="1799" 
+              onclick="setCourse(this)">
+              Enroll Now
+            </button>
+          </div>
+        </div>
+      </div>
 
-    <!-- Corrected button with data-course and onclick -->
-    <button 
-      class="bg-blue-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-700 transition duration-200"
-      data-course="Digital Marketing" 
-      data-price="849" 
-      onclick="setCourse(this);">
-      Enroll Now
-    </button>
-</div>
-  
-  <!-- Course Card: Game Development -->
-<div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 cursor-pointer flex flex-col items-center relative course-card" data-course="Game Development" data-price="1199">
-    <img src="game_dev.jpg" alt="Game Development" class="w-full h-40 object-cover rounded-lg mb-4">
-    <h4 class="text-xl font-semibold mb-2 text-center">Game Development</h4>
-    <p class="mb-4 text-center text-gray-600">Learn the fundamentals of game development using Unity and C# to create engaging games.</p>
-    <span class="bg-green-100 text-green-800 text-sm font-semibold px-4 py-1 rounded-full mt-2">R1199</span>
+      <!-- Cloud Computing Card -->
+      <div class="course-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center relative overflow-hidden">
+        <div class="absolute top-2 right-2 badge-certified text-xs font-bold px-2 py-1 rounded-full">
+          <i class="fas fa-certificate mr-1"></i> Certified
+        </div>
+        <img src="cloud_computing.jpg" alt="Cloud Computing" class="course-image w-full rounded-lg mb-4">
+        <div class="w-full">
+          <div class="flex items-center mb-1">
+            <span class="text-yellow-400 text-sm">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </span>
+            <span class="text-gray-500 text-xs ml-1">(4.9)</span>
+          </div>
+          <h4 class="text-lg font-bold mb-2">Cloud Computing</h4>
+          <p class="text-gray-600 text-sm mb-4">Master AWS, Azure and GCP to deploy and manage cloud infrastructure.</p>
+          <div class="flex justify-between items-center">
+            <span class="price-tag text-sm font-bold px-3 py-1 rounded-full">R1199</span>
+            <button 
+              class="enroll-btn px-4 py-2 rounded-lg text-white text-sm font-medium"
+              data-course="Cloud Computing" 
+              data-price="1199" 
+              onclick="setCourse(this)">
+              Enroll Now
+            </button>
+          </div>
+        </div>
+      </div>
 
-    <!-- Corrected button with data-course and onclick -->
-    <button 
-      class="bg-blue-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-700 transition duration-200"
-      data-course="Game Development" 
-      data-price="1199" 
-      onclick="setCourse(this);">
-      Enroll Now
-    </button>
-</div>
+      <!-- Mobile App Development Card -->
+      <div class="course-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center relative overflow-hidden">
+        <div class="absolute top-2 right-2 badge-certified text-xs font-bold px-2 py-1 rounded-full">
+          <i class="fas fa-certificate mr-1"></i> Certified
+        </div>
+        <img src="mobile_app.jpg" alt="Mobile App Development" class="course-image w-full rounded-lg mb-4">
+        <div class="w-full">
+          <div class="flex items-center mb-1">
+            <span class="text-yellow-400 text-sm">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </span>
+            <span class="text-gray-500 text-xs ml-1">(4.6)</span>
+          </div>
+          <h4 class="text-lg font-bold mb-2">Mobile App Development</h4>
+          <p class="text-gray-600 text-sm mb-4">Build cross-platform apps with React Native and Flutter for iOS and Android.</p>
+          <div class="flex justify-between items-center">
+            <span class="price-tag text-sm font-bold px-3 py-1 rounded-full">R999</span>
+            <button 
+              class="enroll-btn px-4 py-2 rounded-lg text-white text-sm font-medium"
+              data-course="Mobile App Development" 
+              data-price="999" 
+              onclick="setCourse(this)">
+              Enroll Now
+            </button>
+          </div>
+        </div>
+      </div>
 
-  
-  <!-- Course Card: Cloud Computing -->
-<div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 cursor-pointer flex flex-col items-center relative course-card" data-course="Cloud Computing" data-price="899">
-    <img src="cloud_computing.jpg" alt="Cloud Computing" class="w-full h-40 object-cover rounded-lg mb-4">
-    <h4 class="text-xl font-semibold mb-2 text-center">Cloud Computing</h4>
-    <p class="mb-4 text-center text-gray-600">Learn how to deploy and manage applications in the cloud using platforms like AWS and Azure.</p>
-    <span class="bg-green-100 text-green-800 text-sm font-semibold px-4 py-1 rounded-full mt-2">R899</span>
+      <!-- UI/UX Design Card -->
+      <div class="course-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center relative overflow-hidden">
+        <div class="absolute top-2 right-2 badge-certified text-xs font-bold px-2 py-1 rounded-full">
+          <i class="fas fa-certificate mr-1"></i> Certified
+        </div>
+        <img src="uiux.jpg" alt="UI/UX Design" class="course-image w-full rounded-lg mb-4">
+        <div class="w-full">
+          <div class="flex items-center mb-1">
+            <span class="text-yellow-400 text-sm">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </span>
+            <span class="text-gray-500 text-xs ml-1">(4.9)</span>
+          </div>
+          <h4 class="text-lg font-bold mb-2">UI/UX Design</h4>
+          <p class="text-gray-600 text-sm mb-4">Create beautiful, user-friendly interfaces with Figma, Adobe XD and more.</p>
+          <div class="flex justify-between items-center">
+            <span class="price-tag text-sm font-bold px-3 py-1 rounded-full">R749</span>
+            <button 
+              class="enroll-btn px-4 py-2 rounded-lg text-white text-sm font-medium"
+              data-course="UI/UX Design" 
+              data-price="749" 
+              onclick="setCourse(this)">
+              Enroll Now
+            </button>
+          </div>
+        </div>
+      </div>
 
-    <!-- Corrected button with data-course and onclick -->
-    <button 
-      class="bg-blue-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-700 transition duration-200"
-      data-course="Cloud Computing" 
-      data-price="899" 
-      onclick="setCourse(this);">
-      Enroll Now
-    </button>
-</div>
-
-<!-- Course Card: Artificial Intelligence -->
-<div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 cursor-pointer flex flex-col items-center relative course-card" data-course="Artificial Intelligence" data-price="1799">
-    <img src="ai.jpg" alt="Artificial Intelligence" class="w-full h-40 object-cover rounded-lg mb-4">
-    <h4 class="text-xl font-semibold mb-2 text-center">Artificial Intelligence</h4>
-    <p class="mb-4 text-center text-gray-600">Dive into the world of AI and machine learning with hands-on projects and theory.</p>
-    <span class="bg-green-100 text-green-800 text-sm font-semibold px-4 py-1 rounded-full mt-2">R1799</span>
-
-    <!-- Corrected button with data-course and onclick -->
-    <button 
-      class="bg-blue-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-700 transition duration-200"
-      data-course="Artificial Intelligence" 
-      data-price="1799" 
-      onclick="setCourse(this);">
-      Enroll Now
-    </button>
-</div>
-
-  
- <!-- Course Card: Blockchain Development -->
-<div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 cursor-pointer flex flex-col items-center relative course-card" data-course="Blockchain Development" data-price="1499">
-    <img src="blockchain.jpg" alt="Blockchain Development" class="w-full h-40 object-cover rounded-lg mb-4">
-    <h4 class="text-xl font-semibold mb-2 text-center">Blockchain Development</h4>
-    <p class="mb-4 text-center text-gray-600">Learn how to build decentralized applications using blockchain technology.</p>
-    <span class="bg-green-100 text-green-800 text-sm font-semibold px-4 py-1 rounded-full mt-2">R1499</span>
-
-    <!-- Corrected button with data-course and onclick -->
-    <button 
-      class="bg-blue-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-700 transition duration-200"
-      data-course="Blockchain Development" 
-      data-price="1499" 
-      onclick="setCourse(this);">
-      Enroll Now
-    </button>
-</div>
-
-<!-- Course Card: Video Editing -->
-<div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 cursor-pointer flex flex-col items-center relative course-card" data-course="Video Editing" data-price="799">
-    <video class="w-full h-40 object-cover rounded-lg mb-4" autoplay muted loop playsinline>
-        <source src="video_editing.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-    <h4 class="text-xl font-semibold mb-2 text-center">Video Editing</h4>
-    <p class="mb-4 text-center text-gray-600">Learn to create professional-quality videos using tools like Adobe Premiere and Final Cut Pro.</p>
-    <span class="bg-green-100 text-green-800 text-sm font-semibold px-4 py-1 rounded-full mt-2">R799</span>
-
-    <!-- Corrected button with data-course and onclick -->
-    <button 
-      class="bg-blue-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-700 transition duration-200"
-      data-course="Video Editing" 
-      data-price="799" 
-      onclick="setCourse(this);">
-      Enroll Now
-    </button>
-</div>
-
-  
-  <!-- Course Card: Photography -->
-<div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 cursor-pointer flex flex-col items-center relative course-card" data-course="Photography" data-price="899">
-    <img src="photography.jpg" alt="Photography" class="w-full h-40 object-cover rounded-lg mb-4">
-    <h4 class="text-xl font-semibold mb-2 text-center">Photography</h4>
-    <p class="mb-4 text-center text-gray-600">Master the art of photography, from basics to advanced techniques, and learn how to edit photos professionally.</p>
-    <span class="bg-green-100 text-green-800 text-sm font-semibold px-4 py-1 rounded-full mt-2">R899</span>
-
-    <!-- Corrected button with data-course and onclick -->
-    <button 
-      class="bg-blue-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-700 transition duration-200"
-      data-course="Photography" 
-      data-price="899" 
-      onclick="setCourse(this);">
-      Enroll Now
-    </button>
-</div>
-
-  
-  <!-- Course Card: Content Writing -->
-<div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 cursor-pointer flex flex-col items-center relative course-card" data-course="Content Writing" data-price="649">
-    <img src="content_writing.jpg" alt="Content Writing" class="w-full h-40 object-cover rounded-lg mb-4">
-    <h4 class="text-xl font-semibold mb-2 text-center">Content Writing</h4>
-    <p class="mb-4 text-center text-gray-600">Learn how to write compelling content for blogs, websites, and social media.</p>
-    <span class="bg-green-100 text-green-800 text-sm font-semibold px-4 py-1 rounded-full mt-2">R649</span>
-    
-    <!-- Corrected button with data-course and onclick -->
-    <button 
-      class="bg-blue-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-700 transition duration-200"
-      data-course="Content Writing" 
-      data-price="649" 
-      onclick="setCourse(this);">
-      Enroll Now
-    </button>
-</div>
-
-<!-- Course Card: Graphic Design -->
-<div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 cursor-pointer flex flex-col items-center relative course-card" data-course="Graphic Design" data-price="799">
-    <img src="graphic_design.jpg" alt="Graphic Design" class="w-full h-40 object-cover rounded-lg mb-4">
-    <h4 class="text-xl font-semibold mb-2 text-center">Graphic Design</h4>
-    <p class="mb-4 text-center text-gray-600">Learn the fundamentals of design and how to create stunning graphics using Photoshop and Illustrator.</p>
-    <span class="bg-green-100 text-green-800 text-sm font-semibold px-4 py-1 rounded-full mt-2">R799</span>
-
-    <!-- Corrected button with data-course and onclick -->
-    <button 
-      class="bg-blue-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-700 transition duration-200"
-      data-course="Graphic Design" 
-      data-price="799" 
-      onclick="setCourse(this);">
-      Enroll Now
-    </button>
-</div>
-
-<!-- Course Card: Cloud Computing -->
-<div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 cursor-pointer flex flex-col items-center relative course-card" data-course="Cloud Computing" data-price="1199">
-    <img src="cloud_computing.jpg" alt="Cloud Computing" class="w-full h-40 object-cover rounded-lg mb-4">
-    <h4 class="text-xl font-semibold mb-2 text-center">Cloud Computing</h4>
-    <p class="mb-4 text-center text-gray-600">Learn how to build, deploy, and manage applications in the cloud using AWS, Google Cloud, and Microsoft Azure.</p>
-    <span class="bg-green-100 text-green-800 text-sm font-semibold px-4 py-1 rounded-full mt-2">R1199</span>
-
-    <!-- Corrected button with data-course and onclick -->
-    <button 
-      class="bg-blue-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-700 transition duration-200"
-      data-course="Cloud Computing" 
-      data-price="1199" 
-      onclick="setCourse(this);">
-      Enroll Now
-    </button>
-</div>
-
-<!-- Course Card: Ethical Hacking -->
-<div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 cursor-pointer flex flex-col items-center relative course-card" data-course="Ethical Hacking" data-price="1399">
-    <img src="ethical_hacking.jpg" alt="Ethical Hacking" class="w-full h-40 object-cover rounded-lg mb-4">
-    <h4 class="text-xl font-semibold mb-2 text-center">Ethical Hacking</h4>
-    <p class="mb-4 text-center text-gray-600">Learn the tools and techniques used by ethical hackers to protect systems and networks from cyber-attacks.</p>
-    <span class="bg-green-100 text-green-800 text-sm font-semibold px-4 py-1 rounded-full mt-2">R1399</span>
-
-    <!-- Corrected button with data-course and onclick -->
-    <button 
-      class="bg-blue-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-700 transition duration-200"
-      data-course="Ethical Hacking" 
-      data-price="1399" 
-      onclick="setCourse(this);">
-      Enroll Now
-    </button>
-</div>
-
-<!-- Course Card: Python Programming -->
-<div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 cursor-pointer flex flex-col items-center relative course-card" data-course="Python Programming" data-price="799">
-    <img src="python_programming.jpg" alt="Python Programming" class="w-full h-40 object-cover rounded-lg mb-4">
-    <h4 class="text-xl font-semibold mb-2 text-center">Python Programming</h4>
-    <p class="mb-4 text-center text-gray-600">Learn Python, one of the most versatile programming languages, for web development, automation, and data analysis.</p>
-    <span class="bg-green-100 text-green-800 text-sm font-semibold px-4 py-1 rounded-full mt-2">R799</span>
-
-    <!-- Corrected button with data-course and onclick -->
-    <button 
-      class="bg-blue-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-700 transition duration-200"
-      data-course="Python Programming" 
-      data-price="799" 
-      onclick="setCourse(this);">
-      Enroll Now
-    </button>
-</div>
-
-
- <!-- Course Card: MQL5 Programming -->
-<div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 cursor-pointer flex flex-col items-center relative course-card" data-course="MQL5 Programming" data-price="999">
-    <img src="mql5_programming.jpg" alt="MQL5 Programming" class="w-full h-40 object-cover rounded-lg mb-4">
-    <h4 class="text-xl font-semibold mb-2 text-center">MQL5 Programming</h4>
-    <p class="mb-4 text-center text-gray-600">Master algorithmic trading by learning to build indicators, scripts, and expert advisors using MQL5 on MetaTrader 5.</p>
-    <span class="bg-green-100 text-green-800 text-sm font-semibold px-4 py-1 rounded-full mt-2">R999</span>
-    
-    <!-- Corrected button with data-course and onclick -->
-    <button 
-      class="bg-blue-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-700 transition duration-200"
-      data-course="MQL5 Programming" 
-      data-price="999" 
-      onclick="setCourse(this);">
-      Enroll Now
-    </button>
-</div>
-
-<!-- Course Card: SQL Database Management -->
-<div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300 cursor-pointer flex flex-col items-center relative course-card" data-course="SQL Database Management" data-price="849">
-    <img src="sql_database.jpg" alt="SQL Database Management" class="w-full h-40 object-cover rounded-lg mb-4">
-    <h4 class="text-xl font-semibold mb-2 text-center">SQL Database Management</h4>
-    <p class="mb-4 text-center text-gray-600">Learn how to design, implement, and manage SQL databases effectively for efficient data storage and retrieval.</p>
-    <span class="bg-green-100 text-green-800 text-sm font-semibold px-4 py-1 rounded-full mt-2">R849</span>
-    
-    <!-- Corrected button with data-course and onclick -->
-    <button 
-      class="bg-blue-600 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-700 transition duration-200"
-      data-course="SQL Database Management" 
-      data-price="849" 
-      onclick="setCourse(this);">
-      Enroll Now
-    </button>
-</div>
+      <!-- Blockchain Development Card -->
+      <div class="course-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center relative overflow-hidden">
+        <div class="absolute top-2 right-2 badge-certified text-xs font-bold px-2 py-1 rounded-full">
+          <i class="fas fa-certificate mr-1"></i> Certified
+        </div>
+        <img src="blockchain.jpg" alt="Blockchain Development" class="course-image w-full rounded-lg mb-4">
+        <div class="w-full">
+          <div class="flex items-center mb-1">
+            <span class="text-yellow-400 text-sm">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </span>
+            <span class="text-gray-500 text-xs ml-1">(4.7)</span>
+          </div>
+          <h4 class="text-lg font-bold mb-2">Blockchain Development</h4>
+          <p class="text-gray-600 text-sm mb-4">Build decentralized apps with Solidity, Ethereum and Web3 technologies.</p>
+          <div class="flex justify-between items-center">
+            <span class="price-tag text-sm font-bold px-3 py-1 rounded-full">R1499</span>
+            <button 
+              class="enroll-btn px-4 py-2 rounded-lg text-white text-sm font-medium"
+              data-course="Blockchain Development" 
+              data-price="1499" 
+              onclick="setCourse(this)">
+              Enroll Now
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
+    
+    <div class="text-center mt-12">
+      <button class="px-6 py-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 font-medium">
+        <i class="fas fa-sync-alt mr-2"></i> Load More Courses
+      </button>
     </div>
   </section>
 
+  <!-- Testimonials Section -->
+  <section class="bg-gray-50 py-16">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">
+        What Our <span class="text-blue-600">Students</span> Say
+      </h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Testimonial 1 -->
+        <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
+          <div class="flex items-center mb-4">
+            <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Sarah J." class="w-12 h-12 rounded-full object-cover">
+            <div class="ml-4">
+              <h4 class="font-semibold">Sarah J.</h4>
+              <p class="text-gray-500 text-sm">Web Development Student</p>
+            </div>
+          </div>
+          <div class="text-yellow-400 mb-3">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <p class="text-gray-700">
+            "The Web Development course transformed my career. Within 3 months I landed a junior developer role. The hands-on projects were incredibly valuable."
+          </p>
+        </div>
+        
+        <!-- Testimonial 2 -->
+        <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
+          <div class="flex items-center mb-4">
+            <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="David K." class="w-12 h-12 rounded-full object-cover">
+            <div class="ml-4">
+              <h4 class="font-semibold">David K.</h4>
+              <p class="text-gray-500 text-sm">Data Science Student</p>
+            </div>
+          </div>
+          <div class="text-yellow-400 mb-3">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i>
+          </div>
+          <p class="text-gray-700">
+            "As a complete beginner, I was nervous about learning Python and ML. The instructors broke down complex concepts into digestible lessons. Highly recommend!"
+          </p>
+        </div>
+        
+        <!-- Testimonial 3 -->
+        <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition">
+          <div class="flex items-center mb-4">
+            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Priya M." class="w-12 h-12 rounded-full object-cover">
+            <div class="ml-4">
+              <h4 class="font-semibold">Priya M.</h4>
+              <p class="text-gray-500 text-sm">Cybersecurity Graduate</p>
+            </div>
+          </div>
+          <div class="text-yellow-400 mb-3">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <p class="text-gray-700">
+            "The certification helped me get promoted to Security Analyst. The course materials were up-to-date with real-world scenarios that I use daily in my job."
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="bg-gradient-to-r from-blue-600 to-blue-400 py-16 text-white">
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your Career?</h2>
+      <p class="text-xl mb-8 max-w-2xl mx-auto">Join thousands of students who have accelerated their careers with CodeX courses.</p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <button class="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold shadow-lg hover:bg-gray-100 transition">
+          Browse All Courses <i class="fas fa-arrow-right ml-2"></i>
+        </button>
+        <button class="border-2 border-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-blue-600 transition">
+          Speak to an Advisor
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="bg-white py-16">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Frequently Asked Questions</h2>
+      
+      <div class="space-y-4">
+        <!-- FAQ Item 1 -->
+        <div class="border border-gray-200 rounded-lg overflow-hidden">
+          <button class="faq-toggle w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100">
+            <span class="font-medium text-left">How do I access my courses after purchase?</span>
+            <i class="fas fa-chevron-down transition-transform duration-300"></i>
+          </button>
+          <div class="faq-content hidden p-4 border-t border-gray-200">
+            <p class="text-gray-700">
+              After completing your purchase, you'll receive an email with login credentials to our learning platform. 
+              You can access all your courses anytime by logging in at learn.codex.com. All courses are available 
+              for lifetime access once purchased.
+            </p>
+          </div>
+        </div>
+        
+        <!-- FAQ Item 2 -->
+        <div class="border border-gray-200 rounded-lg overflow-hidden">
+          <button class="faq-toggle w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100">
+            <span class="font-medium text-left">Are the certifications recognized by employers?</span>
+            <i class="fas fa-chevron-down transition-transform duration-300"></i>
+          </button>
+          <div class="faq-content hidden p-4 border-t border-gray-200">
+            <p class="text-gray-700">
+              Our certifications are not officially accredited by any university, but they serve as strong proof of 
+              practical skills. Many employers value real-world knowledge, completed projects, and initiative — all of 
+              which our courses help you demonstrate.<br><br>
+
+              Each course completion comes with a certificate, and we encourage students to showcase their 
+              projects and skills on portfolios, GitHub, and LinkedIn. Some of our students have successfully 
+              landed internships, freelance gigs, and even full-time jobs using their course experience.<br><br>
+
+            💡 If you're building a career in tech, employers often care more about what you can do than where you learned it.
+            </p>
+          </div>
+        </div>
+        
+        <!-- FAQ Item 3 -->
+        <div class="border border-gray-200 rounded-lg overflow-hidden">
+          <button class="faq-toggle w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100">
+            <span class="font-medium text-left">What if I need help during the course?</span>
+            <i class="fas fa-chevron-down transition-transform duration-300"></i>
+          </button>
+          <div class="faq-content hidden p-4 border-t border-gray-200">
+            <p class="text-gray-700">
+              We offer multiple support channels: 24/7 Q&A forums where instructors and TAs respond within hours, 
+              weekly live office hours, and a dedicated student community. For technical issues, our support team 
+              is available via email and live chat during business hours.
+            </p>
+          </div>
+        </div>
+        
+        <!-- FAQ Item 4 -->
+        <div class="border border-gray-200 rounded-lg overflow-hidden">
+          <button class="faq-toggle w-full flex justify-between items-center p-4 bg-gray-50 hover:bg-gray-100">
+            <span class="font-medium text-left">Do you offer payment plans or discounts?</span>
+            <i class="fas fa-chevron-down transition-transform duration-300"></i>
+          </button>
+          <div class="faq-content hidden p-4 border-t border-gray-200">
+            <p class="text-gray-700">
+              Yes! We offer interest-free payment plans for most courses, allowing you to pay in 3-6 monthly 
+              installments. We also provide discounts for students, military personnel, and bulk purchases 
+              (teams of 5+). Contact our sales team for more information.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white pt-16 pb-8">
+    <div class="container mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- Column 1 -->
+        <div>
+          <div class="flex items-center mb-4">
+            <img src="codexbg.png" alt="CodeX Logo" class="h-8 mr-2">
+            <span class="text-xl font-bold">CodeX</span>
+          </div>
+          <p class="text-gray-400 mb-4">
+            Empowering the next generation of tech professionals through accessible, high-quality education.
+          </p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-youtube"></i>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Column 2 -->
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Courses</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-white">Web Development</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white">Data Science</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white">Cybersecurity</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white">AI & Machine Learning</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white">Cloud Computing</a></li>
+          </ul>
+        </div>
+        
+        <!-- Column 3 -->
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Resources</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-white">Blog</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white">Career Guide</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white">Scholarships</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white">Community</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white">Events</a></li>
+          </ul>
+        </div>
+        
+        <!-- Column 4 -->
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Company</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white">Careers</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white">Become an Instructor</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white">Affiliate Program</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+        <p class="text-gray-400 mb-4 md:mb-0">
+          © 2023 CodeX Academy. All rights reserved.
+        </p>
+        <div class="flex space-x-6">
+          <a href="#" class="text-gray-400 hover:text-white">Terms</a>
+          <a href="#" class="text-gray-400 hover:text-white">Privacy</a>
+          <a href="#" class="text-gray-400 hover:text-white">Cookies</a>
+          <a href="#" class="text-gray-400 hover:text-white">Sitemap</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
   <!-- Payment Modal -->
-<div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-  <div class="bg-white p-6 rounded shadow-lg w-full max-w-md relative">
-    <button onclick="closeModal()" class="absolute top-2 right-2 text-gray-600 hover:text-black">✖</button>
-    <h3 class="text-xl font-bold mb-4" id="modalCourseTitle">Enroll in Course</h3>
-    <p class="mb-2">Price: <strong id="modalCoursePrice">R0</strong></p>
+  <div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md relative modal-enter">
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="text-center mb-6">
+        <i class="fas fa-lock text-blue-500 text-4xl mb-4"></i>
+        <h3 class="text-2xl font-bold text-gray-800" id="modalCourseTitle">Enroll in Course</h3>
+        <p class="text-gray-600 mt-2">Secure Payment</p>
+      </div>
+      
+      <div class="bg-gray-50 p-4 rounded-lg mb-6">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-gray-700">Course:</span>
+          <span class="font-medium" id="modalCourseName">Web Development</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-gray-700">Price:</span>
+          <span class="text-xl font-bold text-blue-600" id="modalCoursePrice">R499</span>
+        </div>
+      </div>
 
-    <!-- Payfast Form -->
-    <form action="https://sandbox.payfast.co.za/eng/process" method="post" onsubmit="redirectToPayment(event)">
-      <input type="hidden" name="merchant_id" value="10000100">
-      <input type="hidden" name="merchant_key" value="46f0cd694581a">
-    
-      <!-- Dynamically generated URLs -->
-      <input type="hidden" id="return_url" name="return_url">
-      <input type="hidden" id="cancel_url" name="cancel_url">
-      <input type="hidden" id="notify_url" name="notify_url">
-
-      <input type="hidden" name="amount" value="10.00">
-      <input type="hidden" name="item_name" value="Test Course">
-    
-      <!-- Optional buyer info -->
-      <input type="hidden" name="email_address" value="test@example.com">
-      <input type="hidden" name="name_first" value="Louis">
-      <input type="hidden" name="name_last" value="Smith">
-    
-      <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded mt-3 w-full">Proceed to Payment</button>
-    </form>
-    
+      <!-- Payfast Form -->
+      <form action="https://sandbox.payfast.co.za/eng/process" method="post" onsubmit="redirectToPayment(event)">
+        <input type="hidden" name="merchant_id" value="10000100">
+        <input type="hidden" name="merchant_key" value="46f0cd694581a">
+        <input type="hidden" id="return_url" name="return_url">
+        <input type="hidden" id="cancel_url" name="cancel_url">
+        <input type="hidden" id="notify_url" name="notify_url">
+        <input type="hidden" name="amount" value="10.00">
+        <input type="hidden" name="item_name" value="Test Course">
+        <input type="hidden" name="email_address" value="test@example.com">
+        <input type="hidden" name="name_first" value="Louis">
+        <input type="hidden" name="name_last" value="Smith">
+        
+        <div class="mb-6">
+          <label class="block text-gray-700 text-sm font-medium mb-2" for="email">
+            Email Address
+          </label>
+          <input 
+            type="email" 
+            id="email" 
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+            placeholder="your@email.com"
+            required>
+        </div>
+        
+        <button type="submit" class="enroll-btn w-full py-3 rounded-lg text-white font-semibold shadow-lg flex items-center justify-center">
+          <i class="fas fa-lock mr-2"></i> Proceed to Secure Payment
+        </button>
+      </form>
+      
+      <div class="mt-4 text-center text-sm text-gray-500">
+        <p>All payments are secure and encrypted</p>
+        <div class="flex justify-center mt-2 space-x-4">
+          <i class="fab fa-cc-visa text-gray-500 text-xl"></i>
+          <i class="fab fa-cc-mastercard text-gray-500 text-xl"></i>
+          <i class="fab fa-cc-paypal text-gray-500 text-xl"></i>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+
+  <!-- Back to Top Button -->
+  <button id="backToTop" class="fixed bottom-8 right-8 bg-blue-600 text-white p-3 rounded-full shadow-lg hidden">
+    <i class="fas fa-arrow-up"></i>
+  </button>
 
 <script>
+  // Scroll progress indicator
+  window.onscroll = function() {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    document.getElementById("scrollProgress").style.width = scrolled + "%";
+    
+    // Show/hide back to top button
+    if (winScroll > 300) {
+      document.getElementById("backToTop").classList.remove("hidden");
+    } else {
+      document.getElementById("backToTop").classList.add("hidden");
+    }
+  };
+  
+  // Back to top functionality
+  document.getElementById("backToTop").addEventListener("click", function() {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  });
+  
+  // FAQ toggle functionality
+  document.querySelectorAll('.faq-toggle').forEach(button => {
+    button.addEventListener('click', () => {
+      const content = button.nextElementSibling;
+      const icon = button.querySelector('i');
+      
+      content.classList.toggle('hidden');
+      icon.classList.toggle('rotate-180');
+    });
+  });
+  
+  // Course enrollment functionality
   let selectedCourse = "";
   let coursePrice = "";
   let userEmail = localStorage.getItem("userEmail"); 
@@ -464,6 +859,7 @@
 
     // Update modal text
     document.getElementById("modalCourseTitle").innerText = `Enroll in ${selectedCourse}`;
+    document.getElementById("modalCourseName").innerText = selectedCourse;
     document.getElementById("modalCoursePrice").innerText = `R${coursePrice}`;
 
     // Update Payfast form hidden inputs
@@ -482,20 +878,30 @@
 
   function showPaymentModal() {
     document.getElementById("paymentModal").classList.remove("hidden");
+    document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
   }
 
   function closeModal() {
     document.getElementById("paymentModal").classList.add("hidden");
+    document.body.style.overflow = ''; // Re-enable scrolling
   }
 
   function redirectToPayment(event) {
-    event.preventDefault();  // Prevent the form from submitting immediately
+    event.preventDefault();
+    
+    const emailInput = document.getElementById("email");
+    if (!emailInput.checkValidity()) {
+      emailInput.focus();
+      return;
+    }
+    
     // Check if userEmail exists
     if (!userEmail) {
-        alert("Please log in before enrolling in a course.");
-        window.location.href = "codex.html";
-        return;
-      }
+      alert("Please log in before enrolling in a course.");
+      window.location.href = "codex.html";
+      return;
+    }
+    
     // Prepare the purchase data
     const purchaseData = {
       course: selectedCourse,
@@ -532,11 +938,37 @@
 
     courses.forEach(course => {
       const courseTitle = course.querySelector('h4').textContent.toLowerCase();
-      course.style.display = courseTitle.includes(searchQuery) ? 'block' : 'none';
+      course.style.display = courseTitle.includes(searchQuery) ? 'flex' : 'none';
     });
   }
+  
+  // Close modal when clicking outside
+  window.addEventListener('click', function(event) {
+    const modal = document.getElementById('paymentModal');
+    if (event.target === modal) {
+      closeModal();
+    }
+  });
+  
+  // Initialize animations on scroll
+  document.addEventListener('DOMContentLoaded', function() {
+    const animateElements = document.querySelectorAll('.animate__animated');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add(entry.target.dataset.animate);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+    
+    animateElements.forEach(element => {
+      observer.observe(element);
+    });
+  });
 </script>
-
-
 </body>
 </html>

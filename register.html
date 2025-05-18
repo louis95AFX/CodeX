@@ -3,267 +3,539 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Account</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<style>
+  <title>Create Account | Student Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+    
+    .form-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+      transition: all 0.3s ease;
+    }
+    
+    .form-container:hover {
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.25);
+    }
+    
+    .input-field {
+      transition: all 0.3s ease;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .input-field:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    
+    .password-strength {
+      height: 4px;
+      transition: all 0.3s ease;
+    }
+    
     #loaderOverlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(0, 0, 0, 0.6); /* semi-transparent overlay */
-      display: none; /* Change from hidden to none */
+      background-color: rgba(0, 0, 0, 0.6);
+      display: none;
       align-items: center;
       justify-content: center;
       z-index: 9999;
     }
-  
-    .loaderContent {
+    
+    .loader-content {
       text-align: center;
       background: #fff;
       padding: 30px 40px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
     }
-  
-    .computerIcon {
+    
+    .computer-icon {
       font-size: 48px;
       animation: bounce 1.2s infinite;
+      color: #3b82f6;
     }
-  
-    .loadingText {
+    
+    .loading-text {
       margin-top: 15px;
       font-size: 16px;
-      font-weight: bold;
-      color: #333;
+      font-weight: 600;
+      color: #334155;
     }
-  
-    /* Animation */
+    
     @keyframes bounce {
-      0%, 100% {
-          transform: translateY(0);
-      }
-      50% {
-          transform: translateY(-10px);
-      }
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
-  
+    
     .hidden {
       display: none;
     }
+    
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #64748b;
+    }
+    
+    .password-container {
+      position: relative;
+    }
+    
+    .password-requirements {
+      background-color: #f8fafc;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 8px;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .requirement-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4px;
+      font-size: 13px;
+      color: #64748b;
+    }
+    
+    .requirement-item.valid {
+      color: #10b981;
+    }
+    
+    .requirement-icon {
+      margin-right: 8px;
+      font-size: 12px;
+    }
+    
+    .logo {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 16px;
+    }
   </style>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+  <div class="form-container p-8 w-full max-w-2xl">
+    <div class="text-center mb-8">
+      <div class="logo mx-auto bg-blue-100 rounded-full flex items-center justify-center">
+        <i class="fas fa-user-graduate text-blue-600 text-2xl"></i>
+      </div>
+      <h2 class="text-3xl font-bold text-gray-800 mb-2">Create Your Account</h2>
+      <p class="text-gray-500">Join our community of students and access exclusive resources</p>
+    </div>
 
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl">
-        <h2 class="text-2xl font-semibold text-gray-700 mb-6 text-center">Create Account</h2>
-
-    <form id="registerForm">
-        <!-- Full Name & Username -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div>
-            <label for="name" class="block text-gray-600 text-sm mb-2"> Name</label>
-            <input type="text" id="name" name="name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300" required>
-          </div>
-      
-          <div>
-            <label for="surname" class="block text-gray-600 text-sm mb-2">Surname</label>
-            <input type="text" id="surname" name="surname" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300" required>
+    <form id="registerForm" class="space-y-5">
+      <!-- Name Section -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+          <div class="relative">
+            <input type="text" id="name" name="name" class="input-field w-full px-4 py-3 rounded-lg pl-10" placeholder="John" required>
+            <i class="fas fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
           </div>
         </div>
-      
-        <!-- Email & Cell Number -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div>
-            <label for="email" class="block text-gray-600 text-sm mb-2">Email</label>
-            <input type="email" id="email" name="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300" required>
-          </div>
-      
-          <div>
-            <label for="cell" class="block text-gray-600 text-sm mb-2">Cell Number</label>
-            <input type="tel" id="cell" name="cell" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300" required>
+        
+        <div>
+          <label for="surname" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+          <div class="relative">
+            <input type="text" id="surname" name="surname" class="input-field w-full px-4 py-3 rounded-lg pl-10" placeholder="Doe" required>
+            <i class="fas fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
           </div>
         </div>
-      
-        <!-- Date of Birth & Optional Dropdown -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <div>
-            <label for="dob" class="block text-gray-600 text-sm mb-2">Date of Birth</label>
-            <input type="date" id="dob" name="dob" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300">
+      </div>
+
+      <!-- Contact Section -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+          <div class="relative">
+            <input type="email" id="email" name="email" class="input-field w-full px-4 py-3 rounded-lg pl-10" placeholder="john@example.com" required>
+            <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
           </div>
-      
-          <!-- Optional: Gender Dropdown -->
-          <div>
-            <label for="gender" class="block text-gray-600 text-sm mb-2">Gender</label>
-            <select id="gender" name="gender" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300">
+        </div>
+        
+        <div>
+          <label for="cell" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+          <div class="relative">
+            <input type="tel" id="cell" name="cell" class="input-field w-full px-4 py-3 rounded-lg pl-10" placeholder="+1 (555) 123-4567" required>
+            <i class="fas fa-phone absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Personal Info Section -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="dob" class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
+          <div class="relative">
+            <input type="date" id="dob" name="dob" class="input-field w-full px-4 py-3 rounded-lg pl-10">
+            <i class="fas fa-calendar-day absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+          </div>
+        </div>
+        
+        <div>
+          <label for="gender" class="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+          <div class="relative">
+            <select id="gender" name="gender" class="input-field w-full px-4 py-3 rounded-lg pl-10 appearance-none">
               <option value="">Select gender</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
+              <option value="Other">Other</option>
+              <option value="Prefer not to say">Prefer not to say</option>
             </select>
+            <i class="fas fa-venus-mars absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"></i>
           </div>
         </div>
-      
-        <!-- Password & Confirm Password -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <!-- Password -->
-            <div>
-                <label for="password" class="block text-gray-600 text-sm mb-2">Password</label>
-                <input type="password" id="password" name="password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300" placeholder="Enter password" required>
-                <small id="passwordHint" class="text-gray-500 text-sm mt-1 hidden">
-                    Must be 8+ characters, include a capital letter, number, and special character.
-                </small>
-            </div>
+      </div>
+
+      <!-- Password Section -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+          <div class="password-container relative">
+            <input type="password" id="password" name="password" class="input-field w-full px-4 py-3 rounded-lg pl-10 pr-10" placeholder="Create password" required>
+            <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <span class="password-toggle" id="togglePassword">
+              <i class="fas fa-eye"></i>
+            </span>
+          </div>
           
-            <!-- Confirm Password -->
-            <div>
-                <label for="confirmPassword" class="block text-gray-600 text-sm mb-2">Confirm Password</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300" placeholder="Confirm password" required>
+          <div class="password-requirements hidden" id="passwordRequirements">
+            <div class="requirement-item" id="lengthReq">
+              <i class="requirement-icon fas fa-circle" id="lengthIcon"></i>
+              <span>At least 8 characters</span>
             </div>
+            <div class="requirement-item" id="capitalReq">
+              <i class="requirement-icon fas fa-circle" id="capitalIcon"></i>
+              <span>At least 1 capital letter</span>
+            </div>
+            <div class="requirement-item" id="numberReq">
+              <i class="requirement-icon fas fa-circle" id="numberIcon"></i>
+              <span>At least 1 number</span>
+            </div>
+            <div class="requirement-item" id="specialReq">
+              <i class="requirement-icon fas fa-circle" id="specialIcon"></i>
+              <span>At least 1 special character</span>
+            </div>
+          </div>
+          
+          <div class="flex items-center mt-2">
+            <div class="w-full bg-gray-200 rounded-full h-1.5">
+              <div id="passwordStrength" class="password-strength h-1.5 rounded-full bg-gray-400 w-0"></div>
+            </div>
+            <span id="strengthText" class="text-xs ml-2 text-gray-500">Weak</span>
+          </div>
         </div>
+        
+        <div>
+          <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+          <div class="password-container relative">
+            <input type="password" id="confirmPassword" name="confirmPassword" class="input-field w-full px-4 py-3 rounded-lg pl-10 pr-10" placeholder="Confirm password" required>
+            <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <span class="password-toggle" id="toggleConfirmPassword">
+              <i class="fas fa-eye"></i>
+            </span>
+          </div>
+          <div id="passwordMatch" class="text-xs mt-1 hidden">
+            <i class="fas fa-check-circle text-green-500 mr-1"></i>
+            <span class="text-green-500">Passwords match</span>
+          </div>
+        </div>
+      </div>
 
-        <!-- Submit Button -->
-        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Sign Up</button>
+      <!-- Terms and Conditions -->
+      <div class="flex items-start">
+        <div class="flex items-center h-5">
+          <input id="terms" name="terms" type="checkbox" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded" required>
+        </div>
+        <div class="ml-3 text-sm">
+          <label for="terms" class="font-medium text-gray-700">I agree to the <a href="#" class="text-blue-600 hover:underline">Terms of Service</a> and <a href="#" class="text-blue-600 hover:underline">Privacy Policy</a></label>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn-primary w-full py-3 px-4 rounded-lg font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+        <i class="fas fa-user-plus mr-2"></i> Create Account
+      </button>
+
+      <div class="text-center text-sm text-gray-500">
+        Already have an account? <a href="codex.html" class="font-medium text-blue-600 hover:underline">Sign in</a>
+      </div>
     </form>
+  </div>
 
-    <div class="text-center mt-4">
-      <p class="text-sm text-gray-600">Already have an account? <a href="codex.html" class="text-blue-600 hover:underline">Sign in</a></p>
+  <!-- Loader Overlay -->
+  <div id="loaderOverlay" class="hidden">
+    <div class="loader-content">
+      <div class="computer-icon">
+        <i class="fas fa-cog fa-spin"></i>
+      </div>
+      <div class="loading-text">Creating your account...</div>
+      <div class="text-sm text-gray-500 mt-2">This may take a few moments</div>
     </div>
   </div>
-  <div id="loaderOverlay" class="hidden">
-    <div class="loaderContent">
-        <div class="computerIcon">
-            💻
-        </div>
-        <div class="loadingText">Processing... Please wait</div>
-    </div>
-</div>
 
-<script>
+  <script>
+    // DOM Elements
     const loaderOverlay = document.getElementById('loaderOverlay');
     const passwordInput = document.getElementById('password');
-    const passwordHint = document.getElementById('passwordHint');
-    const registerForm = document.getElementById('registerForm');
     const confirmPasswordInput = document.getElementById('confirmPassword');
-  
-    // Show password hint when typing
-    passwordInput.addEventListener('input', function () {
-        if (this.value.length > 0) {
-            passwordHint.classList.remove('hidden');
-        } else {
-            passwordHint.classList.add('hidden');
-        }
+    const registerForm = document.getElementById('registerForm');
+    const passwordRequirements = document.getElementById('passwordRequirements');
+    const passwordMatch = document.getElementById('passwordMatch');
+    const togglePassword = document.getElementById('togglePassword');
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+    const passwordStrength = document.getElementById('passwordStrength');
+    const strengthText = document.getElementById('strengthText');
+
+    // Password visibility toggle
+    togglePassword.addEventListener('click', function() {
+      const icon = this.querySelector('i');
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+      }
     });
-  
+
+    toggleConfirmPassword.addEventListener('click', function() {
+      const icon = this.querySelector('i');
+      if (confirmPasswordInput.type === 'password') {
+        confirmPasswordInput.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        confirmPasswordInput.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    });
+
+    // Password validation
+    passwordInput.addEventListener('input', function() {
+      const password = this.value;
+      
+      // Show requirements when typing
+      if (password.length > 0) {
+        passwordRequirements.classList.remove('hidden');
+      } else {
+        passwordRequirements.classList.add('hidden');
+      }
+      
+      // Check requirements
+      const hasLength = password.length >= 8;
+      const hasCapital = /[A-Z]/.test(password);
+      const hasNumber = /\d/.test(password);
+      const hasSpecial = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+      
+      // Update requirement indicators
+      updateRequirement('lengthReq', 'lengthIcon', hasLength);
+      updateRequirement('capitalReq', 'capitalIcon', hasCapital);
+      updateRequirement('numberReq', 'numberIcon', hasNumber);
+      updateRequirement('specialReq', 'specialIcon', hasSpecial);
+      
+      // Calculate password strength
+      let strength = 0;
+      if (hasLength) strength += 25;
+      if (hasCapital) strength += 25;
+      if (hasNumber) strength += 25;
+      if (hasSpecial) strength += 25;
+      
+      // Update strength meter
+      passwordStrength.style.width = `${strength}%`;
+      
+      // Update strength text and color
+      if (strength < 50) {
+        passwordStrength.classList.remove('bg-yellow-500', 'bg-green-500');
+        passwordStrength.classList.add('bg-red-500');
+        strengthText.textContent = 'Weak';
+        strengthText.className = 'text-xs ml-2 text-red-500';
+      } else if (strength < 75) {
+        passwordStrength.classList.remove('bg-red-500', 'bg-green-500');
+        passwordStrength.classList.add('bg-yellow-500');
+        strengthText.textContent = 'Medium';
+        strengthText.className = 'text-xs ml-2 text-yellow-500';
+      } else {
+        passwordStrength.classList.remove('bg-red-500', 'bg-yellow-500');
+        passwordStrength.classList.add('bg-green-500');
+        strengthText.textContent = 'Strong';
+        strengthText.className = 'text-xs ml-2 text-green-500';
+      }
+      
+      // Check password match if confirm password has value
+      if (confirmPasswordInput.value.length > 0) {
+        checkPasswordMatch();
+      }
+    });
+    
+    // Confirm password validation
+    confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+    
+    function checkPasswordMatch() {
+      if (passwordInput.value === confirmPasswordInput.value && passwordInput.value.length > 0) {
+        passwordMatch.classList.remove('hidden');
+      } else {
+        passwordMatch.classList.add('hidden');
+      }
+    }
+    
+    function updateRequirement(reqId, iconId, isValid) {
+      const reqElement = document.getElementById(reqId);
+      const iconElement = document.getElementById(iconId);
+      
+      if (isValid) {
+        reqElement.classList.add('valid');
+        iconElement.classList.remove('fa-circle');
+        iconElement.classList.add('fa-check-circle');
+        iconElement.style.color = '#10b981';
+      } else {
+        reqElement.classList.remove('valid');
+        iconElement.classList.remove('fa-check-circle');
+        iconElement.classList.add('fa-circle');
+        iconElement.style.color = '';
+      }
+    }
+
     // Generate a random 7-character alphanumeric string
     function generateStudentId() {
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        let studentId = '';
-        for (let i = 0; i < 7; i++) {
-            studentId += characters.charAt(Math.floor(Math.random() * characters.length));
-        }
-        return studentId;
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let studentId = '';
+      for (let i = 0; i < 7; i++) {
+        studentId += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+      return studentId;
     }
-  
+
     // Function to check if the email already exists
     async function checkEmailExists(email) {
-        try {
-            const response = await fetch(`http://localhost:5000/check-email?email=${encodeURIComponent(email)}`);
-            const data = await response.json();
-            return data.exists; // { exists: true/false }
-        } catch (error) {
-            console.error('Error checking email:', error);
-            alert('An error occurred while checking the email. Please try again.');
-            return false; // Allow form to continue if check fails
-        }
+      try {
+        const response = await fetch(`http://localhost:5000/check-email?email=${encodeURIComponent(email)}`);
+        const data = await response.json();
+        return data.exists;
+      } catch (error) {
+        console.error('Error checking email:', error);
+        alert('An error occurred while checking the email. Please try again.');
+        return false;
+      }
     }
-  
+
     // Form submission with retry logic
-    registerForm.addEventListener('submit', async function (event) {
-        event.preventDefault();
-        loaderOverlay.style.display = 'flex'; // Show overlay & loader
-  
-        const password = passwordInput.value;
-        const confirmPassword = confirmPasswordInput.value;
-  
-        const passwordRequirements = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
-        if (!passwordRequirements.test(password)) {
-            alert('Password must be at least 8 characters long and include at least 1 number, 1 capital letter, and 1 special character.');
-            loaderOverlay.style.display = 'none'; // Hide loader if validation fails
-            return;
-        }
-  
-        if (password !== confirmPassword) {
-            alert('Passwords do not match!');
-            loaderOverlay.style.display = 'none'; // Hide loader if validation fails
-            return;
-        }
-  
-        const baseData = {
-            name: document.getElementById('name').value,
-            surname: document.getElementById('surname').value,
-            email: document.getElementById('email').value,
-            cell: document.getElementById('cell').value,
-            dob: document.getElementById('dob').value,
-            gender: document.getElementById('gender').value,
-            password: password
+    registerForm.addEventListener('submit', async function(event) {
+      event.preventDefault();
+      
+      // Validate password match
+      if (passwordInput.value !== confirmPasswordInput.value) {
+        alert('Passwords do not match!');
+        return;
+      }
+      
+      // Validate password strength
+      const password = passwordInput.value;
+      const passwordRequirements = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+      if (!passwordRequirements.test(password)) {
+        alert('Password must be at least 8 characters long and include at least 1 number, 1 capital letter, and 1 special character.');
+        return;
+      }
+      
+      // Validate terms checkbox
+      if (!document.getElementById('terms').checked) {
+        alert('You must agree to the Terms of Service and Privacy Policy');
+        return;
+      }
+      
+      loaderOverlay.style.display = 'flex';
+
+      const baseData = {
+        name: document.getElementById('name').value,
+        surname: document.getElementById('surname').value,
+        email: document.getElementById('email').value,
+        cell: document.getElementById('cell').value,
+        dob: document.getElementById('dob').value,
+        gender: document.getElementById('gender').value,
+        password: password
+      };
+
+      // Check if email already exists
+      const emailExists = await checkEmailExists(baseData.email);
+      if (emailExists) {
+        alert('This email is already registered. Please use a different one or log in.');
+        loaderOverlay.style.display = 'none';
+        return;
+      }
+
+      let attempts = 0;
+      const maxAttempts = 10;
+
+      while (attempts < maxAttempts) {
+        const formData = {
+          ...baseData,
+          student_id: generateStudentId()
         };
-  
-        // Check if email already exists
-        const emailExists = await checkEmailExists(baseData.email);
-        if (emailExists) {
-            alert('This email is already registered. Please use a different one or log in.');
-            loaderOverlay.style.display = 'none'; // Hide loader if email exists
+
+        try {
+          const res = await fetch('http://localhost:5000/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+          });
+
+          const result = await res.json();
+
+          if (res.ok) {
+            alert(`Registered successfully! Your Student ID is: ${formData.student_id}`);
+            registerForm.reset();
+            localStorage.setItem('showSigninModal', 'true');
+            window.location.href = 'codex.html';
             return;
-        }
-  
-        let attempts = 0;
-        const maxAttempts = 10;
-  
-        while (attempts < maxAttempts) {
-            const formData = {
-                ...baseData,
-                student_id: generateStudentId()
-            };
-  
-            try {
-                const res = await fetch('http://localhost:5000/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(formData)
-                });
-  
-                const result = await res.json();
-  
-                if (res.ok) {
-                    alert(`Registered successfully! Your Student ID is: ${formData.student_id}`);
-                    registerForm.reset();
-                    localStorage.setItem('showSigninModal', 'true');
-                    window.location.href = 'codex.html';
-                    return;
-                } else {
-                    if (result.message.includes('Duplicate student ID')) {
-                        console.warn(`Student ID ${formData.student_id} already exists. Retrying...`);
-                        attempts++;
-                        continue;
-                    } else {
-                        alert(result.message || 'Something went wrong.');
-                        loaderOverlay.style.display = 'none'; // Hide loader on failure
-                        return;
-                    }
-                }
-            } catch (err) {
-                console.error("Error submitting form:", err);
-                alert('An error occurred. Please try again later.');
-                loaderOverlay.style.display = 'none'; // Hide loader on failure
-                return;
+          } else {
+            if (result.message.includes('Duplicate student ID')) {
+              console.warn(`Student ID ${formData.student_id} already exists. Retrying...`);
+              attempts++;
+              continue;
+            } else {
+              alert(result.message || 'Something went wrong.');
+              loaderOverlay.style.display = 'none';
+              return;
             }
+          }
+        } catch (err) {
+          console.error("Error submitting form:", err);
+          alert('An error occurred. Please try again later.');
+          loaderOverlay.style.display = 'none';
+          return;
         }
-  
-        alert('Failed to generate a unique student ID. Please try again later.');
-        loaderOverlay.style.display = 'none'; // Hide loader after all attempts
+      }
+
+      alert('Failed to generate a unique student ID. Please try again later.');
+      loaderOverlay.style.display = 'none';
     });
   </script>
-
 </body>
 </html>
+
+

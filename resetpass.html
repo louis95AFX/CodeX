@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Password | Secure Account</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+    }
+    
+    .card {
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+    
+    .input-field:focus {
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+    }
+    
+    .btn-primary {
+      transition: all 0.3s ease;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+    
+    .password-toggle {
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+    
+    #loader {
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top: 3px solid white;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 10px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .success-checkmark {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto;
+      position: relative;
+    }
+    
+    .check-icon {
+      width: 80px;
+      height: 80px;
+      position: relative;
+      border-radius: 50%;
+      box-sizing: content-box;
+      border: 4px solid #4CAF50;
+    }
+    
+    .check-icon::before {
+      top: 3px;
+      left: -2px;
+      width: 30px;
+      transform-origin: 100% 50%;
+      border-radius: 100px 0 0 100px;
+    }
+    
+    .check-icon::after {
+      top: 0;
+      left: 30px;
+      width: 60px;
+      transform-origin: 0 50%;
+      border-radius: 0 100px 100px 0;
+      animation: rotate-circle 4.25s ease-in;
+    }
+    
+    .check-icon::before, .check-icon::after {
+      content: '';
+      height: 100px;
+      position: absolute;
+      background: transparent;
+      transform: rotate(-45deg);
+    }
+    
+    .icon-line {
+      height: 5px;
+      background-color: #4CAF50;
+      display: block;
+      border-radius: 2px;
+      position: absolute;
+      z-index: 10;
+    }
+    
+    .icon-line.line-tip {
+      top: 46px;
+      left: 14px;
+      width: 25px;
+      transform: rotate(45deg);
+      animation: icon-line-tip 0.75s;
+    }
+    
+    .icon-line.line-long {
+      top: 38px;
+      right: 8px;
+      width: 47px;
+      transform: rotate(-45deg);
+      animation: icon-line-long 0.75s;
+    }
+    
+    @keyframes icon-line-tip {
+      0% { width: 0; left: 1px; top: 19px; }
+      54% { width: 0; left: 1px; top: 19px; }
+      70% { width: 50px; left: -8px; top: 37px; }
+      84% { width: 17px; left: 21px; top: 48px; }
+      100% { width: 25px; left: 14px; top: 46px; }
+    }
+    
+    @keyframes icon-line-long {
+      0% { width: 0; right: 46px; top: 54px; }
+      65% { width: 0; right: 46px; top: 54px; }
+      84% { width: 55px; right: 0px; top: 35px; }
+      100% { width: 47px; right: 8px; top: 38px; }
+    }
+    
+    @keyframes rotate-circle {
+      0% { transform: rotate(-45deg); }
+      5% { transform: rotate(-45deg); }
+      12% { transform: rotate(-405deg); }
+      100% { transform: rotate(-405deg); }
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center p-4">
+  <div class="card bg-white rounded-xl p-8 w-full max-w-md">
+    <div class="text-center mb-8">
+      <div class="flex justify-center mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+      </div>
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">Reset Your Password</h1>
+      <p class="text-gray-600">Create a new secure password for your account</p>
+    </div>
+    
+    <form id="reset-password-form" class="space-y-6">
+      <div class="relative">
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+        <div class="relative">
+          <input 
+            type="password" 
+            id="password" 
+            required
+            minlength="8"
+            class="input-field w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
+            placeholder="Enter your new password"
+          >
+          <span class="password-toggle absolute right-3" onclick="togglePasswordVisibility()">
+            <i class="far fa-eye text-gray-400 hover:text-indigo-600 transition"></i>
+          </span>
+        </div>
+        <div class="mt-2 text-xs text-gray-500">
+          <p class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-1"></i> At least 8 characters</p>
+          <p class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-1"></i> Contains a number</p>
+          <p class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-1"></i> Contains a special character</p>
+        </div>
+      </div>
+      
+      <div class="relative">
+        <label for="confirm-password" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+        <div class="relative">
+          <input 
+            type="password" 
+            id="confirm-password" 
+            required
+            class="input-field w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition duration-200"
+            placeholder="Confirm your new password"
+          >
+          <span class="password-toggle absolute right-3" onclick="toggleConfirmPasswordVisibility()">
+            <i class="far fa-eye text-gray-400 hover:text-indigo-600 transition"></i>
+          </span>
+        </div>
+      </div>
+      
+      <button type="submit" class="btn-primary w-full py-3 px-4 rounded-lg text-white font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        Reset Password
+        <!-- <span id="loader" class="hidden"></span> -->
+      </button>
+    </form>
+    
+    <div id="message" class="mt-6 text-center hidden">
+      <div id="success-message" class="hidden">
+        <div class="success-checkmark mb-4">
+          <div class="check-icon">
+            <span class="icon-line line-tip"></span>
+            <span class="icon-line line-long"></span>
+          </div>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-2">Password Reset Successful!</h3>
+        <p class="text-gray-600 mb-4">Your password has been updated successfully.</p>
+        <a href="/login" class="text-indigo-600 hover:text-indigo-800 font-medium">Back to Login</a>
+      </div>
+      
+      <div id="error-message" class="hidden p-4 bg-red-50 rounded-lg">
+        <div class="flex items-center justify-center text-red-600 mb-2">
+          <i class="fas fa-exclamation-circle text-xl mr-2"></i>
+          <span class="font-semibold">Error</span>
+        </div>
+        <p class="text-red-600" id="error-text"></p>
+      </div>
+    </div>
+    
+    <div class="mt-6 text-center text-sm text-gray-500">
+      Remember your password? <a href="/login" class="text-indigo-600 hover:text-indigo-800 font-medium">Sign in</a>
+    </div>
+  </div>
+
+  <script>
+  // Get token from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get("token");
+
+  const form = document.getElementById("reset-password-form");
+  const loader = document.getElementById("loader");
+  const message = document.getElementById("message");
+  const successMessage = document.getElementById("success-message");
+  const errorMessage = document.getElementById("error-message");
+  const errorText = document.getElementById("error-text");
+
+  // Toggle visibility for password
+  function togglePasswordVisibility() {
+    const password = document.getElementById("password");
+    const icon = document.querySelector('.password-toggle i');
+    if (password.type === "password") {
+      password.type = "text";
+      icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+      password.type = "password";
+      icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+  }
+
+  // Toggle visibility for confirm password
+  function toggleConfirmPasswordVisibility() {
+    const confirmPassword = document.getElementById("confirm-password");
+    const icon = document.querySelectorAll('.password-toggle i')[1];
+    if (confirmPassword.type === "password") {
+      confirmPassword.type = "text";
+      icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+      confirmPassword.type = "password";
+      icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+  }
+
+  // Password strength indicator
+  document.getElementById('password').addEventListener('input', function () {
+    const password = this.value;
+    const requirements = document.querySelectorAll('.text-xs p');
+
+    // At least 8 characters
+    requirements[0].querySelector('i').className =
+      password.length >= 8
+        ? 'fas fa-check-circle text-green-500 mr-1'
+        : 'fas fa-times-circle text-red-500 mr-1';
+
+    // Contains a number
+    requirements[1].querySelector('i').className =
+      /\d/.test(password)
+        ? 'fas fa-check-circle text-green-500 mr-1'
+        : 'fas fa-times-circle text-red-500 mr-1';
+
+    // Contains a special character
+    requirements[2].querySelector('i').className =
+      /[!@#$%^&*(),.?":{}|<>]/.test(password)
+        ? 'fas fa-check-circle text-green-500 mr-1'
+        : 'fas fa-times-circle text-red-500 mr-1';
+  });
+
+  // Form submission
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    // Show loader
+    loader.style.display = "inline-block";
+    loader.classList.remove("hidden");
+
+    // Hide messages
+    message.innerText = "";
+    message.classList.add("hidden");
+    successMessage.classList.add("hidden");
+    errorMessage.classList.add("hidden");
+
+    const newPassword = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirm-password").value;
+
+    // Token validation
+    if (!token) {
+      loader.style.display = "none";
+      loader.classList.add("hidden");
+      errorText.textContent = "Invalid or expired token.";
+      errorMessage.classList.remove("hidden");
+      message.classList.remove("hidden");
+      return;
+    }
+
+    // Client-side password match check
+    if (newPassword !== confirmPassword) {
+      loader.style.display = "none";
+      loader.classList.add("hidden");
+      errorText.textContent = "Passwords do not match.";
+      errorMessage.classList.remove("hidden");
+      message.classList.remove("hidden");
+      return;
+    }
+
+    // Client-side strength check
+    if (newPassword.length < 8 || !/\d/.test(newPassword) || !/[!@#$%^&*(),.?":{}|<>]/.test(newPassword)) {
+      loader.style.display = "none";
+      loader.classList.add("hidden");
+      errorText.textContent = "Password must be at least 8 characters, include a number and a special character.";
+      errorMessage.classList.remove("hidden");
+      message.classList.remove("hidden");
+      return;
+    }
+
+    // Submit request to backend
+    try {
+      const res = await fetch("/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, newPassword })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        form.reset();
+        successMessage.textContent = data.message || "Password reset successfully.";
+        successMessage.classList.remove("hidden");
+      } else {
+        errorText.textContent = data.message || "Something went wrong. Please try again.";
+        errorMessage.classList.remove("hidden");
+      }
+
+      message.classList.remove("hidden");
+    } catch (err) {
+      errorText.textContent = "Network error. Please try again later.";
+      errorMessage.classList.remove("hidden");
+      message.classList.remove("hidden");
+      console.error(err);
+    } finally {
+      loader.style.display = "none";
+      loader.classList.add("hidden");
+    }
+  });
+</script>
+
+
+</body>
+</html>
