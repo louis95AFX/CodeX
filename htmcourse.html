@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Mastery - Interactive Learning Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
+    <link rel="stylesheet" href="htmcourse.css">
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-gray-800 shadow-lg">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fab fa-html5 text-3xl text-orange-500"></i>
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-600 bg-clip-text text-transparent">
+                    HTML Mastery
+                </h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <div class="w-12 h-12">
+                        <svg class="w-full h-full" viewBox="0 0 36 36">
+                            <path 
+                                d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none"
+                                stroke="#4b5563",
+                                stroke-width="2",
+                                stroke-dasharray="100, 100"
+                            />
+                            <path 
+                                class="progress-ring__circle"
+                                d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none"
+                                stroke="#3b82f6",
+                                stroke-width="2",
+                                stroke-dasharray="25, 100"
+                            />
+                        </svg>
+                    </div>
+                    <span class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs font-bold">25%</span>
+                </div>
+                <button class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-medium flex items-center space-x-2">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>My Profile</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar w-64 bg-gray-800 overflow-y-auto flex-shrink-0">
+            <div class="p-4">
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold mb-2 text-gray-300">Course Content</h2>
+                    <div class="space-y-1">
+                        <div class="mb-2">
+                            <div class="flex items-center justify-between px-2 py-1 bg-gray-700 rounded">
+                              <span class="font-medium">Module 1: HTML Basics</span>
+                              <span class="text-xs text-green-400">0%</span>
+                            </div>
+                          
+                            <div class="mt-1 ml-4 space-y-1">
+                              <!-- ▶️ Current lesson with blue play icon -->
+                              <a href="#" class="lesson-link block px-2 py-1 rounded bg-gray-700 text-white font-medium"
+                                data-module="Module 1" data-lesson="Introduction to HTML">
+                                <i class="fas fa-play-circle text-blue-400 mr-2"></i>
+                                Introduction to HTML
+                              </a>
+                              <div class="subtopics ml-6 mt-1 hidden space-y-1"></div>
+                          
+                              <a href="#" class="lesson-link block px-2 py-1 rounded hover:bg-gray-700 text-gray-400"
+                                data-module="Module 1" data-lesson="HTML Document Structure">
+                                <i class="fas fa-check-circle text-gray-500 mr-2"></i>
+                                HTML Document Structure
+                              </a>
+                              <div class="subtopics ml-6 mt-1 hidden space-y-1"></div>
+                          
+                              <a href="#" class="lesson-link block px-2 py-1 rounded hover:bg-gray-700 text-gray-400"
+                                data-module="Module 1" data-lesson="HTML Elements & Tags">
+                                <i class="fas fa-check-circle text-gray-500 mr-2"></i>
+                                HTML Elements & Tags
+                              </a>
+                              <div class="subtopics ml-6 mt-1 hidden space-y-1"></div>
+                          
+                              <a href="#" class="lesson-link block px-2 py-1 rounded hover:bg-gray-700 text-gray-400"
+                                data-module="Module 1" data-lesson="Attributes">
+                                <i class="fas fa-check-circle text-gray-500 mr-2"></i>
+                                Attributes
+                              </a>
+                              <div class="subtopics ml-6 mt-1 hidden space-y-1"></div>
+                          
+                              <a href="#" class="lesson-link block px-2 py-1 rounded hover:bg-gray-700 text-gray-400"
+                                data-module="Module 1" data-lesson="Headings & Paragraphs">
+                                <i class="fas fa-check-circle text-gray-500 mr-2"></i>
+                                Headings & Paragraphs
+                              </a>
+                              <div class="subtopics ml-6 mt-1 hidden space-y-1"></div>
+                            </div>
+                          </div>
+                          
+                          
+
+                        <div class="mb-2">
+                            <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 2: HTML Formatting</span>
+                                <span class="text-xs text-gray-400">0%</span>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 3: Links & Images</span>
+                                <span class="text-xs text-gray-400">0%</span>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 4: Lists & Tables</span>
+                                <span class="text-xs text-gray-400">0%</span>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 5: Forms & Input</span>
+                                <span class="text-xs text-gray-400">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold mb-2 text-gray-300">Quick Links</h2>
+                    <div class="space-y-2">
+                        <a href="#" class="flex items-center px-3 py-2 rounded-lg bg-gray-700 hover:bg-gray-600">
+                            <i class="fas fa-trophy text-yellow-400 mr-3"></i>
+                            <span>Challenges</span>
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-book text-blue-400 mr-3"></i>
+                            <span>Cheat Sheet</span>
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-question-circle text-green-400 mr-3"></i>
+                            <span>FAQ</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="p-4 bg-gray-700 rounded-lg">
+                    <h3 class="font-medium mb-2">Daily Challenge</h3>
+                    <p class="text-sm text-gray-300 mb-3">Create a simple HTML page with a heading, paragraph, and image.</p>
+                    <button class="w-full bg-blue-600 hover:bg-blue-700 py-1 rounded text-sm">
+                        Start Challenge
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto bg-gray-900">
+            <div class="container mx-auto px-4 py-6">
+                <!-- Breadcrumbs -->
+                <div class="flex items-center text-sm text-gray-400 mb-6" id="breadcrumb">
+                    <a href="#" class="hover:text-blue-400">Home</a>
+                    <span class="mx-2">/</span>
+                    <span id="breadcrumb-module" class="hover:text-blue-400">Module 1</span>
+                    <span class="mx-2">/</span>
+                    <span id="breadcrumb-lesson" class="text-blue-400">HTML Elements & Tags</span>
+                </div>                
+                
+                
+                <!-- Lesson Header -->
+<div class="bg-gray-800 rounded-lg p-6 mb-6 shadow-lg lesson-header">
+  <div class="flex items-start justify-between">
+    <div>
+      <h2 class="text-2xl font-bold mb-2">HTML Elements & Tags</h2>
+      <p class="text-gray-400 mb-4">Learn the building blocks of HTML documents and how to use them effectively.</p>
+      <div class="flex items-center space-x-4">
+        <div class="flex items-center text-yellow-400 lesson-rating">
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star"></i>
+          <i class="fas fa-star-half-alt"></i>
+          <span class="ml-2 text-gray-400">4.5</span>
+        </div>
+        <span class="text-gray-400 lesson-duration"><i class="fas fa-clock mr-1"></i> 25 min</span>
+        <span class="text-gray-400 lesson-exercises"><i class="fas fa-tasks mr-1"></i> 3 exercises</span>
+      </div>
+    </div>
+    <div class="flex space-x-2">
+      <button class="p-2 rounded-full bg-gray-700 hover:bg-gray-600">
+        <i class="fas fa-bookmark"></i>
+      </button>
+      <button class="p-2 rounded-full bg-gray-700 hover:bg-gray-600">
+        <i class="fas fa-share-alt"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+                
+                <!-- Lesson Content -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <!-- Theory Section -->
+                    <div class="lg:col-span-2 bg-gray-800 rounded-lg p-6 shadow-lg">
+                        <div class="prose prose-invert max-w-none">
+                            <h3 class="text-xl font-semibold mb-4">Understanding HTML Elements</h3>
+                            <p>HTML documents are made up of HTML elements that structure and present content on web pages. An HTML element is defined by a start tag, some content, and an end tag.</p>
+                            
+                            <div class="my-6 p-4 bg-gray-700 rounded-lg border-l-4 border-blue-500">
+                                <h4 class="font-medium mb-2">Key Concepts:</h4>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li>HTML elements are the building blocks of HTML pages</li>
+                                    <li>Elements are represented by tags in the HTML code</li>
+                                    <li>Most elements have opening and closing tags</li>
+                                    <li>Some elements are self-closing (void elements)</li>
+                                </ul>
+                            </div>
+                            
+                            <h4 class="font-semibold mt-6 mb-3">Basic Syntax</h4>
+                            <p>The basic syntax for an HTML element is:</p>
+                            <pre class="bg-gray-900 p-3 rounded text-sm overflow-x-auto">&lt;tagname&gt;Content goes here...&lt;/tagname&gt;</pre>
+                            
+                            <h4 class="font-semibold mt-6 mb-3">Example Elements</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                                <div class="bg-gray-700 p-3 rounded-lg">
+                                    <p class="font-mono text-sm">&lt;h1&gt;Heading&lt;/h1&gt;</p>
+                                    <p class="text-xs text-gray-400 mt-1">Heading element (level 1)</p>
+                                </div>
+                                <div class="bg-gray-700 p-3 rounded-lg">
+                                    <p class="font-mono text-sm">&lt;p&gt;Paragraph text&lt;/p&gt;</p>
+                                    <p class="text-xs text-gray-400 mt-1">Paragraph element</p>
+                                </div>
+                                <div class="bg-gray-700 p-3 rounded-lg">
+                                    <p class="font-mono text-sm">&lt;div&gt;Container&lt;/div&gt;</p>
+                                    <p class="text-xs text-gray-400 mt-1">Division container</p>
+                                </div>
+                                <div class="bg-gray-700 p-3 rounded-lg">
+                                    <p class="font-mono text-sm">&lt;img src="image.jpg"&gt;</p>
+                                    <p class="text-xs text-gray-400 mt-1">Image element (self-closing)</p>
+                                </div>
+                            </div>
+                            
+                            <h4 class="font-semibold mt-6 mb-3">Nesting Elements</h4>
+                            <p>HTML elements can be nested inside other elements. This means you can place elements within other elements to create more complex structures.</p>
+                            <pre class="bg-gray-900 p-3 rounded text-sm overflow-x-auto my-4">
+                                &lt;div&gt;
+                                    &lt;h1&gt;Main Heading&lt;/h1&gt;
+                                    &lt;p&gt;This is a paragraph inside a div.&lt;/p&gt;
+                                &lt;/div&gt;</pre>
+                            
+                            <div class="mt-6 p-4 bg-blue-900 bg-opacity-30 rounded-lg border-l-4 border-blue-400">
+                                <h4 class="font-medium mb-2"><i class="fas fa-lightbulb mr-2"></i>Best Practice</h4>
+                                <p>Always properly nest your HTML elements. Make sure closing tags are in the correct order - the last opened tag should be the first closed.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 flex justify-between border-t border-gray-700 pt-4">
+                            <button id="previous-subtopic" class="flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                Previous Lesson
+                            </button>
+                            <button id="next-subtopic" class="flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg">
+                                Next Lesson
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                            
+                        </div>
+                    </div>
+                    
+                    <!-- Practice Section -->
+                    <div id="resourceContainer" class="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                        <div class="bg-gray-700 px-4 py-3 border-b border-gray-600">
+                            <h3 class="font-semibold"><i class="fas fa-code mr-2"></i>Interactive Practice</h3>
+                        </div>
+                        <div class="p-4">
+                            <div class="mb-4">
+                                <div class="flex border-b border-gray-700">
+                                    <button class="tab-button active px-4 py-2 font-medium" data-tab="exercise1">Exercise 1</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Exercise 1 -->
+                            <div class="exercise-tab active" id="exercise1">
+                                <div class="mb-4">
+                                    <h4 class="font-medium mb-2">Task:</h4>
+                                    <p class="text-sm text-gray-300">Add the missing DOCTYPE declaration at the beginning of the HTML structure to ensure it's rendered as an HTML5 document.</p>
+                                </div>
+                                
+                                <div class="h-64 mb-4 bg-gray-900 rounded overflow-hidden">
+                                    <textarea id="codeEditor1" class="hidden" style="white-space: pre; width: 100%; height: 100%; padding: 10px; border: none; resize: none;">
+                                        &lt;!-- Write your code here --&gt;
+                                &lt;html&gt;
+                                    &lt;head&gt;
+                                        &lt;title&gt;My Page&lt;/title&gt;
+                                    &lt;/head&gt;
+                                    &lt;body&gt;
+                                        
+                                        
+                                    &lt;/body&gt;
+                                &lt;/html&gt;
+                                    </textarea>
+                                </div>
+                                
+                                
+                                <div class="flex space-x-3 mb-4">
+                                    <button class="run-btn flex-1 bg-green-600 hover:bg-green-700 py-2 rounded font-medium flex items-center justify-center">
+                                        <i class="fas fa-play mr-2"></i> Run Code
+                                    </button>
+                                    <button class="reset-btn px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded">
+                                        <i class="fas fa-redo"></i>
+                                    </button>
+                                    <button class="hint-btn px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded">
+                                        <i class="fas fa-question"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="bg-gray-900 rounded p-2 mb-4">
+                                    <h4 class="font-medium mb-2 text-sm">Output:</h4>
+                                    <div class="output-iframe" id="output1"></div>
+                                </div>
+                                
+                                <div class="hint-box bg-gray-700 bg-opacity-50 rounded-lg p-3 border border-gray-600 mb-4">
+                                    <div class="flex items-start">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-info-circle text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Hint</h4>
+                                            <p class="text-sm text-gray-300">Remember to add the `DOCTYPE html` declaration at the top of the document. This tells the browser to render the page as an HTML5 document.</p>
+                                            <pre class="bg-gray-800 p-2 rounded mt-2 text-xs overflow-x-auto">
+                                            &lt;!DOCTYPE html&gt;
+                                            &lt;html&gt;
+                                                &lt;head&gt;
+                                                    &lt;title&gt;My Page&lt;/title&gt;
+                                                &lt;/head&gt;
+                                                &lt;body&gt;
+                                                    &lt;!-- Write your code here --&gt;
+                                                &lt;/body&gt;
+                                            &lt;/html&gt;
+                                            </pre>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="success-message bg-green-900 bg-opacity-30 rounded-lg p-3 border border-green-600 mb-4">
+                                    <div class="flex items-center">
+                                        <div class="bg-green-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-check text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Success!</h4>
+                                            <p class="text-sm text-gray-300">You've completed this exercise. Great job!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="check-btn w-full bg-purple-600 hover:bg-purple-700 py-2 rounded font-medium">
+                                    <i class="fas fa-check-circle mr-2"></i> Check Solution
+                                </button>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Resources -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Additional Resources</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <a href="#" class="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-start">
+                            <div class="bg-blue-600 rounded-lg p-3 mr-4">
+                                <i class="fas fa-video text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Video Tutorial</h4>
+                                <p class="text-sm text-gray-400">Watch a 10-minute tutorial on HTML elements</p>
+                            </div>
+                        </a>
+                        <a href="#" class="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-start">
+                            <div class="bg-green-600 rounded-lg p-3 mr-4">
+                                <i class="fas fa-file-alt text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Cheat Sheet</h4>
+                                <p class="text-sm text-gray-400">Download HTML elements reference</p>
+                            </div>
+                        </a>
+                        <a href="#" class="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-start">
+                            <div class="bg-purple-600 rounded-lg p-3 mr-4">
+                                <i class="fas fa-question-circle text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Quiz</h4>
+                                <p class="text-sm text-gray-400">Test your knowledge with 5 questions</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Community Section -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4">Community Discussion</h3>
+                    <div class="mb-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
+                                <span class="font-bold">JS</span>
+                            </div>
+                            <div class="flex-1 bg-gray-700 rounded-lg p-3">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="font-medium">John Smith</span>
+                                    <span class="text-xs text-gray-400">2 hours ago</span>
+                                </div>
+                                <p class="text-sm">What's the difference between &lt;div&gt; and &lt;span&gt; elements?</p>
+                                <div class="flex space-x-4 mt-2 text-xs text-gray-400">
+                                    <a href="#" class="hover:text-blue-400"><i class="far fa-thumbs-up mr-1"></i> 5</a>
+                                    <a href="#" class="hover:text-blue-400"><i class="far fa-comment mr-1"></i> Reply</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center">
+                            <span class="font-bold">AD</span>
+                        </div>
+                        <div class="flex-1">
+                            <textarea class="w-full bg-gray-700 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Add your comment or question..."></textarea>
+                            <div class="flex justify-end mt-2">
+                                <button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm">Post</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center space-x-2">
+                        <i class="fab fa-html5 text-2xl text-orange-500"></i>
+                        <span class="font-bold">HTML Mastery</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mt-1">Learn HTML the interactive way</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-github"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-discord"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-6 pt-6 text-sm text-gray-400 text-center">
+                <p>&copy; 2023 HTML Mastery. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closetag.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+    <script src="htmcourse.js"></script>
+        

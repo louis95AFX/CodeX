@@ -1,0 +1,65 @@
+.lesson-card:hover .lesson-icon {
+  transform: scale(1.1);
+  transition: all 0.3s ease;
+}
+.cm-editor {
+  height: 100%;
+}
+.output-iframe {
+  border: 1px solid #e5e7eb;
+  background: white;
+  min-height: 200px;
+}
+.sidebar {
+  scrollbar-width: thin;
+  scrollbar-color: #4b5563 #1f2937;
+}
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #4b5563;
+  border-radius: 6px;
+}
+.progress-ring__circle {
+  transition: stroke-dashoffset 0.35s;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+.tab-button.active {
+  border-bottom: 3px solid #3b82f6;
+  color: #3b82f6;
+}
+.flash {
+  animation: flash 0.5s;
+}
+@keyframes flash {
+  0% { background-color: rgba(59, 130, 246, 0.3); }
+  100% { background-color: transparent; }
+}
+.exercise-tab {
+  display: none;
+}
+.exercise-tab.active {
+  display: block;
+}
+.hint-box {
+  display: none;
+}
+.hint-box.visible {
+  display: block;
+}
+.success-message {
+  display: none;
+}
+.success-message.visible {
+  display: block;
+  animation: fadeIn 0.5s;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

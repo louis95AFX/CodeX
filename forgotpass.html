@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Your Password | Account Recovery</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .animate-spin-slow {
+      animation: spin 1.5s linear infinite;
+    }
+    
+    .bg-gradient-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .shadow-soft {
+      box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .input-focus-effect:focus {
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+      border-color: #667eea;
+    }
+    
+    .transition-all {
+      transition: all 0.3s ease;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+  <div class="max-w-md w-full bg-white rounded-xl shadow-soft overflow-hidden transition-all hover:shadow-lg">
+    <!-- Header with gradient background -->
+    <div class="bg-gradient-primary p-6 text-white">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-bold">Reset Password</h1>
+          <p class="text-blue-100 opacity-90 mt-1">Enter your email to receive a reset link</p>
+        </div>
+        <div class="bg-white bg-opacity-20 p-3 rounded-full">
+          <i class="fas fa-key text-xl"></i>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Form container -->
+    <div class="p-6 sm:p-8">
+      <form id="forgot-password-form" class="space-y-6">
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-envelope text-gray-400"></i>
+            </div>
+            <input 
+              type="email" 
+              id="email" 
+              required
+              class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg input-focus-effect transition-all focus:outline-none"
+              placeholder="your@email.com"
+            >
+          </div>
+        </div>
+        
+        <div>
+          <button 
+            type="submit" 
+            id="submit-btn"
+            class="w-full bg-gradient-primary text-white py-3 px-4 rounded-lg font-medium hover:opacity-90 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center justify-center"
+          >
+            <span id="btn-text">Send Reset Link</span>
+            <span id="btn-loader" class="hidden ml-2">
+              <i class="fas fa-circle-notch animate-spin-slow"></i>
+            </span>
+          </button>
+        </div>
+      </form>
+      
+      <!-- Status message -->
+      <div id="message" class="mt-4 text-center text-sm text-gray-600">
+        <p>Enter your email and we'll send you a link to reset your password.</p>
+      </div>
+      
+      <!-- Back to login link -->
+      <div class="mt-6 text-center">
+        <a href="codex.html" class="text-indigo-600 hover:text-indigo-500 text-sm font-medium">
+          <i class="fas fa-arrow-left mr-1"></i> Back to login
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log("Page loaded ✅");
+      
+      const form = document.getElementById('forgot-password-form');
+      const emailInput = document.getElementById('email');
+      const messageDiv = document.getElementById('message');
+      const submitBtn = document.getElementById('submit-btn');
+      const btnText = document.getElementById('btn-text');
+      const btnLoader = document.getElementById('btn-loader');
+      
+      // Focus email input on page load
+      emailInput.focus();
+      
+      // Form submission handler
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = emailInput.value.trim();
+        
+        // Validate email
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          showMessage('Please enter a valid email address', 'error');
+          emailInput.focus();
+          return;
+        }
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        btnText.textContent = 'Sending...';
+        btnLoader.classList.remove('hidden');
+        
+        try {
+           const res = await fetch("http://localhost:5000/request-password-reset", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email })
+        });
+          // Simulate API call (replace with actual fetch)
+          await new Promise(resolve => setTimeout(resolve, 1500));
+          
+          // Mock response
+          const success = Math.random() > 0.2; // 80% success rate for demo
+          
+          if (success) {
+            showMessage(`Password reset link sent to ${email}. Please check your inbox.`, 'success');
+            form.reset();
+          } else {
+            showMessage('This email is not registered in our system.', 'error');
+          }
+        } catch (err) {
+          console.error('Error:', err);
+          showMessage('Something went wrong. Please try again later.', 'error');
+        } finally {
+          // Reset button state
+          submitBtn.disabled = false;
+          btnText.textContent = 'Send Reset Link';
+          btnLoader.classList.add('hidden');
+        }
+      });
+      
+      // Helper function to show status messages
+      function showMessage(text, type) {
+        messageDiv.innerHTML = `
+          <div class="p-3 rounded-lg ${type === 'error' ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}">
+            <i class="fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'} mr-2"></i>
+            ${text}
+          </div>
+        `;
+      }
+      
+      // Beforeunload event
+      window.addEventListener('beforeunload', (e) => {
+        if (emailInput.value.trim() !== '') {
+          e.preventDefault();
+          e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

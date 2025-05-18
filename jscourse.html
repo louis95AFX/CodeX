@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Mastery - Interactive Learning Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
+    <style>
+        .lesson-card:hover .lesson-icon {
+            transform: scale(1.1);
+            transition: all 0.3s ease;
+        }
+        .cm-editor {
+            height: 100%;
+        }
+        .output-iframe {
+            border: 1px solid #e5e7eb;
+            background: white;
+            min-height: 200px;
+        }
+        .sidebar {
+            scrollbar-width: thin;
+            scrollbar-color: #4b5563 #1f2937;
+        }
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sidebar::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: #4b5563;
+            border-radius: 6px;
+        }
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        .tab-button.active {
+            border-bottom: 3px solid #3b82f6;
+            color: #3b82f6;
+        }
+        .flash {
+            animation: flash 0.5s;
+        }
+        @keyframes flash {
+            0% { background-color: rgba(59, 130, 246, 0.3); }
+            100% { background-color: transparent; }
+        }
+        .exercise-tab {
+            display: none;
+        }
+        .exercise-tab.active {
+            display: block;
+        }
+        .hint-box {
+            display: none;
+        }
+        .hint-box.visible {
+            display: block;
+        }
+        .success-message {
+            display: none;
+        }
+        .success-message.visible {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .console-output {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            font-family: monospace;
+            padding: 10px;
+            border-radius: 4px;
+            height: 100px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-gray-800 shadow-lg">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fab fa-js text-3xl text-yellow-400"></i>
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+                    JavaScript Mastery
+                </h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <div class="w-12 h-12">
+                        <svg class="w-full h-full" viewBox="0 0 36 36">
+                            <path 
+                                d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none"
+                                stroke="#4b5563",
+                                stroke-width="2",
+                                stroke-dasharray="100, 100"
+                            />
+                            <path 
+                                class="progress-ring__circle"
+                                d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none"
+                                stroke="#f59e0b",
+                                stroke-width="2",
+                                stroke-dasharray="0, 100"
+                            />
+                        </svg>
+                    </div>
+                    <span class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs font-bold">0%</span>
+                </div>
+                <button class="bg-yellow-600 hover:bg-yellow-700 px-4 py-2 rounded-lg font-medium flex items-center space-x-2">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>My Profile</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar w-64 bg-gray-800 overflow-y-auto flex-shrink-0">
+            <div class="p-4">
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold mb-2 text-gray-300">Course Content</h2>
+                    <div class="space-y-1">
+                        <div class="mb-2">
+                            <div class="flex items-center justify-between px-2 py-1 bg-gray-700 rounded">
+                                <span class="font-medium">Module 1: JS Basics</span>
+                                <span class="text-xs text-gray-400">0%</span>
+                            </div>
+                            <div class="mt-1 ml-4 space-y-1">
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Introduction to JavaScript
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Variables & Data Types
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-yellow-400 font-medium">
+                                    <i class="fas fa-play-circle text-yellow-400 mr-2"></i>
+                                    Operators & Expressions
+                                </a>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="flex items-center justify-between px-2 py-1 bg-gray-700 rounded">
+                                <span class="font-medium">Module 2: Control Flow</span>
+                                <span class="text-xs text-gray-400">0%</span>
+                            </div>
+                            <div class="mt-1 ml-4 space-y-1">
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Conditionals
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Loops
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Error Handling
+                                </a>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 3: Functions</span>
+                                <span class="text-xs text-gray-400">0%</span>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 4: Objects & Arrays</span>
+                                <span class="text-xs text-gray-400">0%</span>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 5: DOM Manipulation</span>
+                                <span class="text-xs text-gray-400">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold mb-2 text-gray-300">Quick Links</h2>
+                    <div class="space-y-2">
+                        <a href="#" class="flex items-center px-3 py-2 rounded-lg bg-gray-700 hover:bg-gray-600">
+                            <i class="fas fa-trophy text-yellow-400 mr-3"></i>
+                            <span>Challenges</span>
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-code text-blue-400 mr-3"></i>
+                            <span>Code Snippets</span>
+                        </a>
+                        <a href="#" class="flex items-center px-3 py-2 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-question-circle text-green-400 mr-3"></i>
+                            <span>FAQ</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="p-4 bg-gray-700 rounded-lg">
+                    <h3 class="font-medium mb-2">Daily Challenge</h3>
+                    <p class="text-sm text-gray-300 mb-3">Create a function that reverses a string.</p>
+                    <button class="w-full bg-yellow-600 hover:bg-yellow-700 py-1 rounded text-sm">
+                        Start Challenge
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto bg-gray-900">
+            <div class="container mx-auto px-4 py-6">
+                <!-- Breadcrumbs -->
+                <div class="flex items-center text-sm text-gray-400 mb-6">
+                    <a href="#" class="hover:text-yellow-400">Home</a>
+                    <span class="mx-2">/</span>
+                    <a href="#" class="hover:text-yellow-400">Module 1</a>
+                    <span class="mx-2">/</span>
+                    <span class="text-yellow-400">Operators & Expressions</span>
+                </div>
+                
+                <!-- Lesson Header -->
+                <div class="bg-gray-800 rounded-lg p-6 mb-6 shadow-lg">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h2 class="text-2xl font-bold mb-2">Operators & Expressions</h2>
+                            <p class="text-gray-400 mb-4">Learn how to use JavaScript operators to perform operations on variables and values.</p>
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <span class="ml-2 text-gray-400">4.2</span>
+                                </div>
+                                <span class="text-gray-400"><i class="fas fa-clock mr-1"></i> 45 min</span>
+                                <span class="text-gray-400"><i class="fas fa-tasks mr-1"></i> 3 exercises</span>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="p-2 rounded-full bg-gray-700 hover:bg-gray-600">
+                                <i class="fas fa-bookmark"></i>
+                            </button>
+                            <button class="p-2 rounded-full bg-gray-700 hover:bg-gray-600">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Lesson Content -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <!-- Theory Section -->
+                    <div class="lg:col-span-2 bg-gray-800 rounded-lg p-6 shadow-lg">
+                        <div class="prose prose-invert max-w-none">
+                            <h3 class="text-xl font-semibold mb-4">JavaScript Operators</h3>
+                            <p>JavaScript operators are symbols that are used to perform operations on operands (values and variables).</p>
+                            
+                            <div class="my-6 p-4 bg-gray-700 rounded-lg border-l-4 border-yellow-500">
+                                <h4 class="font-medium mb-2">Operator Categories:</h4>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li><strong>Arithmetic Operators</strong> - Perform mathematical calculations</li>
+                                    <li><strong>Assignment Operators</strong> - Assign values to variables</li>
+                                    <li><strong>Comparison Operators</strong> - Compare two values</li>
+                                    <li><strong>Logical Operators</strong> - Combine conditional statements</li>
+                                    <li><strong>Bitwise Operators</strong> - Perform operations on binary representations</li>
+                                    <li><strong>Ternary Operator</strong> - Conditional operator</li>
+                                </ul>
+                            </div>
+                            
+                            <h4 class="font-semibold mt-6 mb-3">Arithmetic Operators</h4>
+                            <p>These operators perform arithmetic between variables or values:</p>
+                            <pre class="bg-gray-900 p-3 rounded text-sm overflow-x-auto">let x = 10;
+let y = 5;
+
+console.log(x + y); // Addition: 15
+console.log(x - y); // Subtraction: 5
+console.log(x * y); // Multiplication: 50
+console.log(x / y); // Division: 2
+console.log(x % y); // Modulus (remainder): 0
+console.log(x ** y); // Exponentiation: 100000
+console.log(x++); // Post-increment: 10 (then x becomes 11)
+console.log(++x); // Pre-increment: 12</pre>
+                            
+                            <h4 class="font-semibold mt-6 mb-3">Comparison Operators</h4>
+                            <p>These operators compare two values and return a boolean (true/false):</p>
+                            <pre class="bg-gray-900 p-3 rounded text-sm overflow-x-auto">let a = 5;
+let b = '5';
+
+console.log(a == b);  // Loose equality: true
+console.log(a === b); // Strict equality: false
+console.log(a != b);  // Loose inequality: false
+console.log(a !== b); // Strict inequality: true
+console.log(a > 3);   // Greater than: true
+console.log(a < 3);   // Less than: false
+console.log(a >= 5);  // Greater than or equal: true
+console.log(a <= 4);  // Less than or equal: false</pre>
+                            
+                            <h4 class="font-semibold mt-6 mb-3">Logical Operators</h4>
+                            <p>These operators are used to combine conditional statements:</p>
+                            <pre class="bg-gray-900 p-3 rounded text-sm overflow-x-auto">let age = 25;
+let hasLicense = true;
+
+// Logical AND
+if (age >= 18 && hasLicense) {
+    console.log('You can drive!');
+}
+
+// Logical OR
+if (age < 18 || age > 65) {
+    console.log('You get a discount!');
+}
+
+// Logical NOT
+if (!hasLicense) {
+    console.log('You need a license to drive');
+}</pre>
+                            
+                            <div class="mt-6 p-4 bg-yellow-900 bg-opacity-30 rounded-lg border-l-4 border-yellow-400">
+                                <h4 class="font-medium mb-2"><i class="fas fa-lightbulb mr-2"></i>Best Practice</h4>
+                                <p>Always use strict equality (===) and strict inequality (!==) operators instead of their loose counterparts (== and !=). This prevents unexpected type coercion and makes your code more predictable.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 flex justify-between border-t border-gray-700 pt-4">
+                            <button class="flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                Previous Lesson
+                            </button>
+                            <button class="flex items-center px-4 py-2 bg-yellow-600 hover:bg-yellow-700 rounded-lg">
+                                Next Lesson
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Practice Section -->
+                    <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                        <div class="bg-gray-700 px-4 py-3 border-b border-gray-600">
+                            <h3 class="font-semibold"><i class="fas fa-code mr-2"></i>Interactive Practice</h3>
+                        </div>
+                        <div class="p-4">
+                            <div class="mb-4">
+                                <div class="flex border-b border-gray-700">
+                                    <button class="tab-button active px-4 py-2 font-medium" data-tab="exercise1">Exercise 1</button>
+                                    <button class="tab-button px-4 py-2 font-medium" data-tab="exercise2">Exercise 2</button>
+                                    <button class="tab-button px-4 py-2 font-medium" data-tab="exercise3">Exercise 3</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Exercise 1 -->
+                            <div class="exercise-tab active" id="exercise1">
+                                <div class="mb-4">
+                                    <h4 class="font-medium mb-2">Task:</h4>
+                                    <p class="text-sm text-gray-300">Calculate the area of a rectangle using arithmetic operators.</p>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 gap-4 mb-4">
+                                    <div class="h-64 bg-gray-900 rounded overflow-hidden">
+                                        <textarea id="codeEditor1" class="hidden">// Given variables
+const length = 10;
+const width = 5;
+
+// Calculate area
+const area = /* Your code here */;
+
+// Output the result
+console.log(`The area is: ${area}`);</textarea>
+                                    </div>
+                                    <div class="bg-gray-900 rounded p-2">
+                                        <h4 class="font-medium mb-2 text-sm">Console Output:</h4>
+                                        <div class="console-output" id="output1"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex space-x-3 mb-4">
+                                    <button class="run-btn flex-1 bg-green-600 hover:bg-green-700 py-2 rounded font-medium flex items-center justify-center">
+                                        <i class="fas fa-play mr-2"></i> Run Code
+                                    </button>
+                                    <button class="reset-btn px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded">
+                                        <i class="fas fa-redo"></i>
+                                    </button>
+                                    <button class="hint-btn px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded">
+                                        <i class="fas fa-question"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="hint-box bg-gray-700 bg-opacity-50 rounded-lg p-3 border border-gray-600 mb-4">
+                                    <div class="flex items-start">
+                                        <div class="bg-yellow-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-info-circle text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Hint</h4>
+                                            <p class="text-sm text-gray-300">The area of a rectangle is calculated by multiplying its length by its width.</p>
+                                            <pre class="bg-gray-800 p-2 rounded mt-2 text-xs overflow-x-auto">
+const area = length * width;</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="success-message bg-green-900 bg-opacity-30 rounded-lg p-3 border border-green-600 mb-4">
+                                    <div class="flex items-center">
+                                        <div class="bg-green-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-check text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Success!</h4>
+                                            <p class="text-sm text-gray-300">You've completed this exercise. Great job!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="check-btn w-full bg-purple-600 hover:bg-purple-700 py-2 rounded font-medium">
+                                    <i class="fas fa-check-circle mr-2"></i> Check Solution
+                                </button>
+                            </div>
+                            
+                            <!-- Exercise 2 -->
+                            <div class="exercise-tab" id="exercise2">
+                                <div class="mb-4">
+                                    <h4 class="font-medium mb-2">Task:</h4>
+                                    <p class="text-sm text-gray-300">Use comparison operators to check if a user is eligible to vote (18+ years old).</p>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 gap-4 mb-4">
+                                    <div class="h-64 bg-gray-900 rounded overflow-hidden">
+                                        <textarea id="codeEditor2" class="hidden">// User's age
+const age = 20;
+
+// Check eligibility
+const canVote = /* Your code here */;
+
+// Output the result
+console.log(`Can vote: ${canVote}`);</textarea>
+                                    </div>
+                                    <div class="bg-gray-900 rounded p-2">
+                                        <h4 class="font-medium mb-2 text-sm">Console Output:</h4>
+                                        <div class="console-output" id="output2"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex space-x-3 mb-4">
+                                    <button class="run-btn flex-1 bg-green-600 hover:bg-green-700 py-2 rounded font-medium flex items-center justify-center">
+                                        <i class="fas fa-play mr-2"></i> Run Code
+                                    </button>
+                                    <button class="reset-btn px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded">
+                                        <i class="fas fa-redo"></i>
+                                    </button>
+                                    <button class="hint-btn px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded">
+                                        <i class="fas fa-question"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="hint-box bg-gray-700 bg-opacity-50 rounded-lg p-3 border border-gray-600 mb-4">
+                                    <div class="flex items-start">
+                                        <div class="bg-yellow-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-info-circle text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Hint</h4>
+                                            <p class="text-sm text-gray-300">Use the greater than or equal to operator to check if age is 18 or more.</p>
+                                            <pre class="bg-gray-800 p-2 rounded mt-2 text-xs overflow-x-auto">
+const canVote = age >= 18;</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="success-message bg-green-900 bg-opacity-30 rounded-lg p-3 border border-green-600 mb-4">
+                                    <div class="flex items-center">
+                                        <div class="bg-green-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-check text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Success!</h4>
+                                            <p class="text-sm text-gray-300">You've completed this exercise. Well done!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="check-btn w-full bg-purple-600 hover:bg-purple-700 py-2 rounded font-medium">
+                                    <i class="fas fa-check-circle mr-2"></i> Check Solution
+                                </button>
+                            </div>
+                            
+                            <!-- Exercise 3 -->
+                            <div class="exercise-tab" id="exercise3">
+                                <div class="mb-4">
+                                    <h4 class="font-medium mb-2">Task:</h4>
+                                    <p class="text-sm text-gray-300">Use logical operators to check if a user can get a driver's license (must be 16+ and have passed the test).</p>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 gap-4 mb-4">
+                                    <div class="h-64 bg-gray-900 rounded overflow-hidden">
+                                        <textarea id="codeEditor3" class="hidden">// User details
+const age = 17;
+const passedTest = true;
+
+// Check eligibility
+const canGetLicense = /* Your code here */;
+
+// Output the result
+console.log(`Can get license: ${canGetLicense}`);</textarea>
+                                    </div>
+                                    <div class="bg-gray-900 rounded p-2">
+                                        <h4 class="font-medium mb-2 text-sm">Console Output:</h4>
+                                        <div class="console-output" id="output3"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex space-x-3 mb-4">
+                                    <button class="run-btn flex-1 bg-green-600 hover:bg-green-700 py-2 rounded font-medium flex items-center justify-center">
+                                        <i class="fas fa-play mr-2"></i> Run Code
+                                    </button>
+                                    <button class="reset-btn px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded">
+                                        <i class="fas fa-redo"></i>
+                                    </button>
+                                    <button class="hint-btn px-3 py-2 bg-gray-700 hover:bg-gray-600 rounded">
+                                        <i class="fas fa-question"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="hint-box bg-gray-700 bg-opacity-50 rounded-lg p-3 border border-gray-600 mb-4">
+                                    <div class="flex items-start">
+                                        <div class="bg-yellow-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-info-circle text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Hint</h4>
+                                            <p class="text-sm text-gray-300">Use the logical AND operator to check both conditions.</p>
+                                            <pre class="bg-gray-800 p-2 rounded mt-2 text-xs overflow-x-auto">
+const canGetLicense = age >= 16 && passedTest;</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="success-message bg-green-900 bg-opacity-30 rounded-lg p-3 border border-green-600 mb-4">
+                                    <div class="flex items-center">
+                                        <div class="bg-green-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-check text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Success!</h4>
+                                            <p class="text-sm text-gray-300">You've completed all exercises in this lesson!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="check-btn w-full bg-purple-600 hover:bg-purple-700 py-2 rounded font-medium">
+                                    <i class="fas fa-check-circle mr-2"></i> Check Solution
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Resources -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Additional Resources</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <a href="#" class="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-start">
+                            <div class="bg-yellow-600 rounded-lg p-3 mr-4">
+                                <i class="fas fa-video text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Video Tutorial</h4>
+                                <p class="text-sm text-gray-400">Advanced JavaScript operators</p>
+                            </div>
+                        </a>
+                        <a href="#" class="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-start">
+                            <div class="bg-green-600 rounded-lg p-3 mr-4">
+                                <i class="fas fa-file-alt text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Cheat Sheet</h4>
+                                <p class="text-sm text-gray-400">JavaScript operators reference</p>
+                            </div>
+                        </a>
+                        <a href="#" class="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-start">
+                            <div class="bg-purple-600 rounded-lg p-3 mr-4">
+                                <i class="fas fa-question-circle text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Quiz</h4>
+                                <p class="text-sm text-gray-400">Test your operators knowledge</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Community Section -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4">Community Discussion</h3>
+                    <div class="mb-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-10 h-10 rounded-full bg-yellow-600 flex items-center justify-center">
+                                <span class="font-bold">JS</span>
+                            </div>
+                            <div class="flex-1 bg-gray-700 rounded-lg p-3">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="font-medium">Jane Smith</span>
+                                    <span class="text-xs text-gray-400">3 hours ago</span>
+                                </div>
+                                <p class="text-sm">When should I use the ternary operator vs if/else statements?</p>
+                                <div class="flex space-x-4 mt-2 text-xs text-gray-400">
+                                    <a href="#" class="hover:text-yellow-400"><i class="far fa-thumbs-up mr-1"></i> 8</a>
+                                    <a href="#" class="hover:text-yellow-400"><i class="far fa-comment mr-1"></i> Reply</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center">
+                            <span class="font-bold">AD</span>
+                        </div>
+                        <div class="flex-1">
+                            <textarea class="w-full bg-gray-700 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Add your comment or question..."></textarea>
+                            <div class="flex justify-end mt-2">
+                                <button class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 rounded-lg text-sm">Post</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center space-x-2">
+                        <i class="fab fa-js text-2xl text-yellow-400"></i>
+                        <span class="font-bold">JavaScript Mastery</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mt-1">Master JavaScript with interactive lessons</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-github"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-discord"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-6 pt-6 text-sm text-gray-400 text-center">
+                <p>&copy; 2023 JavaScript Mastery. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script>
+        // Initialize CodeMirror editors
+        const editor1 = CodeMirror.fromTextArea(document.getElementById('codeEditor1'), {
+            mode: 'javascript',
+            theme: 'dracula',
+            lineNumbers: true,
+            indentUnit: 4,
+            tabSize: 4,
+            autoCloseBrackets: true,
+            extraKeys: {"Ctrl-Space": "autocomplete"}
+        });
+        
+        const editor2 = CodeMirror.fromTextArea(document.getElementById('codeEditor2'), {
+            mode: 'javascript',
+            theme: 'dracula',
+            lineNumbers: true,
+            indentUnit: 4,
+            tabSize: 4,
+            autoCloseBrackets: true,
+            extraKeys: {"Ctrl-Space": "autocomplete"}
+        });
+        
+        const editor3 = CodeMirror.fromTextArea(document.getElementById('codeEditor3'), {
+            mode: 'javascript',
+            theme: 'dracula',
+            lineNumbers: true,
+            indentUnit: 4,
+            tabSize: 4,
+            autoCloseBrackets: true,
+            extraKeys: {"Ctrl-Space": "autocomplete"}
+        });
+        
+        // Set editor heights
+        editor1.setSize(null, '100%');
+        editor2.setSize(null, '100%');
+        editor3.setSize(null, '100%');
+        
+        // Track progress
+        let completedExercises = 0;
+        const totalExercises = 3;
+        
+        // Update progress function
+        function updateProgress() {
+            const progressPercentage = Math.round((completedExercises / totalExercises) * 100);
+            const progressCircle = document.querySelector('.progress-ring__circle');
+            const progressText = document.querySelector('.relative span');
+            
+            // Update progress circle
+            progressCircle.setAttribute('stroke-dasharray', `${progressPercentage}, 100`);
+            progressText.textContent = `${progressPercentage}%`;
+            
+            // Update module progress if all exercises are completed
+            if (completedExercises === totalExercises) {
+                const moduleProgress = document.querySelector('.sidebar div:nth-child(1) span.text-xs');
+                moduleProgress.textContent = '100%';
+                moduleProgress.classList.remove('text-gray-400');
+                moduleProgress.classList.add('text-green-400');
+            }
+        }
+        
+        // Tab functionality
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const exerciseTabs = document.querySelectorAll('.exercise-tab');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and tabs
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                exerciseTabs.forEach(tab => tab.classList.remove('active'));
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Show corresponding tab
+                const tabId = button.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Run button functionality
+        document.querySelectorAll('.run-btn').forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                const editor = [editor1, editor2, editor3][index];
+                const outputDiv = document.querySelectorAll('.console-output')[index];
+                const code = editor.getValue();
+                
+                // Flash the run button for feedback
+                btn.classList.add('flash');
+                setTimeout(() => btn.classList.remove('flash'), 500);
+                
+                try {
+                    // Clear previous output
+                    outputDiv.innerHTML = '';
+                    
+                    // Override console.log to capture output
+                    const originalConsoleLog = console.log;
+                    console.log = function(...args) {
+                        originalConsoleLog.apply(console, args);
+                        const formattedArgs = args.map(arg => {
+                            if (typeof arg === 'object') {
+                                return JSON.stringify(arg, null, 2);
+                            }
+                            return arg;
+                        }).join(' ');
+                        outputDiv.innerHTML += `<div>${formattedArgs}</div>`;
+                    };
+                    
+                    // Execute the code
+                    eval(code);
+                    
+                    // Restore original console.log
+                    console.log = originalConsoleLog;
+                } catch (error) {
+                    outputDiv.innerHTML = `<div class="text-red-400">Error: ${error.message}</div>`;
+                }
+            });
+        });
+        
+        // Check button functionality
+        document.querySelectorAll('.check-btn').forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                const successMessage = document.querySelectorAll('.success-message')[index];
+                const hintBox = document.querySelectorAll('.hint-box')[index];
+                
+                // Show success message
+                successMessage.classList.add('visible');
+                
+                // Hide hint box if visible
+                hintBox.classList.remove('visible');
+                
+                // Mark exercise as completed if not already
+                if (!btn.classList.contains('completed')) {
+                    btn.classList.add('completed');
+                    completedExercises++;
+                    updateProgress();
+                }
+                
+                // Disable the button after completion
+                btn.disabled = true;
+                btn.classList.remove('bg-purple-600', 'hover:bg-purple-700');
+                btn.classList.add('bg-gray-600', 'cursor-not-allowed');
+            });
+        });
+        
+        // Hint button functionality
+        document.querySelectorAll('.hint-btn').forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                const hintBox = document.querySelectorAll('.hint-box')[index];
+                hintBox.classList.toggle('visible');
+            });
+        });
+        
+        // Reset button functionality
+        document.querySelectorAll('.reset-btn').forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                const editor = [editor1, editor2, editor3][index];
+                const outputDiv = document.querySelectorAll('.console-output')[index];
+                const checkBtn = document.querySelectorAll('.check-btn')[index];
+                const successMessage = document.querySelectorAll('.success-message')[index];
+                const hintBox = document.querySelectorAll('.hint-box')[index];
+                
+                // Reset to default code
+                if (index === 0) {
+                    editor.setValue(`// Given variables
+const length = 10;
+const width = 5;
+
+// Calculate area
+const area = /* Your code here */;
+
+// Output the result
+console.log(\`The area is: \${area}\`);`);
+                } else if (index === 1) {
+                    editor.setValue(`// User's age
+const age = 20;
+
+// Check eligibility
+const canVote = /* Your code here */;
+
+// Output the result
+console.log(\`Can vote: \${canVote}\`);`);
+                } else if (index === 2) {
+                    editor.setValue(`// User details
+const age = 17;
+const passedTest = true;
+
+// Check eligibility
+const canGetLicense = /* Your code here */;
+
+// Output the result
+console.log(\`Can get license: \${canGetLicense}\`);`);
+                }
+                
+                // Clear output
+                outputDiv.innerHTML = '';
+                
+                // Reset completion status if this exercise was completed
+                if (checkBtn.classList.contains('completed')) {
+                    checkBtn.classList.remove('completed');
+                    completedExercises--;
+                    updateProgress();
+                }
+                
+                // Hide success message and hint box
+                successMessage.classList.remove('visible');
+                hintBox.classList.remove('visible');
+                
+                // Re-enable check button
+                checkBtn.disabled = false;
+                checkBtn.classList.add('bg-purple-600', 'hover:bg-purple-700');
+                checkBtn.classList.remove('bg-gray-600', 'cursor-not-allowed');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphic Design Masterclass</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .design-card:hover .design-icon {
+            transform: scale(1.1);
+            transition: all 0.3s ease;
+        }
+        .sidebar {
+            scrollbar-width: thin;
+            scrollbar-color: #4b5563 #1f2937;
+        }
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sidebar::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: #4b5563;
+            border-radius: 6px;
+        }
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        .tab-button.active {
+            border-bottom: 3px solid #3b82f6;
+            color: #3b82f6;
+        }
+        .flash {
+            animation: flash 0.5s;
+        }
+        @keyframes flash {
+            0% { background-color: rgba(59, 130, 246, 0.3); }
+            100% { background-color: transparent; }
+        }
+        .design-tab {
+            display: none;
+        }
+        .design-tab.active {
+            display: block;
+        }
+        .hint-box {
+            display: none;
+        }
+        .hint-box.visible {
+            display: block;
+        }
+        .success-message {
+            display: none;
+        }
+        .success-message.visible {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .module-toggle {
+            cursor: pointer;
+        }
+        .module-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .module-content.expanded {
+            max-height: 1000px;
+        }
+        .module-toggle i {
+            transition: transform 0.3s ease;
+        }
+        .module-toggle.expanded i {
+            transform: rotate(90deg);
+        }
+        .design-icon {
+            color: #3b82f6;
+        }
+        .active-lesson {
+            background-color: #1d4ed8;
+            color: white;
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        .color-mixer {
+            background: linear-gradient(90deg, #ff0000, #ff00ff, #0000ff, #00ffff, #00ff00, #ffff00, #ff0000);
+            background-size: 200% 100%;
+            animation: rainbow 5s linear infinite;
+        }
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-gray-800 shadow-lg">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-palette design-icon text-3xl"></i>
+                <h1 class="text-2xl font-bold gradient-text">
+                    Graphic Design Masterclass
+                </h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <div class="w-12 h-12">
+                        <svg class="w-full h-full" viewBox="0 0 36 36">
+                            <path 
+                                d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none"
+                                stroke="#4b5563",
+                                stroke-width="2",
+                                stroke-dasharray="100, 100"
+                            />
+                            <path 
+                                class="progress-ring__circle"
+                                d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none"
+                                stroke="#3b82f6",
+                                stroke-width="2",
+                                stroke-dasharray="0, 100"
+                            />
+                        </svg>
+                    </div>
+                    <span class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs font-bold">0%</span>
+                </div>
+                <button class="profile-btn bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-medium flex items-center space-x-2">
+                    <i class="fas fa-user-tie"></i>
+                    <span>My Profile</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar w-64 bg-gray-800 overflow-y-auto flex-shrink-0">
+            <div class="p-4">
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold mb-2 text-gray-300">Course Content</h2>
+                    <div class="space-y-1">
+                        <!-- Module 1 -->
+                        <div class="mb-2">
+                            <div class="module-toggle flex items-center justify-between px-2 py-1 bg-gray-700 rounded">
+                                <span class="font-medium">Module 1: Design Fundamentals</span>
+                                <div class="flex items-center">
+                                    <span class="text-xs text-gray-400 mr-2">0%</span>
+                                    <i class="fas fa-chevron-right text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="module-content ml-4 mt-1 space-y-1">
+                                <a href="#" class="block px-2 py-1 rounded active-lesson flash">
+                                    <i class="fas fa-play-circle text-blue-400 mr-2"></i>
+                                    Introduction to Graphic Design
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Color Theory
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Typography Basics
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Layout & Composition
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Design Principles
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Module 2 -->
+                        <div class="mb-2">
+                            <div class="module-toggle flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 2: Design Tools</span>
+                                <div class="flex items-center">
+                                    <span class="text-xs text-gray-400 mr-2">0%</span>
+                                    <i class="fas fa-chevron-right text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="module-content ml-4 mt-1 space-y-1">
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Adobe Photoshop
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Adobe Illustrator
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Figma Basics
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Canva for Designers
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    InDesign Essentials
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Module 3 -->
+                        <div class="mb-2">
+                            <div class="module-toggle flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 3: Design Types</span>
+                                <div class="flex items-center">
+                                    <span class="text-xs text-gray-400 mr-2">0%</span>
+                                    <i class="fas fa-chevron-right text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="module-content ml-4 mt-1 space-y-1">
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Logo Design
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Brand Identity
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    UI/UX Design
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Print Design
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Social Media Graphics
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Module 4 -->
+                        <div class="mb-2">
+                            <div class="module-toggle flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 4: Advanced Techniques</span>
+                                <div class="flex items-center">
+                                    <span class="text-xs text-gray-400 mr-2">0%</span>
+                                    <i class="fas fa-chevron-right text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="module-content ml-4 mt-1 space-y-1">
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Photo Manipulation
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Vector Illustration
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Motion Graphics Basics
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    3D Design Intro
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Advanced Typography
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Module 5 -->
+                        <div class="mb-2">
+                            <div class="module-toggle flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 5: Design Business</span>
+                                <div class="flex items-center">
+                                    <span class="text-xs text-gray-400 mr-2">0%</span>
+                                    <i class="fas fa-chevron-right text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="module-content ml-4 mt-1 space-y-1">
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Freelance Design
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Building a Portfolio
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Client Communication
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Pricing Your Work
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Design Contracts
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold mb-2 text-gray-300">Quick Links</h2>
+                    <div class="space-y-2">
+                        <a href="#" class="quick-link flex items-center px-3 py-2 rounded-lg bg-gray-700 hover:bg-gray-600">
+                            <i class="fas fa-images text-purple-400 mr-3"></i>
+                            <span>Design Resources</span>
+                        </a>
+                        <a href="#" class="quick-link flex items-center px-3 py-2 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-palette text-blue-400 mr-3"></i>
+                            <span>Color Tools</span>
+                        </a>
+                        <a href="#" class="quick-link flex items-center px-3 py-2 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-question-circle text-green-400 mr-3"></i>
+                            <span>Design FAQ</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="daily-challenge p-4 bg-gray-700 rounded-lg">
+                    <h3 class="font-medium mb-2">Daily Design Challenge</h3>
+                    <p class="text-sm text-gray-300 mb-3">Create a minimalist logo for a coffee shop.</p>
+                    <button class="challenge-btn w-full bg-blue-600 hover:bg-blue-700 py-1 rounded text-sm">
+                        Start Designing
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto bg-gray-900">
+            <div class="container mx-auto px-4 py-6">
+                <!-- Breadcrumbs -->
+                <div class="flex items-center text-sm text-gray-400 mb-6">
+                    <a href="#" class="hover:text-blue-400">Home</a>
+                    <span class="mx-2">/</span>
+                    <a href="#" class="hover:text-blue-400">Module 1</a>
+                    <span class="mx-2">/</span>
+                    <span class="text-blue-400">Introduction to Graphic Design</span>
+                </div>
+                
+                <!-- Lesson Header -->
+                <div class="bg-gray-800 rounded-lg p-6 mb-6 shadow-lg">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h2 class="text-2xl font-bold mb-2">Introduction to Graphic Design</h2>
+                            <p class="text-gray-400 mb-4">Learn the fundamental concepts and visual communication principles of graphic design.</p>
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <span class="ml-2 text-gray-400">4.8</span>
+                                </div>
+                                <span class="text-gray-400"><i class="fas fa-clock mr-1"></i> 45 min</span>
+                                <span class="text-gray-400"><i class="fas fa-tasks mr-1"></i> 4 exercises</span>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="bookmark-btn p-2 rounded-full bg-gray-700 hover:bg-gray-600">
+                                <i class="fas fa-bookmark"></i>
+                            </button>
+                            <button class="share-btn p-2 rounded-full bg-gray-700 hover:bg-gray-600">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Lesson Content -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <!-- Theory Section -->
+                    <div class="lg:col-span-2 bg-gray-800 rounded-lg p-6 shadow-lg">
+                        <div class="prose prose-invert max-w-none">
+                            <h3 class="text-xl font-semibold mb-4">What is Graphic Design?</h3>
+                            <p>Graphic design is the art and practice of planning and projecting ideas and experiences with visual and textual content. It communicates messages through typography, imagery, color, and form to inform, persuade, and engage audiences.</p>
+                            
+                            <div class="my-6 p-4 bg-gray-700 rounded-lg border-l-4 border-blue-500">
+                                <h4 class="font-medium mb-2">Key Concepts:</h4>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li><strong>Visual Communication:</strong> Conveying ideas through visuals</li>
+                                    <li><strong>Problem Solving:</strong> Addressing communication challenges</li>
+                                    <li><strong>Aesthetics:</strong> Creating visually appealing solutions</li>
+                                    <li><strong>Functionality:</strong> Designs must serve their purpose</li>
+                                    <li><strong>User Experience:</strong> Considering how people interact with designs</li>
+                                </ul>
+                            </div>
+                            
+                            <h4 class="font-semibold mt-6 mb-3">1. The Design Process</h4>
+                            <p>Effective design follows a structured approach:</p>
+                            <div class="bg-gray-700 rounded-lg p-4 my-4">
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+                                    <div class="bg-gray-800 p-3 rounded-lg">
+                                        <div class="w-12 h-12 rounded-full bg-blue-600 mx-auto mb-2 flex items-center justify-center">
+                                            <i class="fas fa-search"></i>
+                                        </div>
+                                        <h5 class="font-medium">Research</h5>
+                                        <p class="text-xs text-gray-400">Understand the problem</p>
+                                    </div>
+                                    <div class="bg-gray-800 p-3 rounded-lg">
+                                        <div class="w-12 h-12 rounded-full bg-purple-600 mx-auto mb-2 flex items-center justify-center">
+                                            <i class="fas fa-lightbulb"></i>
+                                        </div>
+                                        <h5 class="font-medium">Ideation</h5>
+                                        <p class="text-xs text-gray-400">Generate concepts</p>
+                                    </div>
+                                    <div class="bg-gray-800 p-3 rounded-lg">
+                                        <div class="w-12 h-12 rounded-full bg-green-600 mx-auto mb-2 flex items-center justify-center">
+                                            <i class="fas fa-pencil-ruler"></i>
+                                        </div>
+                                        <h5 class="font-medium">Creation</h5>
+                                        <p class="text-xs text-gray-400">Develop designs</p>
+                                    </div>
+                                    <div class="bg-gray-800 p-3 rounded-lg">
+                                        <div class="w-12 h-12 rounded-full bg-yellow-600 mx-auto mb-2 flex items-center justify-center">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <h5 class="font-medium">Implementation</h5>
+                                        <p class="text-xs text-gray-400">Finalize & deliver</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h4 class="font-semibold mt-6 mb-3">2. Design Elements</h4>
+                            <p>The building blocks of all visual design:</p>
+                            <div class="bg-gray-700 p-3 rounded-lg my-4">
+                                <div class="grid grid-cols-3 gap-3">
+                                    <div class="bg-gray-800 p-2 rounded">
+                                        <h5 class="font-medium mb-1">Line</h5>
+                                        <p class="text-xs text-gray-400">Connects points, defines shapes</p>
+                                    </div>
+                                    <div class="bg-gray-800 p-2 rounded">
+                                        <h5 class="font-medium mb-1">Shape</h5>
+                                        <p class="text-xs text-gray-400">2D defined areas</p>
+                                    </div>
+                                    <div class="bg-gray-800 p-2 rounded">
+                                        <h5 class="font-medium mb-1">Color</h5>
+                                        <p class="text-xs text-gray-400">Hue, saturation, value</p>
+                                    </div>
+                                    <div class="bg-gray-800 p-2 rounded">
+                                        <h5 class="font-medium mb-1">Texture</h5>
+                                        <p class="text-xs text-gray-400">Surface quality</p>
+                                    </div>
+                                    <div class="bg-gray-800 p-2 rounded">
+                                        <h5 class="font-medium mb-1">Space</h5>
+                                        <p class="text-xs text-gray-400">Positive & negative</p>
+                                    </div>
+                                    <div class="bg-gray-800 p-2 rounded">
+                                        <h5 class="font-medium mb-1">Typography</h5>
+                                        <p class="text-xs text-gray-400">Fonts & text arrangement</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h4 class="font-semibold mt-6 mb-3">3. Design Principles</h4>
+                            <p>Guidelines for effective visual communication:</p>
+                            <div class="bg-gray-700 p-3 rounded-lg my-4">
+                                <div class="grid grid-cols-2 gap-2 text-sm">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-balance-scale text-blue-400 mr-2"></i>
+                                        <span>Balance</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-layer-group text-blue-400 mr-2"></i>
+                                        <span>Hierarchy</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-ruler-combined text-blue-400 mr-2"></i>
+                                        <span>Alignment</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-redo text-blue-400 mr-2"></i>
+                                        <span>Repetition</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-arrows-alt text-blue-400 mr-2"></i>
+                                        <span>Proportion</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-bolt text-blue-400 mr-2"></i>
+                                        <span>Contrast</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 p-4 bg-blue-900 bg-opacity-30 rounded-lg border-l-4 border-blue-400">
+                                <h4 class="font-medium mb-2"><i class="fas fa-quote-left mr-2"></i>Design Wisdom</h4>
+                                <p>"Design is not just what it looks like and feels like. Design is how it works." - Steve Jobs. Good design combines aesthetics with functionality.</p>
+                            </div>
+                            
+                            <!-- Color Wheel Visualization -->
+                            <div class="bg-gray-700 rounded-lg p-4 mt-6">
+                                <h4 class="font-semibold mb-3 text-center">The Color Wheel</h4>
+                                <div class="flex justify-center mb-4">
+                                    <div class="w-40 h-40 rounded-full color-mixer relative">
+                                        <div class="absolute inset-0 rounded-full bg-gray-800 opacity-70 flex items-center justify-center">
+                                            <div class="text-center px-4">
+                                                <p class="text-xs font-medium">Primary: Red, Blue, Yellow</p>
+                                                <p class="text-xs">Secondary: Green, Orange, Purple</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                                    <div>
+                                        <div class="w-6 h-6 rounded-full bg-red-500 mx-auto mb-1"></div>
+                                        <span>Red</span>
+                                    </div>
+                                    <div>
+                                        <div class="w-6 h-6 rounded-full bg-blue-500 mx-auto mb-1"></div>
+                                        <span>Blue</span>
+                                    </div>
+                                    <div>
+                                        <div class="w-6 h-6 rounded-full bg-yellow-500 mx-auto mb-1"></div>
+                                        <span>Yellow</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 flex justify-between border-t border-gray-700 pt-4">
+                            <button class="prev-lesson flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                Previous Lesson
+                            </button>
+                            <button class="next-lesson flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg">
+                                Next Lesson
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Practice Section -->
+                    <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                        <div class="bg-gray-700 px-4 py-3 border-b border-gray-600">
+                            <h3 class="font-semibold"><i class="fas fa-pencil-ruler mr-2"></i>Design Lab</h3>
+                        </div>
+                        <div class="p-4">
+                            <div class="mb-4">
+                                <div class="flex border-b border-gray-700">
+                                    <button class="tab-button active px-4 py-2 font-medium" data-tab="exercise1">Exercise 1</button>
+                                    <button class="tab-button px-4 py-2 font-medium" data-tab="exercise2">Exercise 2</button>
+                                    <button class="tab-button px-4 py-2 font-medium" data-tab="exercise3">Exercise 3</button>
+                                    <button class="tab-button px-4 py-2 font-medium" data-tab="exercise4">Design Challenge</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Exercise 1 -->
+                            <div class="design-tab active" id="exercise1">
+                                <div class="mb-4">
+                                    <h4 class="font-medium mb-2">Task:</h4>
+                                    <p class="text-sm text-gray-300">Match each design term with its correct definition.</p>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <div class="grid grid-cols-1 gap-3">
+                                        <div class="bg-gray-700 p-3 rounded-lg">
+                                            <p class="font-medium mb-2">Kerning</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">The study of color combinations</button>
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm" data-correct="1">Adjusting space between characters</button>
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">A type of design grid</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-gray-700 p-3 rounded-lg">
+                                            <p class="font-medium mb-2">CMYK</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm" data-correct="2">Color model for print</button>
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">A design software</button>
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">A type of font</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-gray-700 p-3 rounded-lg">
+                                            <p class="font-medium mb-2">Negative Space</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">A dark color palette</button>
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">An unused design area</button>
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm" data-correct="3">The empty space around elements</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="hint-box bg-gray-700 bg-opacity-50 rounded-lg p-3 border border-gray-600 mb-4">
+                                    <div class="flex items-start">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-info-circle text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Hint</h4>
+                                            <p class="text-sm text-gray-300">Kerning is typography term. CMYK stands for Cyan, Magenta, Yellow, Key (black). Negative space is also called white space.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="success-message bg-blue-900 bg-opacity-30 rounded-lg p-3 border border-blue-600 mb-4">
+                                    <div class="flex items-center">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-check text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Success!</h4>
+                                            <p class="text-sm text-gray-300">You've correctly matched all design terms!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="check-btn w-full bg-purple-600 hover:bg-purple-700 py-2 rounded font-medium">
+                                    <i class="fas fa-check-circle mr-2"></i> Check Answers
+                                </button>
+                            </div>
+                            
+                            <!-- Exercise 2 -->
+                            <div class="design-tab" id="exercise2">
+                                <div class="mb-4">
+                                    <h4 class="font-medium mb-2">Task:</h4>
+                                    <p class="text-sm text-gray-300">Identify the correct design workflow sequence.</p>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <div class="bg-gray-700 p-3 rounded-lg">
+                                        <div class="grid grid-cols-1 gap-3" id="sortable">
+                                            <div class="bg-gray-800 p-2 rounded flex items-center cursor-move" data-order="3">
+                                                <i class="fas fa-grip-lines mr-2 text-gray-500"></i>
+                                                <span>Create design mockups</span>
+                                            </div>
+                                            <div class="bg-gray-800 p-2 rounded flex items-center cursor-move" data-order="1">
+                                                <i class="fas fa-grip-lines mr-2 text-gray-500"></i>
+                                                <span>Research client needs</span>
+                                            </div>
+                                            <div class="bg-gray-800 p-2 rounded flex items-center cursor-move" data-order="4">
+                                                <i class="fas fa-grip-lines mr-2 text-gray-500"></i>
+                                                <span>Get feedback & revise</span>
+                                            </div>
+                                            <div class="bg-gray-800 p-2 rounded flex items-center cursor-move" data-order="2">
+                                                <i class="fas fa-grip-lines mr-2 text-gray-500"></i>
+                                                <span>Sketch initial ideas</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="hint-box bg-gray-700 bg-opacity-50 rounded-lg p-3 border border-gray-600 mb-4">
+                                    <div class="flex items-start">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-info-circle text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Hint</h4>
+                                            <p class="text-sm text-gray-300">The workflow typically starts with research, then ideation, followed by creation before finalizing the design.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="success-message bg-blue-900 bg-opacity-30 rounded-lg p-3 border border-blue-600 mb-4">
+                                    <div class="flex items-center">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-check text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Success!</h4>
+                                            <p class="text-sm text-gray-300">Perfect! You've arranged the design workflow correctly.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="check-btn w-full bg-purple-600 hover:bg-purple-700 py-2 rounded font-medium">
+                                    <i class="fas fa-check-circle mr-2"></i> Check Sequence
+                                </button>
+                            </div>
+                            
+                            <!-- Exercise 3 -->
+                            <div class="design-tab" id="exercise3">
+                                <div class="mb-4">
+                                    <h4 class="font-medium mb-2">Task:</h4>
+                                    <p class="text-sm text-gray-300">Select the best design approach for each scenario.</p>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <div class="grid grid-cols-1 gap-3">
+                                        <div class="bg-gray-700 p-3 rounded-lg">
+                                            <p class="font-medium mb-2">A luxury brand logo</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm" data-correct="1">Elegant, minimalist with gold accents</button>
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Bright, colorful with cartoon elements</button>
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Grunge texture with distressed effects</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-gray-700 p-3 rounded-lg">
+                                            <p class="font-medium mb-2">A children's book cover</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Formal serif typography only</button>
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm" data-correct="2">Bright colors, playful illustrations</button>
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Monochromatic corporate style</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-gray-700 p-3 rounded-lg">
+                                            <p class="font-medium mb-2">A medical app interface</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Dark theme with neon accents</button>
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Highly decorative Victorian style</button>
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm" data-correct="3">Clean, high-contrast, accessible</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="hint-box bg-gray-700 bg-opacity-50 rounded-lg p-3 border border-gray-600 mb-4">
+                                    <div class="flex items-start">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-info-circle text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Hint</h4>
+                                            <p class="text-sm text-gray-300">Luxury brands prefer elegance, children's items need playfulness, and medical interfaces require clarity and accessibility.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="success-message bg-blue-900 bg-opacity-30 rounded-lg p-3 border border-blue-600 mb-4">
+                                    <div class="flex items-center">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-check text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Success!</h4>
+                                            <p class="text-sm text-gray-300">Excellent choices! You're thinking like a professional designer.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="check-btn w-full bg-purple-600 hover:bg-purple-700 py-2 rounded font-medium">
+                                    <i class="fas fa-check-circle mr-2"></i> Check Answers
+                                </button>
+                            </div>
+                            
+                            <!-- Exercise 4 - Design Challenge -->
+                            <div class="design-tab" id="exercise4">
+                                <div class="mb-4">
+                                    <h4 class="font-medium mb-2">Task:</h4>
+                                    <p class="text-sm text-gray-300">Design a simple business card for a photographer.</p>
+                                </div>
+                                
+                                <div class="bg-gray-700 p-4 mb-4 rounded-lg">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <div class="bg-gray-800 rounded-lg p-3 h-48 mb-2 flex items-center justify-center">
+                                                <p class="text-gray-500 text-center">Design Preview</p>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <button class="px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Upload Image</button>
+                                                <button class="px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Change Colors</button>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <textarea class="w-full bg-gray-800 rounded-lg p-3 text-sm h-32 focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Enter your business card text here..."></textarea>
+                                            <div class="flex justify-between mt-2">
+                                                <select class="bg-gray-800 rounded text-sm px-2 py-1">
+                                                    <option>Select Font</option>
+                                                    <option>Helvetica</option>
+                                                    <option>Times New Roman</option>
+                                                    <option>Roboto</option>
+                                                </select>
+                                                <button class="px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded text-sm">Preview</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="hint-box bg-gray-700 bg-opacity-50 rounded-lg p-3 border border-gray-600 mb-4">
+                                    <div class="flex items-start">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-info-circle text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Hint</h4>
+                                            <p class="text-sm text-gray-300">Include the photographer's name, contact info, and specialty. Use a clean layout that showcases their photographic style.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="success-message bg-blue-900 bg-opacity-30 rounded-lg p-3 border border-blue-600 mb-4">
+                                    <div class="flex items-center">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-check text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Success!</h4>
+                                            <p class="text-sm text-gray-300">Great job! Your business card design effectively represents a photographer.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="check-btn w-full bg-purple-600 hover:bg-purple-700 py-2 rounded font-medium">
+                                    <i class="fas fa-check-circle mr-2"></i> Submit Design
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Resources -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Design Resources</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <a href="#" class="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-start">
+                            <div class="bg-blue-600 rounded-lg p-3 mr-4">
+                                <i class="fas fa-images text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Stock Images</h4>
+                                <p class="text-sm text-gray-400">Unsplash, Pexels, etc.</p>
+                            </div>
+                        </a>
+                        <a href="#" class="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-start">
+                            <div class="bg-purple-600 rounded-lg p-3 mr-4">
+                                <i class="fas fa-font text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Font Resources</h4>
+                                <p class="text-sm text-gray-400">Google Fonts, Adobe Fonts</p>
+                            </div>
+                        </a>
+                        <a href="#" class="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-start">
+                            <div class="bg-green-600 rounded-lg p-3 mr-4">
+                                <i class="fas fa-palette text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Color Tools</h4>
+                                <p class="text-sm text-gray-400">Coolors, Adobe Color</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Community Section -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4">Designer's Forum</h3>
+                    <div class="mb-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
+                                <span class="font-bold">AD</span>
+                            </div>
+                            <div class="flex-1 bg-gray-700 rounded-lg p-3">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="font-medium">Alex Designer</span>
+                                    <span class="text-xs text-gray-400">3 hours ago</span>
+                                </div>
+                                <p class="text-sm">What's your favorite tool for creating mood boards?</p>
+                                <div class="flex space-x-2 mt-2">
+                                    <button class="text-xs text-gray-400 hover:text-blue-400"><i class="far fa-thumbs-up mr-1"></i>Like (12)</button>
+                                    <button class="text-xs text-gray-400 hover:text-blue-400"><i class="far fa-comment mr-1"></i>Reply (7)</button>
+                                </div>
+                                
+                                <!-- Replies -->
+                                <div class="mt-3 pl-3 border-l-2 border-gray-600 space-y-3">
+                                    <div class="flex items-start space-x-2">
+                                        <div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-xs">
+                                            <span>JM</span>
+                                        </div>
+                                        <div class="bg-gray-800 rounded-lg p-2 text-xs">
+                                            <p>I love using Milanote for its flexibility and visual organization.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-2">
+                                        <div class="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-xs">
+                                            <span>TS</span>
+                                        </div>
+                                        <div class="bg-gray-800 rounded-lg p-2 text-xs">
+                                            <p>Pinterest is still my go-to for quick inspiration gathering.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
+                            <span class="font-bold">YP</span>
+                        </div>
+                        <div class="flex-1">
+                            <textarea class="w-full bg-gray-700 rounded-lg p-3 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Join the design discussion..."></textarea>
+                            <button class="mt-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded text-sm">Post Comment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Toggle module content
+        document.querySelectorAll('.module-toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const content = toggle.nextElementSibling;
+                content.classList.toggle('expanded');
+                toggle.classList.toggle('expanded');
+            });
+        });
+
+        // Tab switching
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                
+                // Remove active class from all tabs and buttons
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.design-tab').forEach(tab => tab.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding tab
+                button.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Check buttons for exercises
+        document.querySelectorAll('.check-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const successMessage = button.closest('.design-tab').querySelector('.success-message');
+                successMessage.classList.add('visible');
+                
+                // Scroll to show the success message
+                successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+        });
+
+        // Option selection for exercise 1
+        document.querySelectorAll('.option-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove highlight from all options in this question
+                button.parentElement.querySelectorAll('.option-btn').forEach(btn => {
+                    btn.classList.remove('bg-blue-600', 'text-white');
+                });
+                
+                // Highlight selected option
+                button.classList.add('bg-blue-600', 'text-white');
+            });
+        });
+
+        // Scenario selection for exercise 3
+        document.querySelectorAll('.scenario-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove highlight from all options in this question
+                button.parentElement.querySelectorAll('.scenario-btn').forEach(btn => {
+                    btn.classList.remove('bg-blue-600', 'text-white');
+                });
+                
+                // Highlight selected option
+                button.classList.add('bg-blue-600', 'text-white');
+            });
+        });
+
+        // Navigation buttons
+        document.querySelector('.next-lesson').addEventListener('click', () => {
+            alert('Moving to the next lesson: Color Theory');
+        });
+
+        document.querySelector('.prev-lesson').addEventListener('click', () => {
+            alert('This is the first lesson in the course');
+        });
+
+        // Bookmark button
+        document.querySelector('.bookmark-btn').addEventListener('click', function() {
+            const icon = this.querySelector('i');
+            if (icon.classList.contains('fas')) {
+                icon.classList.replace('fas', 'far');
+                alert('Lesson removed from bookmarks');
+            } else {
+                icon.classList.replace('far', 'fas');
+                alert('Lesson added to bookmarks');
+            }
+        });
+
+        // Expand the first module by default
+        document.querySelector('.module-toggle').click();
+    </script>
+</body>
+</html>

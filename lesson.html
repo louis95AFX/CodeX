@@ -17,110 +17,124 @@
 .fade.show {
   opacity: 1;
 }
+dialog {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 100%;
+  max-width: 400px;
+}
+
+dialog[open] {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 
 </style>
 <body class="bg-gray-100">
  <!-- Header -->
-  <header class="bg-white p-4 shadow fixed top-0 w-full z-10">
-    <div class="container mx-auto flex justify-between items-center">
-      <img src="codexbg.png" alt="Logo" class="h-12">
-      <!-- Logout Icon -->
-      <a href="webdev.html" class="text-gray-600 hover:text-red-600 text-xl flex items-center gap-2">
-        <i class="fa-solid fa-right-from-bracket"></i>
-        <span class="text-sm">Exit Lesson</span>
-      </a>
-      
-    </div>
-  </header>
-
-  <div class="flex ">
-    <aside class="w-64 bg-white shadow h-screen p-4">
-      <h2 class="text-lg font-semibold mt-20 mb-4">Lessons</h2>
-      
-      <!-- Current Lesson Progress -->
-      <div id="current-lesson" class="mb-4">
-        <h3 class="font-semibold text-xl">Current Lesson</h3>
-        <p id="current-lesson-title" class="text-gray-600"></p>
-        <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-          <div id="lesson-progress-bar" class="bg-blue-600 h-2 rounded-full" style="width: 0%;"></div>
-        </div>
-      </div>
-    
-      <!-- Lesson Links (sidebar navigation) -->
-      <div class="mt-8">
-        <h3 class="text-lg font-semibold">Lesson Navigation</h3>
-        <ul id="lesson-links">
-          <!-- Lessons will be added dynamically -->
-        </ul>
-      </div>
-    </aside>
-
-
-    <!-- Main Content -->
-    <main class="flex-1 p-6 pt-20 overflow-y-auto">
-      <h2 id="lesson-title" class="text-2xl font-bold mb-2">Welcome to HTML</h2>
-      <p id="lesson-desc" class="mb-4 text-gray-700">Choose a lesson to begin coding.</p>
-    
-      <!-- Progress Bar -->
-      <div class="w-full bg-gray-200 rounded-full h-2 mb-6">
-        <div id="progress-bar" class="bg-blue-600 h-2 rounded-full" style="width: 0%;"></div>
-      </div>
-    
-      <!-- Lesson Info Panel -->
-      <div id="lesson-info" class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded">
-        <h3 id="lesson-header" class="text-xl font-semibold text-yellow-800 mb-2">Lesson Title</h3>
-        <p id="lesson-description" class="text-gray-700">Lesson description goes here. This will help learners understand the core idea of the lesson before they code.</p>
-    
-        <div id="lesson-challenge" class="mt-4 text-sm text-blue-800">
-          <strong>Challenge:</strong> <span id="challenge-text">Try doing something with the code below!</span>
-        </div>
-      </div>
-    
-      <!-- Code Editor -->
-      <div class="bg-white p-4 rounded shadow">
-        <textarea id="editor" name="editor"></textarea>
-        <button onclick="runCode()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded">Run Code</button>
-      </div>
-    
-      <!-- Output Preview -->
-      <h3 class="text-xl mt-6 font-semibold">Output:</h3>
-      <iframe id="output" class="w-full h-64 bg-white p-2 border mt-2"></iframe>
-    
-      <!-- Quiz Section -->
-      <div id="quiz-section" class="hidden mt-8">
-        <h3 class="text-xl font-semibold mb-4">Quiz: Test Your Knowledge</h3>
-        <div id="quiz-container"></div>
-        <button onclick="submitQuiz()" class="mt-4 bg-blue-600 text-white px-6 py-2 rounded">Submit Quiz</button>
-      </div>
-    
-      <!-- Completion -->
-      <div class="mt-10 text-right">
-        <button onclick="moveToNextLesson()" class="bg-blue-600 text-white px-6 py-2 rounded">Next Lesson</button>
-      </div>
-    </main>
-    
+<header class="bg-white p-4 shadow fixed top-0 w-full z-10">
+  <div class="container mx-auto flex justify-between items-center">
+    <img src="codexbg.png" alt="Logo" class="h-12">
+    <!-- Logout Icon -->
+    <a href="webdev.html" class="text-gray-600 hover:text-red-600 text-xl flex items-center gap-2">
+      <i class="fa-solid fa-right-from-bracket"></i>
+      <span class="text-sm">Exit Lesson</span>
+    </a>
   </div>
+</header>
 
-  <!-- Modal -->
-<div id="modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex justify-center items-center">
-  <div class="bg-white p-6 rounded shadow-lg w-1/3 max-w-xs">
-    <h3 class="text-xl font-semibold mb-4">COMPLETE!!</h3>
-    <p class="mb-4">Continue to next lesson?</p>
-    <div class="flex justify-between">
-      <button onclick="moveToNextLesson()" class="bg-green-600 text-white px-6 py-2 rounded">Yes</button>
-      <button onclick="closeModal()" class="bg-red-600 text-white px-6 py-2 rounded">No</button>
+<div class="flex">
+  <aside class="w-64 bg-white shadow h-screen p-4 flex flex-col">
+    <h2 class="text-lg font-semibold mt-20 mb-4">Lessons</h2>
+  
+    <!-- Current Lesson Progress -->
+    <div id="current-lesson" class="mb-4">
+      <h3 class="font-semibold text-xl">Current Lesson</h3>
+      <p id="current-lesson-title" class="text-gray-600"></p>
+      <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+        <div id="lesson-progress-bar" class="bg-blue-600 h-2 rounded-full" style="width: 0%;"></div>
+      </div>
     </div>
+  
+    <!-- Scrollable Lesson Navigation -->
+    <div class="flex-grow overflow-y-auto mt-4">
+      <h3 class="text-lg font-semibold mb-2">Lesson Navigation</h3>
+      <ul id="lesson-links" class="space-y-2">
+        <!-- Lessons will be added dynamically -->
+      </ul>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-6 pt-20 overflow-y-auto">
+    <h2 id="lesson-title" class="text-2xl font-bold mb-2">Welcome to HTML</h2>
+    <p id="lesson-desc" class="mb-4 text-gray-700">Choose a lesson to begin coding.</p>
+
+    <!-- Progress Bar -->
+    <div class="w-full bg-gray-200 rounded-full h-2 mb-6">
+      <div id="progress-bar" class="bg-blue-600 h-2 rounded-full" style="width: 0%;"></div>
+    </div>
+
+    <!-- Lesson Info Panel -->
+    <div id="lesson-info" class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded">
+      <h3 id="lesson-header" class="text-xl font-semibold text-yellow-800 mb-2">Lesson Title</h3>
+      <p id="lesson-description" class="text-gray-700">Lesson description goes here. This will help learners understand the core idea of the lesson before they code.</p>
+
+      <div id="lesson-challenge" class="mt-4 text-sm text-blue-800">
+        <strong>Challenge:</strong> <span id="challenge-text">Try doing something with the code below!</span>
+      </div>
+    </div>
+
+    <!-- Code Editor -->
+    <div class="bg-white p-4 rounded shadow">
+      <textarea id="editor" name="editor"></textarea>
+      <button onclick="runCode()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded">Run Code</button>
+    </div>
+
+    <!-- Output Preview -->
+    <h3 class="text-xl mt-6 font-semibold">Output:</h3>
+    <iframe id="output" class="w-full h-64 bg-white p-2 border mt-2"></iframe>
+
+    <!-- Quiz Section -->
+    <div id="quiz-section" class="hidden mt-8">
+      <h3 class="text-xl font-semibold mb-4">Quiz: Test Your Knowledge</h3>
+      <div id="quiz-container"></div>
+      <button onclick="submitQuiz()" class="mt-4 bg-blue-600 text-white px-6 py-2 rounded">Submit Quiz</button>
+    </div>
+
+    <!-- Completion -->
+    <div class="mt-10 text-right">
+      <button onclick="moveToNextLesson()" class="bg-blue-600 text-white px-6 py-2 rounded">Next Lesson</button>
+    </div>
+  </main>
+</div>
+
+<dialog id="modal" class="p-6 rounded shadow-lg w-1/3 max-w-xs">
+  <h3 class="text-xl font-semibold mb-4">COMPLETE!!</h3>
+  <p id="modal-message" class="mb-4">Message goes here.</p>
+  <div class="flex justify-center space-x-4">
+    <button id="yes-button" class="bg-green-600 text-white px-6 py-2 rounded" style="display:none;" onclick="moveToNextLesson()">Yes</button>
+    <button id="no-button" class="bg-red-600 text-white px-6 py-2 rounded" style="display:none;" onclick="closeModal()">No</button>
+    <button id="ok-retry-button" class="bg-blue-600 text-white px-6 py-2 rounded" style="display:none;" onclick="closeModal()">OK Retry</button>
   </div>
-</div>
-<!-- Error message -->
-<div id="errorMsg" class="fade" style="color: red; margin-top: 10px;">
-  🚫 Hmm, that doesn't look quite right. Try again!
-</div>
+</dialog>
+
 
 <!-- Success Button -->
 <button id="nextBtn" class="fade" disabled style="margin-top: 10px;">
   ✅ Challenge Complete! Proceed
 </button>
+
 
   <!-- CodeMirror & Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
@@ -321,7 +335,354 @@ This is a new line.`,
     <p>Hello, world!This is a new line.</p>
   </body>
 </html>`
+},
+level9: {
+  title: 'Bold and Italic Text',
+  desc: 'Learn how to emphasize text using bold and italic styles.',
+  description: `In HTML, you can style and emphasize text using the <strong> and <em> tags.
+
+- Use <strong> to make text **bold**.
+- Use <em> to make text *italic*.
+
+These tags are helpful when you want to highlight important words.
+
+Here’s how they work:
+
+<p>This is normal text</p>
+<p>This is <strong>bold</strong> text</p>
+<p>This is <em>italic</em> text</p>
+
+In the example above, the word “bold” appears in bold, and “italic” is displayed in italics.`,
+  challenge: `**Easy**
+
+There’s a famous quote by Albert Einstein—and we can’t disagree with it! But we can style it.
+
+Wrap **"difficulty"** in <strong> to make it bold.  
+Wrap **"opportunity"** in <em> to make it italic.`,
+  code: `<!DOCTYPE html>
+<html>
+  <body>
+    <p>In the middle of every difficulty lies opportunity.</p>
+  </body>
+</html>`
+},
+level10: {
+  title: 'Bold and Italic Again',
+  desc: 'Learn how to use the <b> and <i> tags for bold and italic text.',
+  description: `There is another way to style text in HTML:
+
+- Use <b> to make text **bold**.
+- Use <i> to make text *italic*.
+
+These tags are similar to <strong> and <em>, but they are more about presentation and less about emphasis.
+
+Example:
+
+<p>This is normal text. <b>This is bold text</b>. <i>This is italic text</i>.</p>
+
+Use these tags when you want to change how text looks without necessarily changing its meaning.`,
+  challenge: `**Easy**
+
+You are given an HTML document with a paragraph.  
+Style the paragraph using both **bold** and **italic** text using the <b> and <i> tags.`,
+  code: `<!DOCTYPE html>
+<html>
+  <body>
+        <p>HTML is fun to learn!</p>
+  </body>
+</html>`
+},
+level11: {
+  title: 'Recap - Formatting',
+  desc: 'Review all the basic text formatting tags in HTML.',
+  description: `Now that we have learned the basics of text formatting in HTML, let's recap what we've covered:
+
+- **Headings**: Use <h1> to <h6> tags to create headings of different levels. <h1> is the most important, and <h6> is the least.
+- **Paragraphs**: Use <p> tags to create paragraphs. Browsers automatically add space above and below each paragraph.
+- **Line Breaks**: Use the <br> tag to create a line break within a paragraph without starting a new one.
+- **Bold and Italic Text**: Use <strong> or <b> to make text bold and <em> or <i> to make text italic.
+
+Here's an example that combines these elements:
+
+<h1>Main Heading</h1>
+<p>This is a <strong>bold</strong> paragraph. Here is a line break:<br>This is <em>italic</em> text.</p>
+
+This example shows a heading, bold and italic text, and a line break inside a paragraph. It’s a great way to combine formatting elements to create clear and styled content.`,
+  challenge: `**Easy**
+
+Create an HTML document that includes all the formatting elements we've learned so far:
+
+- A main heading (<h1>) with the text "Formatting Recap"
+- A paragraph (<p>) that says: "This is a paragraph with bold and italic text."  
+  Make "bold" bold using <b> or <strong> and "italic" italic using <i> or <em>.
+- Another paragraph that says: "Here is a line break:" followed by a line break (<br>) and the text "This is a new line."`,
+  code: `<!DOCTYPE html>
+<html>
+  <body>
+            <!-- Write code here -->
+
+  </body>
+</html>`
+},
+level12: {
+  title: 'Unordered List',
+  desc: 'Learn how to create bullet point lists using the <ul> and <li> tags.',
+  description: `In HTML, an unordered list is a list of items that are not ordered by numbers or letters. Instead, each item is marked with a bullet point.
+
+To create an unordered list, you use the <ul> tag. Each item in the list is defined using the <li> tag.
+
+Example:
+
+<ul>
+  <li>Item 1</li>
+  <li>Item 2</li>
+  <li>Item 3</li>
+</ul>
+
+In this example:
+- The <ul> tag starts the unordered list.
+- Each <li> tag represents a list item.
+- The browser will display the list with bullet points.
+
+Unordered lists are great for things like ingredients, features, or tasks—anything that doesn’t require a specific order.`,
+  challenge: `**Easy**
+
+Create an HTML document with an unordered list that contains three items:  
+"Apple", "Banana", and "Orange". (In that order)`,
+  code: `<!DOCTYPE html>
+<html>
+  <body>
+            <!-- Write code here -->
+
+  </body>
+</html>`
+},
+level13: {
+  title: 'Ordered List',
+  desc: 'Learn how to create numbered lists using the <ol> and <li> tags.',
+  description: `In HTML, an ordered list is a list of items that are ordered by numbers or letters.
+
+To create an ordered list, use the <ol> tag. Each item inside the list is defined using the <li> tag.
+
+Example:
+
+<ol>
+  <li>First item</li>
+  <li>Second item</li>
+  <li>Third item</li>
+</ol>
+
+In this example:
+- The <ol> tag starts the ordered list.
+- Each <li> tag represents a list item.
+- The browser will display the items as a numbered list.
+
+Ordered lists are useful for showing steps in a process, instructions, or anything where the order is important.`,
+  challenge: `**Easy**
+
+Create an HTML document with an ordered list that contains three items:  
+"First", "Second", and "Third". (In that order)`,
+  code: `<!DOCTYPE html>
+<html>
+  <body>
+                <!-- Write code here -->
+
+  </body>
+</html>`
+},
+level14: {
+  title: 'Nested Lists',
+  desc: 'Learn how to create lists within lists using nested <ul> and <ol> tags.',
+  description: `In HTML, a nested list is a list inside another list. This is useful for showing hierarchy or sub-categories.
+
+You can nest an unordered list (<ul>) or an ordered list (<ol>) inside a list item (<li>) of another list.
+
+Example:
+
+<ul>
+  <li>Item 1</li>
+  <li>Item 2
+    <ul>
+      <li>Subitem 2.1</li>
+      <li>Subitem 2.2</li>
+    </ul>
+  </li>
+  <li>Item 3</li>
+</ul>
+
+In this example, "Item 2" has a nested list with two subitems.
+
+You can mix ordered and unordered lists as needed.`,
+  challenge: `**Easy**
+
+Create an HTML document with a nested unordered list that looks like this:
+
+Fruits  
+- Apple  
+- Banana  
+- Orange  
+
+Vegetables  
+- Carrot  
+- Broccoli  
+- Spinach  
+
+Grains`,
+  code: `<!DOCTYPE html>
+<html>
+  <body>
+            <!-- Write code here -->
+
+  </body>
+</html>`
+},
+level15: {
+  title: 'Recap - Lists',
+  desc: 'Review what you’ve learned about HTML lists, including unordered, ordered, and nested lists.',
+  description: `Let's recap what we've learned about lists in HTML:
+
+- **Unordered Lists**: Use \`<ul>\` to create a list with bullet points. Each item is defined using \`<li>\`.
+- **Ordered Lists**: Use \`<ol>\` to create a numbered list. Each item is defined using \`<li>\`.
+- **Nested Lists**: You can place one list inside another by putting a \`<ul>\` or \`<ol>\` element inside an \`<li>\` element of another list.
+
+These different types of lists help organize content effectively and make it easier to read, whether you're listing steps, categories, or grouped items.
+
+Example:
+
+<ul>
+  <li>Electronics
+    <ol>
+      <li>Phone</li>
+      <li>Tablet</li>
+      <li>Laptop</li>
+    </ol>
+  </li>
+  <li>Books
+    <ul>
+      <li>Fiction</li>
+      <li>Non-Fiction</li>
+      <li>Reference</li>
+    </ul>
+  </li>
+</ul>
+
+This example uses all three types of lists to organize information in a structured way.`,
+  challenge: `**Easy**
+
+Create an HTML document that includes all the list types we've learned so far:
+
+- An unordered list (\`<ul>\`) with the items "Electronics" and "Books".
+- Inside the "Electronics" item, create a nested ordered list (\`<ol>\`) with the items "Phone", "Tablet", and "Laptop".
+- Inside the "Books" item, create a nested unordered list (\`<ul>\`) with the items "Fiction", "Non-Fiction", and "Reference".`,
+  code: `<!DOCTYPE html>
+<html>
+  <body>
+    <!-- Write code here -->
+
+  </body>
+</html>`
+},
+level16: {
+  title: 'Project Overview - Recipe Card',
+  desc: 'Create a recipe card using HTML to demonstrate your understanding of text formatting and lists.',
+  description: `In this project, you will create a recipe card using HTML, demonstrating your understanding of text formatting and lists. The card will feature:
+
+- A **title** for the recipe.
+- A brief **description** of the recipe.
+- An unordered list (\`<ul>\`) for the ingredients.
+- An ordered list (\`<ol>\`) for the steps.
+
+You are encouraged to personalize the recipe with your own ideas or use the example provided. This project is designed to help you solidify your foundational HTML skills while fostering creativity.`,
+
+  challenge: `**Easy**
+
+Create an empty HTML document from scratch, including the \`<html>\` and \`<body>\` tags. This is the starting point for your recipe card. Fill in your content as you go.`,
+
+  code: `<!DOCTYPE html>`
+},
+level17: {
+  title: 'Recipe Title and Description',
+  desc: 'Learn how to structure a recipe title and description in HTML using \`<h1>\` for the title and \`<p>\` for the description.',
+  description: `For this challenge, you will add the recipe title as a heading and a brief description of the recipe. 
+
+Use the \`<h1>\` tag for the title and the \`<p>\` tag for the description. The title should describe the recipe, and the description should give a brief overview of what the recipe is about.
+
+For example:
+- **Title**: Chocolate Chip Cookies
+- **Description**: This is a simple recipe for making delicious chocolate chip cookies at home.`,
+
+  challenge: `**Easy**
+
+Create an HTML document with:
+- A recipe title in \`<h1>\` (e.g., "Chocolate Chip Cookies").
+- A description of the recipe in \`<p>\`. Write a brief description of your recipe.`,
+
+  code: `<!DOCTYPE html>
+<html>
+  <body>
+    
+  </body>
+</html>`
+},
+level18: {
+  title: 'Ingredients',
+  desc: 'Learn how to add a heading for the ingredients section and create an unordered list in HTML.',
+  description: `In this challenge, you will:
+  
+- Add a heading using the \`<h2>\` tag to title the ingredients section.
+- Use an unordered list (\`<ul>\`) to list the ingredients, with each item being defined by a \`<li>\` tag.
+
+For example:
+- **Heading**: Ingredients
+- **List of ingredients**:
+  - 1 cup of butter
+  - 1 cup of sugar
+  - 2 cups of flour
+  - 1 cup of chocolate chips`,
+
+  challenge: `**Easy**
+
+Create an HTML document that includes:
+- A heading (\`<h2>\`) with the text "Ingredients".
+- An unordered list (\`<ul>\`) with the following items:
+  - 1 cup of butter
+  - 1 cup of sugar
+  - 2 cups of flour
+  - 1 cup of chocolate chips`,
+
+  code: `<!DOCTYPE html>`
+},
+level19: {
+  title: 'Steps',
+  desc: 'Learn how to add a heading for the steps section and create an ordered list in HTML.',
+  description: `In this challenge, you will:
+
+- Add a heading using the \`<h2>\` tag to title the steps section.
+- Use an ordered list (\`<ol>\`) to list the steps, with each item being defined by a \`<li>\` tag.
+
+For example:
+- **Heading**: Steps
+- **List of steps**:
+  1. Preheat the oven to 350°F (175°C).
+  2. Mix the butter and sugar together in a bowl.
+  3. Add the flour and chocolate chips, and mix well.
+  4. Scoop the dough onto a baking sheet.
+  5. Bake for 10-12 minutes or until golden brown.`,
+
+  challenge: `**Easy**
+
+Create an HTML document that includes:
+- A heading (\`<h2>\`) with the text "Steps".
+- An ordered list (\`<ol>\`) with the following steps:
+  1. Preheat the oven to 350°F (175°C).
+  2. Mix the butter and sugar together in a bowl.
+  3. Add the flour and chocolate chips, and mix well.
+  4. Scoop the dough onto a baking sheet.
+  5. Bake for 10-12 minutes or until golden brown.`,
+
+  code: `<!DOCTYPE html>`
 }
+
 
 
 
@@ -395,78 +756,308 @@ const expectedOutputs = [
   <body>
     <p>Hello, world!<br>This is a new line.</p>
   </body>
+</html>`,
+  // level9
+  `<!DOCTYPE html>
+<html>
+  <body>
+    <p>This is a <strong>bold</strong> word and this is an <em>italic</em> word.</p>
+  </body>
+</html>`,
+
+  // level10
+  `<!DOCTYPE html>
+<html>
+  <body>
+    <p>This is <b>bold</b> text and this is <i>italic</i> text.</p>
+  </body>
+</html>`,
+
+  // level11
+  `<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Formatting Recap</h1>
+    <p>This is a paragraph with <strong>bold</strong> and <em>italic</em> text.</p>
+    <p>Here is a line break:<br>This is a new line.</p>
+  </body>
+</html>`,
+
+  // level12
+  `<!DOCTYPE html>
+<html>
+  <body>
+    <ul>
+      <li>Apple</li>
+      <li>Banana</li>
+      <li>Orange</li>
+    </ul>
+  </body>
+</html>`,
+
+  // level13
+  `<!DOCTYPE html>
+<html>
+  <body>
+    <ol>
+      <li>First</li>
+      <li>Second</li>
+      <li>Third</li>
+    </ol>
+  </body>
+</html>`,
+
+  // level14
+  `<!DOCTYPE html>
+<html>
+    <body>
+        <ul>
+            <li>Fruits
+                <ol>
+                    <li>Apple</li>
+                    <li>Banana</li>
+                    <li>Orange</li>
+                </ol>
+            </li>
+            <li>Vegetables
+                <ul>
+                    <li>Carrot</li>
+                    <li>Broccoli</li>
+                    <li>Spinach</li>
+                </ul>
+            </li>
+            <li>Grains</li>
+        </ul>
+    </body>
+</html>`,
+// level15
+`<!DOCTYPE html>
+<html>
+  <body>
+    <ul>
+      <li>Electronics
+        <ol>
+          <li>Phone</li>
+          <li>Tablet</li>
+          <li>Laptop</li>
+        </ol>
+      </li>
+      <li>Books
+        <ul>
+          <li>Fiction</li>
+          <li>Non-Fiction</li>
+          <li>Reference</li>
+        </ul>
+      </li>
+    </ul>
+  </body>
+</html>`,
+// level16
+`<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Spaghetti Bolognese</h1>
+    <p>This classic Spaghetti Bolognese recipe is rich in flavor and perfect for a family dinner. The hearty sauce is made with ground beef, tomatoes, and a mix of herbs and spices.</p>
+
+    <h2>Ingredients</h2>
+    <ul>
+      <li>200g Spaghetti</li>
+      <li>300g Ground beef</li>
+      <li>1 Onion, chopped</li>
+      <li>2 Garlic cloves, minced</li>
+      <li>1 Can of crushed tomatoes</li>
+      <li>2 tbsp Tomato paste</li>
+      <li>1 tsp Dried oregano</li>
+      <li>1 tsp Dried basil</li>
+      <li>Salt and pepper to taste</li>
+      <li>Olive oil for cooking</li>
+    </ul>
+
+    <h2>Steps</h2>
+    <ol>
+      <li>Heat olive oil in a pan and sauté the chopped onion and garlic until softened.</li>
+      <li>Add the ground beef and cook until browned.</li>
+      <li>Stir in the tomato paste and cook for 2 minutes.</li>
+      <li>Add the crushed tomatoes, oregano, and basil. Season with salt and pepper. Let the sauce simmer for 20 minutes.</li>
+      <li>Meanwhile, cook the spaghetti according to package instructions. Drain and set aside.</li>
+      <li>Serve the spaghetti topped with the Bolognese sauce. Enjoy!</li>
+    </ol>
+  </body>
+</html>`,
+// level17
+`<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Chocolate Chip Cookies</h1>
+    <p>This is a simple recipe for making delicious chocolate chip cookies at home.</p>
+  </body>
+</html>`,
+// level18
+`<!DOCTYPE html>
+<html>
+    <body>
+        <h1>Chocolate Chip Cookies</h1>
+        <p>This is a simple recipe for making delicious chocolate chip cookies at home.</p>
+        
+        <h2>Ingredients:</h2>
+        <ul>
+            <li>1 cup of butter</li>
+            <li>1 cup of sugar</li>
+            <li>2 cups of flour</li>
+            <li>1 cup of chocolate chips</li>
+        </ul>
+    </body>
+</html>`,
+// level19
+`<!DOCTYPE html>
+<html>
+    <body>
+        <h1>Chocolate Chip Cookies</h1>
+        <p>This is a simple recipe for making delicious chocolate chip cookies at home.</p>
+        
+        <h2>Ingredients:</h2>
+        <ul>
+            <li>1 cup of butter</li>
+            <li>1 cup of sugar</li>
+            <li>2 cups of flour</li>
+            <li>1 cup of chocolate chips</li>
+        </ul>
+        
+        <h2>Steps:</h2>
+        <ol>
+            <li>Preheat the oven to 350°F (175°C).</li>
+            <li>Mix the butter and sugar together in a bowl.</li>
+            <li>Add the flour and chocolate chips, and mix well.</li>
+            <li>Scoop the dough onto a baking sheet.</li>
+            <li>Bake for 10-12 minutes or until golden brown.</li>
+        </ol>
+    </body>
 </html>`
+
+
+
+
+
+
+
+
 ];
 
+function loadLesson(level) {
+  localStorage.setItem('currentLesson', level);
+  const lesson = lessons[level];
 
-    function loadLesson(level) {
-      localStorage.setItem('currentLesson', level);
-      const lesson = lessons[level];
-      document.getElementById('lesson-title').textContent = lesson.title;
-      document.getElementById('lesson-desc').textContent = lesson.desc;
-      editor.setValue(lesson.code);
-      document.getElementById('quiz-section').classList.add('hidden'); // Hide quiz initially
-      loadProgress(level);
-      document.getElementById('output').srcdoc = ''; // Clear previous output
-      loadQuiz(lesson.quiz);
-    }
+  // Update Lesson Title & Description
+  document.getElementById('lesson-title').textContent = lesson.title;
+  document.getElementById('lesson-header').textContent = lesson.title;
+  document.getElementById('lesson-description').textContent = lesson.description;
+  document.getElementById('challenge-text').textContent = lesson.challenge;
 
-    function loadProgress(level) {
-      const progress = JSON.parse(localStorage.getItem('progress')) || {};
-      const lessonProgress = progress[level] || 0;
-      document.getElementById('progress-bar').style.width = lessonProgress + '%';
-    }
-    let expectedOutput = "<p>Hello, world!<br>This is a new line.</p>"; // can change per level
+  // Set editor content
+  editor.setValue(lesson.code);
+  document.getElementById('quiz-section').classList.add('hidden'); // Hide quiz initially
+  loadProgress(level);
+  document.getElementById('output').srcdoc = ''; // Clear previous output
+  updateSidebar(); // Update sidebar when a new lesson is loaded
+}
 
-    function runCode(levelIndex = 0) {
+function loadProgress(level) {
+  const progress = JSON.parse(localStorage.getItem('progress')) || {};
+  const lessonProgress = progress[level] || 0;
+  document.getElementById('lesson-progress-bar').style.width = lessonProgress + '%';
+}
+
+let currentLesson = 0;
+
+function runCode(levelIndex = currentLesson) {
   const userCode = editor.getValue();
   const outputFrame = document.getElementById('output');
-  const nextButton = document.getElementById('nextBtn');
-  const errorMsg = document.getElementById('errorMsg');
-
   const expected = expectedOutputs[levelIndex];
 
+  // Display user's code in iframe
   outputFrame.srcdoc = userCode;
 
+  // Normalize for comparison
   const normalizedExpected = expected.replace(/\s+/g, ' ').trim().toLowerCase();
   const normalizedUserCode = userCode.replace(/\s+/g, ' ').trim().toLowerCase();
 
   if (normalizedUserCode.includes(normalizedExpected)) {
-    nextButton.disabled = false;
-    nextButton.classList.add('show');
-    errorMsg.classList.remove('show');
+    showModal('✅ Great job! You got it right.', true);
   } else {
-    nextButton.disabled = true;
-    nextButton.classList.remove('show');
-    errorMsg.classList.add('show');
+    showModal('❌ Hmm... Something’s not right. Please review your code and try again.');
   }
 }
 
 
+function showModal(message, isCorrect = false) {
+  const modal = document.getElementById('modal');
+  const modalMessage = document.getElementById('modal-message');
+  const yesButton = document.getElementById('yes-button');
+  const noButton = document.getElementById('no-button');
+  const okRetryButton = document.getElementById('ok-retry-button');
 
-    function showModal() {
-      document.getElementById('modal').classList.remove('hidden');
+  if (modal && modalMessage) {
+    modalMessage.textContent = message;
+    modal.showModal(); // Opens the dialog
+
+    // If the message indicates an incorrect answer, show "OK Retry"
+    if (isCorrect) {
+      if (yesButton && noButton) {
+        yesButton.style.display = 'inline-block'; // Show "Yes"
+        noButton.style.display = 'inline-block'; // Show "No"
+      }
+      if (okRetryButton) {
+        okRetryButton.style.display = 'none'; // Hide "OK Retry"
+      }
+    } else {
+      if (okRetryButton) {
+        okRetryButton.style.display = 'inline-block'; // Show "OK Retry"
+      }
+      if (yesButton && noButton) {
+        yesButton.style.display = 'none'; // Hide "Yes"
+        noButton.style.display = 'none'; // Hide "No"
+      }
     }
+  } else {
+    console.error('Modal or Modal Message element not found');
+  }
+}
 
-    function closeModal() {
-      document.getElementById('modal').classList.add('hidden');
-    }
 
-    function completeLesson() {
+function closeModal() {
+  const modal = document.getElementById('modal');
+  if (modal) {
+    modal.close(); // Closes the dialog
+  } else {
+    console.error('Modal element not found');
+  }
+}
+
+function completeLesson() {
   const current = localStorage.getItem('currentLesson') || 'level1';
   let progress = JSON.parse(localStorage.getItem('progress')) || {};
   progress[current] = 100;
   localStorage.setItem('progress', JSON.stringify(progress));
   loadProgress(current);
   document.getElementById('quiz-section').classList.remove('hidden'); // Show quiz section
-  showModal(); // Show the modal after completing the lesson
+  
+  // Close modal after completing the lesson
+  closeModal();
+
+  // Show modal after completing the lesson
+  setTimeout(() => {
+    showModal('Lesson completed! Would you like to move to the next lesson?', true);
+  }, 300); // Delay the next modal to give time for the previous one to close
 }
 
 function moveToNextLesson() {
   const current = localStorage.getItem('currentLesson') || 'level1';
   const nextLesson = getNextLesson(current);
   loadLesson(nextLesson);
-  closeModal(); // Close the modal after selecting "Yes"
+
+  // Close modal after selecting "Yes" to move to next lesson
+  closeModal();
+
   updateSidebar(); // Update sidebar after lesson change
 }
 
@@ -483,48 +1074,15 @@ function getNextLesson(currentLesson) {
   }
 }
 
+// Load default or last lesson on page load
+window.onload = () => {
+  const defaultLesson = localStorage.getItem('currentLesson') || 'level1';
+  loadLesson(defaultLesson);
+  // Don't show the modal immediately
+  // Make sure the modal shows only when needed
+};
 
-
-    function loadQuiz(quiz) {
-      const quizContainer = document.getElementById('quiz-container');
-      quizContainer.innerHTML = ''; // Clear previous quiz
-      quiz.forEach((q, index) => {
-        const quizItem = document.createElement('div');
-        quizItem.classList.add('mb-4');
-        quizItem.innerHTML = `
-          <p class="font-semibold">${q.question}</p>
-          ${q.options.map((option, i) => `
-            <label class="block mt-2">
-              <input type="radio" name="q${index}" value="${option}" class="mr-2">
-              ${option}
-            </label>
-          `).join('')}
-        `;
-        quizContainer.appendChild(quizItem);
-      });
-    }
-
-    function submitQuiz() {
-      const quizAnswers = JSON.parse(localStorage.getItem('quizAnswers')) || {};
-      const quiz = lessons[localStorage.getItem('currentLesson')].quiz;
-      let score = 0;
-      quiz.forEach((q, index) => {
-        const selectedAnswer = document.querySelector(`input[name="q${index}"]:checked`);
-        if (selectedAnswer && selectedAnswer.value === q.answer) {
-          score++;
-        }
-      });
-      alert(`You scored ${score} out of ${quiz.length}`);
-      localStorage.setItem('quizAnswers', JSON.stringify(quizAnswers));
-    }
-
-    // Load default or last lesson on page load
-    window.onload = () => {
-      const defaultLesson = localStorage.getItem('currentLesson') || 'level1';
-      loadLesson(defaultLesson);
-    };
-
-    // Function to update the sidebar content
+// Function to update the sidebar content
 function updateSidebar() {
   const currentLesson = localStorage.getItem('currentLesson') || 'level1';
   const lesson = lessons[currentLesson];
@@ -563,36 +1121,6 @@ function updateSidebar() {
 
 // Call this function when the page loads or when the lesson is changed
 updateSidebar();
-
-function loadProgress(level) {
-  const progress = JSON.parse(localStorage.getItem('progress')) || {};
-  const lessonProgress = progress[level] || 0;
-  document.getElementById('lesson-progress-bar').style.width = lessonProgress + '%';
-}
-
-function loadLesson(level) {
-  localStorage.setItem('currentLesson', level);
-  const lesson = lessons[level];
-  
-  // Update Lesson Title & Description
-  document.getElementById('lesson-title').textContent = lesson.title;
-  document.getElementById('lesson-header').textContent = lesson.title;
-  document.getElementById('lesson-description').textContent = lesson.description;
-  document.getElementById('challenge-text').textContent = lesson.challenge;
-
-  // Set editor content
-  editor.setValue(lesson.code);
-  document.getElementById('quiz-section').classList.add('hidden'); // Hide quiz initially
-  loadProgress(level);
-  document.getElementById('output').srcdoc = ''; // Clear previous output
-  loadQuiz(lesson.quiz);
-  updateSidebar(); // Update sidebar when a new lesson is loaded
-}
-
-window.onload = () => {
-  loadLesson('level1');
-};
-
   </script>
 </body>
 </html>

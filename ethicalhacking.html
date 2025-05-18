@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethical Hacking Masterclass</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
+    <style>
+        .sidebar {
+            scrollbar-width: thin;
+            scrollbar-color: #4f46e5 #1e1e2d;
+        }
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sidebar::-webkit-scrollbar-track {
+            background: #1e1e2d;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: #4f46e5;
+            border-radius: 3px;
+        }
+        .CodeMirror {
+            height: auto;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+        .terminal {
+            background-color: #1e1e2d;
+            color: #f8f8f2;
+            font-family: 'Courier New', monospace;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            height: 200px;
+            overflow-y: auto;
+        }
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <div class="sidebar w-64 bg-gray-800 flex-shrink-0 overflow-y-auto">
+        <div class="p-4 flex items-center space-x-3 border-b border-gray-700">
+            <div class="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center">
+                <i class="fas fa-shield-alt text-white"></i>
+            </div>
+            <h1 class="text-xl font-bold">Ethical Hacker Pro</h1>
+        </div>
+        
+        <div class="p-4">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold">Course Progress</h2>
+                <span class="text-sm text-indigo-400">25%</span>
+            </div>
+            
+            <div class="relative w-20 h-20 mx-auto mb-4">
+                <svg class="w-full h-full" viewBox="0 0 36 36">
+                    <path class="text-gray-700" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
+                    <path class="text-indigo-600 progress-ring__circle" stroke-dasharray="25, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
+                </svg>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <span class="text-sm font-bold">25%</span>
+                </div>
+            </div>
+            
+            <div class="space-y-2">
+                <div class="flex items-center space-x-2 p-2 bg-gray-700 rounded-lg">
+                    <i class="fas fa-user-shield text-indigo-400"></i>
+                    <span>Student: Hacker123</span>
+                </div>
+                <div class="flex items-center space-x-2 p-2 bg-gray-700 rounded-lg">
+                    <i class="fas fa-medal text-yellow-400"></i>
+                    <span>Level: Intermediate</span>
+                </div>
+                <div class="flex items-center space-x-2 p-2 bg-gray-700 rounded-lg">
+                    <i class="fas fa-bolt text-green-400"></i>
+                    <span>Streak: 5 days</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="border-t border-gray-700 pt-4">
+            <h3 class="px-4 text-sm font-semibold text-gray-400 uppercase tracking-wider">Course Modules</h3>
+            <nav class="mt-2">
+                <div class="px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-indigo-400 border-l-4 border-indigo-600">
+                    <i class="fas fa-network-wired"></i>
+                    <span>Network Security</span>
+                </div>
+                <div class="px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-gray-400">
+                    <i class="fas fa-lock"></i>
+                    <span>Cryptography</span>
+                </div>
+                <div class="px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-gray-400">
+                    <i class="fas fa-bug"></i>
+                    <span>Vulnerability Analysis</span>
+                </div>
+                <div class="px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-gray-400">
+                    <i class="fas fa-terminal"></i>
+                    <span>Penetration Testing</span>
+                </div>
+                <div class="px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-gray-400">
+                    <i class="fas fa-code"></i>
+                    <span>Web Exploits</span>
+                </div>
+                <div class="px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-gray-400">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Mobile Security</span>
+                </div>
+                <div class="px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-gray-400">
+                    <i class="fas fa-cloud"></i>
+                    <span>Cloud Security</span>
+                </div>
+            </nav>
+        </div>
+        
+        <div class="p-4 border-t border-gray-700 mt-auto">
+            <div class="bg-gray-700 rounded-lg p-3">
+                <h4 class="text-sm font-semibold mb-2">Need help?</h4>
+                <p class="text-xs text-gray-300 mb-2">Our security experts are available 24/7</p>
+                <button class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-1 px-3 rounded text-sm">
+                    Contact Support
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Header -->
+        <header class="bg-gray-800 border-b border-gray-700 p-4 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <h2 class="text-xl font-semibold">Network Security Fundamentals</h2>
+                <span class="bg-indigo-600 text-xs px-2 py-1 rounded-full">Active</span>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button class="bg-gray-700 hover:bg-gray-600 p-2 rounded-full">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <button class="bg-gray-700 hover:bg-gray-600 p-2 rounded-full">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <div class="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Content Area -->
+        <main class="flex-1 overflow-auto p-6 bg-gray-900">
+            <div class="max-w-4xl mx-auto">
+                <!-- Course Navigation -->
+                <div class="flex items-center justify-between mb-6">
+                    <button class="flex items-center space-x-2 text-indigo-400 hover:text-indigo-300">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Previous Lesson</span>
+                    </button>
+                    <div class="flex space-x-2">
+                        <button class="bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
+                        <button class="bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                    <button class="flex items-center space-x-2 text-indigo-400 hover:text-indigo-300">
+                        <span>Next Lesson</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                
+                <!-- Lesson Content -->
+                <div class="bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                    <!-- Tabs -->
+                    <div class="flex border-b border-gray-700">
+                        <button class="tab-btn px-4 py-3 font-medium text-indigo-400 border-b-2 border-indigo-600" data-tab="lesson">
+                            <i class="fas fa-graduation-cap mr-2"></i>Lesson
+                        </button>
+                        <button class="tab-btn px-4 py-3 font-medium text-gray-400 hover:text-gray-300" data-tab="exercise">
+                            <i class="fas fa-code mr-2"></i>Exercise
+                        </button>
+                        <button class="tab-btn px-4 py-3 font-medium text-gray-400 hover:text-gray-300" data-tab="resources">
+                            <i class="fas fa-link mr-2"></i>Resources
+                        </button>
+                    </div>
+                    
+                    <!-- Tab Contents -->
+                    <div class="p-6">
+                        <!-- Lesson Tab -->
+                        <div id="lesson" class="tab-content active">
+                            <h1 class="text-2xl font-bold mb-4">Network Scanning with Nmap</h1>
+                            <div class="prose prose-invert max-w-none">
+                                <p class="mb-4">Network scanning is a fundamental skill for ethical hackers. It allows you to discover devices, services, and vulnerabilities in a network. Nmap (Network Mapper) is the most popular tool for this purpose.</p>
+                                
+                                <div class="bg-gray-700 p-4 rounded-lg mb-4">
+                                    <h3 class="text-lg font-semibold mb-2 text-yellow-400">
+                                        <i class="fas fa-exclamation-triangle mr-2"></i>Legal Notice
+                                    </h3>
+                                    <p class="text-sm">Always obtain proper authorization before scanning any network. Unauthorized scanning is illegal and can result in severe penalties.</p>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Basic Nmap Commands</h2>
+                                <p class="mb-4">Here are some essential Nmap commands every ethical hacker should know:</p>
+                                
+                                <div class="terminal mb-6">
+                                    <div class="text-green-400"># Basic host discovery</div>
+                                    <div class="mb-2">nmap -sn 192.168.1.0/24</div>
+                                    
+                                    <div class="text-green-400"># Scan for open ports</div>
+                                    <div class="mb-2">nmap -sS 192.168.1.1</div>
+                                    
+                                    <div class="text-green-400"># Service version detection</div>
+                                    <div class="mb-2">nmap -sV 192.168.1.1</div>
+                                    
+                                    <div class="text-green-400"># OS detection</div>
+                                    <div>nmap -O 192.168.1.1</div>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Understanding Scan Types</h2>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    <div class="bg-gray-700 p-4 rounded-lg">
+                                        <h3 class="font-semibold text-indigo-400 mb-2">TCP SYN Scan (-sS)</h3>
+                                        <p class="text-sm">The default and most popular scan option. It's fast, stealthy, and relatively unobtrusive since it doesn't complete TCP connections.</p>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg">
+                                        <h3 class="font-semibold text-indigo-400 mb-2">UDP Scan (-sU)</h3>
+                                        <p class="text-sm">Important for discovering UDP services. Much slower than TCP scans because UDP is connectionless.</p>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg">
+                                        <h3 class="font-semibold text-indigo-400 mb-2">Comprehensive Scan (-A)</h3>
+                                        <p class="text-sm">Enables OS detection, version detection, script scanning, and traceroute for a thorough examination.</p>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg">
+                                        <h3 class="font-semibold text-indigo-400 mb-2">Stealth Scan (-sS -T2)</h3>
+                                        <p class="text-sm">Slower scan that avoids detection by intrusion detection systems.</p>
+                                    </div>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Interpreting Results</h2>
+                                <p class="mb-4">Understanding Nmap output is crucial for effective security assessment:</p>
+                                
+                                <div class="terminal mb-6">
+                                    <div>Nmap scan report for 192.168.1.1</div>
+                                    <div>Host is up (0.045s latency).</div>
+                                    <div class="mb-2">Not shown: 995 closed ports</div>
+                                    <div>PORT     STATE    SERVICE     VERSION</div>
+                                    <div>22/tcp   open     ssh         OpenSSH 7.9p1</div>
+                                    <div>80/tcp   open     http        Apache httpd 2.4.41</div>
+                                    <div>443/tcp  open     ssl/http    Apache httpd 2.4.41</div>
+                                    <div>3306/tcp filtered mysql</div>
+                                    <div>8080/tcp open     http-proxy  Squid http proxy 4.6</div>
+                                </div>
+                                
+                                <div class="bg-gray-700 p-4 rounded-lg mb-6">
+                                    <h3 class="text-lg font-semibold mb-2 text-green-400">
+                                        <i class="fas fa-lightbulb mr-2"></i>Pro Tip
+                                    </h3>
+                                    <p>Combine Nmap with NSE (Nmap Scripting Engine) for advanced vulnerability detection. For example: <code class="bg-gray-800 px-1 rounded">nmap --script vuln 192.168.1.1</code></p>
+                                </div>
+                                
+                                <div class="flex justify-between mt-8">
+                                    <button class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded flex items-center">
+                                        <i class="fas fa-arrow-left mr-2"></i> Previous
+                                    </button>
+                                    <button class="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded flex items-center">
+                                        Mark Complete <i class="fas fa-check ml-2"></i>
+                                    </button>
+                                    <button class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded flex items-center">
+                                        Next <i class="fas fa-arrow-right ml-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Exercise Tab -->
+                        <div id="exercise" class="tab-content">
+                            <h1 class="text-2xl font-bold mb-4">Hands-on: Network Scanning Lab</h1>
+                            <div class="prose prose-invert max-w-none">
+                                <p class="mb-6">Practice your Nmap skills in our safe, controlled environment. The target is a virtual machine we've set up for training purposes.</p>
+                                
+                                <div class="bg-indigo-900 bg-opacity-30 border border-indigo-700 p-4 rounded-lg mb-6">
+                                    <h3 class="text-lg font-semibold mb-2 flex items-center">
+                                        <i class="fas fa-flask mr-2"></i> Lab Environment
+                                    </h3>
+                                    <p class="mb-2">Target IP: <code class="bg-gray-800 px-2 py-1 rounded">192.168.99.100</code></p>
+                                    <p class="text-sm text-gray-300">This is a simulated corporate network with intentionally vulnerable services for training purposes.</p>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Exercise 1: Basic Host Discovery</h2>
+                                <p class="mb-4">Use Nmap to identify all live hosts in the 192.168.99.0/24 network.</p>
+                                
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium mb-2">Enter your Nmap command:</label>
+                                    <textarea id="code-editor" class="w-full">nmap </textarea>
+                                </div>
+                                
+                                <button id="execute-btn" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded mb-6">
+                                    <i class="fas fa-play mr-2"></i> Execute Command
+                                </button>
+                                
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium mb-2">Command Output:</label>
+                                    <div id="command-output" class="terminal">
+                                        <div class="text-gray-500">Waiting for command execution...</div>
+                                    </div>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Exercise 2: Service Enumeration</h2>
+                                <p class="mb-4">Now that you've found the target, perform a service scan to identify running services and their versions.</p>
+                                
+                                <div class="bg-gray-700 p-4 rounded-lg mb-6">
+                                    <h3 class="font-semibold text-yellow-400 mb-2">Challenge</h3>
+                                    <p class="mb-2">Find all open ports on the target and identify the web server version.</p>
+                                    <p class="text-sm text-gray-300">Hint: You'll need to combine two Nmap flags for this task.</p>
+                                </div>
+                                
+                                <div class="flex justify-between mt-8">
+                                    <button class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded">
+                                        <i class="fas fa-redo mr-2"></i> Reset Lab
+                                    </button>
+                                    <button class="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded">
+                                        Verify Solution <i class="fas fa-check ml-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Resources Tab -->
+                        <div id="resources" class="tab-content">
+                            <h1 class="text-2xl font-bold mb-4">Additional Resources</h1>
+                            <div class="prose prose-invert max-w-none">
+                                <p class="mb-6">Expand your knowledge with these carefully selected resources:</p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    <div class="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition cursor-pointer">
+                                        <h3 class="font-semibold text-indigo-400 mb-2 flex items-center">
+                                            <i class="fas fa-book mr-2"></i> Nmap Official Documentation
+                                        </h3>
+                                        <p class="text-sm mb-2">Comprehensive guide to all Nmap features and options.</p>
+                                        <a href="#" class="text-indigo-400 text-sm hover:underline">https://nmap.org/book/</a>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition cursor-pointer">
+                                        <h3 class="font-semibold text-indigo-400 mb-2 flex items-center">
+                                            <i class="fab fa-youtube mr-2"></i> Nmap Crash Course
+                                        </h3>
+                                        <p class="text-sm mb-2">Video tutorial covering essential Nmap techniques.</p>
+                                        <a href="#" class="text-indigo-400 text-sm hover:underline">YouTube Link</a>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition cursor-pointer">
+                                        <h3 class="font-semibold text-indigo-400 mb-2 flex items-center">
+                                            <i class="fas fa-file-pdf mr-2"></i> Network Scanning Cheat Sheet
+                                        </h3>
+                                        <p class="text-sm mb-2">Quick reference for common scanning commands.</p>
+                                        <a href="#" class="text-indigo-400 text-sm hover:underline">Download PDF</a>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition cursor-pointer">
+                                        <h3 class="font-semibold text-indigo-400 mb-2 flex items-center">
+                                            <i class="fas fa-graduation-cap mr-2"></i> Advanced Scanning Techniques
+                                        </h3>
+                                        <p class="text-sm mb-2">Course on bypassing firewalls and IDS systems.</p>
+                                        <a href="#" class="text-indigo-400 text-sm hover:underline">Enroll Now</a>
+                                    </div>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Recommended Tools</h2>
+                                <div class="bg-gray-700 p-4 rounded-lg mb-6">
+                                    <div class="flex items-start mb-3">
+                                        <div class="bg-indigo-600 p-2 rounded mr-3">
+                                            <i class="fas fa-network-wired"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold">Zenmap</h3>
+                                            <p class="text-sm">Graphical interface for Nmap, great for beginners.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start mb-3">
+                                        <div class="bg-green-600 p-2 rounded mr-3">
+                                            <i class="fas fa-shield-alt"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold">Masscan</h3>
+                                            <p class="text-sm">Ultra-fast port scanner for large networks.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="bg-yellow-600 p-2 rounded mr-3">
+                                            <i class="fas fa-search"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold">RustScan</h3>
+                                            <p class="text-sm">Modern port scanner with auto-completion.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Community Resources</h2>
+                                <div class="space-y-3">
+                                    <div class="flex items-center space-x-3 p-3 bg-gray-700 rounded-lg hover:bg-gray-600 cursor-pointer">
+                                        <i class="fab fa-discord text-indigo-400"></i>
+                                        <span>Ethical Hacking Discord</span>
+                                    </div>
+                                    <div class="flex items-center space-x-3 p-3 bg-gray-700 rounded-lg hover:bg-gray-600 cursor-pointer">
+                                        <i class="fab fa-reddit text-orange-400"></i>
+                                        <span>r/netsec on Reddit</span>
+                                    </div>
+                                    <div class="flex items-center space-x-3 p-3 bg-gray-700 rounded-lg hover:bg-gray-600 cursor-pointer">
+                                        <i class="fab fa-github text-gray-300"></i>
+                                        <span>Awesome-Hacking on GitHub</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/shell/shell.min.js"></script>
+    <script>
+        // Initialize CodeMirror
+        const editor = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
+            mode: 'shell',
+            theme: 'dracula',
+            lineNumbers: true,
+            indentUnit: 4,
+            extraKeys: {
+                'Ctrl-Enter': executeCommand,
+                'Cmd-Enter': executeCommand
+            }
+        });
+        
+        // Tab functionality
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                
+                // Update active tab button
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('text-indigo-400', 'border-indigo-600');
+                    btn.classList.add('text-gray-400');
+                });
+                button.classList.add('text-indigo-400', 'border-indigo-600');
+                button.classList.remove('text-gray-400');
+                
+                // Show active tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Execute command button
+        document.getElementById('execute-btn').addEventListener('click', executeCommand);
+        
+        // Sample command execution
+        function executeCommand() {
+            const command = editor.getValue();
+            const output = document.getElementById('command-output');
+            
+            output.innerHTML = '<div class="text-green-400">$ ' + command + '</div>';
+            
+            // Simulate different outputs based on commands
+            if (command.includes('-sn')) {
+                output.innerHTML += `
+                    <div class="my-2">Starting Nmap 7.92 ( https://nmap.org )</div>
+                    <div>Nmap scan report for 192.168.99.100</div>
+                    <div class="text-green-400">Host is up (0.045s latency).</div>
+                    <div>Nmap done: 256 IP addresses (1 host up) scanned in 2.30 seconds</div>
+                `;
+            } else if (command.includes('-sV') || command.includes('-sS')) {
+                output.innerHTML += `
+                    <div class="my-2">Starting Nmap 7.92 ( https://nmap.org )</div>
+                    <div>Nmap scan report for 192.168.99.100</div>
+                    <div>Host is up (0.045s latency).</div>
+                    <div class="mb-2">Not shown: 995 closed ports</div>
+                    <div>PORT     STATE    SERVICE     VERSION</div>
+                    <div>22/tcp   open     ssh         OpenSSH 7.9p1</div>
+                    <div>80/tcp   open     http        Apache httpd 2.4.41</div>
+                    <div>443/tcp  open     ssl/http    Apache httpd 2.4.41</div>
+                    <div>3306/tcp filtered mysql</div>
+                    <div>8080/tcp open     http-proxy  Squid http proxy 4.6</div>
+                    <div class="text-green-400 mt-2">Service detection performed. Please report any incorrect results.</div>
+                `;
+            } else {
+                output.innerHTML += `
+                    <div class="text-red-400">Error: Command not recognized or incomplete.</div>
+                    <div class="mt-2">Try one of these examples:</div>
+                    <div class="ml-4">- nmap -sn 192.168.99.0/24 (Host discovery)</div>
+                    <div class="ml-4">- nmap -sS -sV 192.168.99.100 (Port scan with service detection)</div>
+                `;
+            }
+            
+            // Scroll to bottom of output
+            output.scrollTop = output.scrollHeight;
+        }
+    </script>
+</body>
+</html>
