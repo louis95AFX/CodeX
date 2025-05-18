@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Mastery | Learn Database Programming</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .progress-bar {
+            height: 6px;
+            transition: width 0.3s ease;
+        }
+        .lesson-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .code-editor {
+            font-family: 'Courier New', Courier, monospace;
+            tab-size: 2;
+        }
+        .quiz-option:hover {
+            background-color: #f0f9ff;
+        }
+        .correct-answer {
+            background-color: #d1fae5 !important;
+            border-color: #10b981 !important;
+        }
+        .wrong-answer {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important;
+        }
+        .flip-card {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            backface-visibility: hidden;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-database text-2xl"></i>
+                <h1 class="text-xl font-bold">SQL Mastery</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center">
+                    <i class="fas fa-coins text-yellow-300 mr-1"></i>
+                    <span>0</span>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-indigo-400 flex items-center justify-center">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="bg-indigo-50">
+        <div class="container mx-auto px-4 py-1">
+            <div class="flex items-center justify-between mb-1">
+                <span class="text-sm font-medium">Course Progress</span>
+                <span class="text-sm font-medium">0%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+                <div class="progress-bar bg-indigo-600 rounded-full h-2" style="width: 0%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- Course Overview -->
+        <section class="mb-8">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden mb-6">
+                <div class="md:flex">
+                    <div class="md:flex-shrink-0 md:w-48 bg-indigo-500 flex items-center justify-center">
+                        <i class="fas fa-database text-white text-6xl"></i>
+                    </div>
+                    <div class="p-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">SQL Fundamentals</h2>
+                        <p class="text-gray-600 mb-4">Master the language of databases. Learn how to create, read, update, and delete data with SQL, the standard language for relational database management systems.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">Beginner</span>
+                            <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">8 Hours</span>
+                            <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">45 Lessons</span>
+                        </div>
+                        <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-lg transition duration-200">
+                            Start Learning
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Course Modules -->
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4 flex items-center">
+                <i class="fas fa-list-ul mr-2 text-indigo-600"></i>
+                Course Modules
+            </h2>
+            
+            <!-- Module 1 -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden mb-4">
+                <div class="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center cursor-pointer">
+                    <h3 class="font-medium text-gray-800">
+                        <i class="fas fa-play-circle text-indigo-600 mr-2"></i>
+                        Module 1: Introduction to SQL
+                    </h3>
+                    <span class="text-sm text-gray-500">0/7 lessons</span>
+                </div>
+                
+                <div class="divide-y divide-gray-200">
+                    <!-- Lesson 1 (Current) -->
+                    <div class="p-4 flex items-center bg-indigo-50 border-l-4 border-indigo-500">
+                        <div class="mr-3 w-6 h-6 rounded-full bg-indigo-500 flex items-center justify-center">
+                            <span class="text-white text-xs">1</span>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-medium">What is SQL?</h4>
+                            <p class="text-sm text-gray-600">Learn about SQL and its importance</p>
+                        </div>
+                        <i class="fas fa-play-circle text-indigo-500"></i>
+                    </div>
+                    
+                    <!-- Lesson 2 (Locked) -->
+                    <div class="p-4 flex items-center opacity-75">
+                        <div class="mr-3 w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center">
+                            <span class="text-gray-600 text-xs">2</span>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-medium">Database Basics</h4>
+                            <p class="text-sm text-gray-600">Understand relational databases</p>
+                        </div>
+                        <i class="fas fa-lock text-gray-400"></i>
+                    </div>
+                    
+                    <!-- Lesson 3 (Locked) -->
+                    <div class="p-4 flex items-center opacity-75">
+                        <div class="mr-3 w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center">
+                            <span class="text-gray-600 text-xs">3</span>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-medium">SELECT Statement</h4>
+                            <p class="text-sm text-gray-600">Retrieve data from tables</p>
+                        </div>
+                        <i class="fas fa-lock text-gray-400"></i>
+                    </div>
+                    
+                    <!-- Lesson 4 (Locked) -->
+                    <div class="p-4 flex items-center opacity-75">
+                        <div class="mr-3 w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center">
+                            <span class="text-gray-600 text-xs">4</span>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-medium">WHERE Clause</h4>
+                            <p class="text-sm text-gray-600">Filter your query results</p>
+                        </div>
+                        <i class="fas fa-lock text-gray-400"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Module 2 (Locked) -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden mb-4 opacity-75">
+                <div class="p-4 border-b border-gray-200 bg-gray-100 flex justify-between items-center">
+                    <h3 class="font-medium text-gray-600">
+                        <i class="fas fa-lock mr-2 text-gray-500"></i>
+                        Module 2: Modifying Data
+                    </h3>
+                    <span class="text-sm text-gray-500">0/6 lessons</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Current Lesson -->
+        <section class="mb-8">
+            <h2 class="text-xl font-bold mb-4 flex items-center">
+                <i class="fas fa-book-open mr-2 text-indigo-600"></i>
+                Current Lesson: What is SQL?
+            </h2>
+            
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <!-- Lesson Content -->
+                <div class="p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center mr-3">
+                            <i class="fas fa-info-circle text-indigo-600"></i>
+                        </div>
+                        <h3 class="text-lg font-medium">Introduction to SQL</h3>
+                    </div>
+                    
+                    <div class="prose max-w-none mb-6">
+                        <p>SQL (Structured Query Language) is a standard programming language specifically designed for managing and manipulating relational databases.</p>
+                        
+                        <h4 class="font-medium mt-4">Key Features of SQL:</h4>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Used to communicate with databases</li>
+                            <li>Standardized language (ANSI/ISO)</li>
+                            <li>Used by major database systems (MySQL, PostgreSQL, SQL Server, Oracle)</li>
+                            <li>Allows you to create, read, update, and delete database records (CRUD operations)</li>
+                        </ul>
+                        
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 my-4">
+                            <div class="flex">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-lightbulb text-blue-500"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm text-blue-700">
+                                        <strong>Did You Know?</strong> SQL was first developed at IBM in the 1970s and became commercially available in 1979. Despite being over 40 years old, it remains the most widely used database language today.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h4 class="font-medium mt-4">Common SQL Commands:</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            <div class="bg-gray-50 p-3 rounded-lg">
+                                <h5 class="font-medium text-indigo-600">Data Query Language (DQL)</h5>
+                                <p class="text-sm mt-1"><code class="bg-gray-100 px-1 rounded">SELECT</code> - Retrieves data from database</p>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded-lg">
+                                <h5 class="font-medium text-indigo-600">Data Definition Language (DDL)</h5>
+                                <p class="text-sm mt-1"><code class="bg-gray-100 px-1 rounded">CREATE</code>, <code class="bg-gray-100 px-1 rounded">ALTER</code>, <code class="bg-gray-100 px-1 rounded">DROP</code> - Defines database structure</p>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded-lg">
+                                <h5 class="font-medium text-indigo-600">Data Manipulation Language (DML)</h5>
+                                <p class="text-sm mt-1"><code class="bg-gray-100 px-1 rounded">INSERT</code>, <code class="bg-gray-100 px-1 rounded">UPDATE</code>, <code class="bg-gray-100 px-1 rounded">DELETE</code> - Modifies data</p>
+                            </div>
+                            <div class="bg-gray-50 p-3 rounded-lg">
+                                <h5 class="font-medium text-indigo-600">Data Control Language (DCL)</h5>
+                                <p class="text-sm mt-1"><code class="bg-gray-100 px-1 rounded">GRANT</code>, <code class="bg-gray-100 px-1 rounded">REVOKE</code> - Controls access</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Interactive Example -->
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-medium">Try It Yourself</h4>
+                            <button id="reset-code" class="text-sm text-indigo-600 hover:text-indigo-800">
+                                <i class="fas fa-redo mr-1"></i> Reset Code
+                            </button>
+                        </div>
+                        
+                        <div class="border rounded-lg overflow-hidden">
+                            <div class="bg-gray-800 text-white px-4 py-2 flex justify-between items-center">
+                                <span>SQL Editor</span>
+                                <button id="run-code" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
+                                    <i class="fas fa-play mr-1"></i> Run
+                                </button>
+                            </div>
+                            <textarea id="sql-code" class="code-editor w-full p-4 bg-gray-900 text-green-400 h-32" spellcheck="false">-- This is your first SQL lesson
+-- Try running this simple query:
+
+SELECT 'Hello, SQL World!' AS greeting;</textarea>
+                            <div id="code-output" class="bg-white p-4 border-t hidden">
+                                <h5 class="font-medium mb-2">Result:</h5>
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full divide-y divide-gray-200">
+                                        <thead class="bg-gray-50">
+                                            <tr>
+                                                <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">greeting</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="bg-white divide-y divide-gray-200">
+                                            <tr>
+                                                <td class="px-4 py-2">Hello, SQL World!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Practice Exercise -->
+                    <div class="border rounded-lg overflow-hidden mb-6">
+                        <div class="bg-indigo-600 text-white px-4 py-2">
+                            <h4 class="font-medium">Practice Exercise</h4>
+                        </div>
+                        <div class="p-4 bg-white">
+                            <p class="mb-4">Write a SQL query that returns the text "I'm learning SQL!" as a result.</p>
+                            
+                            <div class="border rounded-lg overflow-hidden mb-4">
+                                <div class="bg-gray-800 text-white px-4 py-2">
+                                    <span>Your Solution</span>
+                                </div>
+                                <textarea id="exercise-code" class="code-editor w-full p-4 bg-gray-900 text-green-400 h-20" spellcheck="false">-- Write your SQL query here</textarea>
+                            </div>
+                            
+                            <button id="check-solution" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded transition duration-200">
+                                Check Solution
+                            </button>
+                            
+                            <div id="solution-feedback" class="mt-4 hidden">
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-check-circle text-green-500 mt-1"></i>
+                                    </div>
+                                    <div class="ml-3">
+                                        <p class="text-sm text-gray-700">
+                                            <strong>Correct!</strong> The solution would be: <code class="bg-gray-100 px-1 rounded">SELECT "I'm learning SQL!" AS result;</code>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation Buttons -->
+                    <div class="flex justify-between">
+                        <button class="text-gray-500 font-medium py-2 px-4 rounded cursor-not-allowed" disabled>
+                            <i class="fas fa-arrow-left mr-2"></i> Previous Lesson
+                        </button>
+                        <button id="next-lesson" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded transition duration-200">
+                            Next Lesson <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Section -->
+        <section id="quiz-section" class="hidden">
+            <h2 class="text-xl font-bold mb-4 flex items-center">
+                <i class="fas fa-question-circle mr-2 text-indigo-600"></i>
+                Lesson Quiz
+            </h2>
+            
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center mr-3">
+                            <i class="fas fa-star text-indigo-600"></i>
+                        </div>
+                        <h3 class="text-lg font-medium">Test Your Knowledge</h3>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <span class="font-medium">Question 1 of 5</span>
+                                <div class="w-full bg-gray-200 rounded-full h-1 mt-1">
+                                    <div class="bg-indigo-600 h-1 rounded-full" style="width: 20%"></div>
+                                </div>
+                            </div>
+                            <div class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm">
+                                +10 XP
+                            </div>
+                        </div>
+                        
+                        <!-- Quiz Question -->
+                        <div class="mb-6">
+                            <p class="font-medium mb-3">What does SQL stand for?</p>
+                            
+                            <div class="space-y-3">
+                                <div class="quiz-option p-3 border rounded-lg cursor-pointer">
+                                    A. Structured Question Language
+                                </div>
+                                <div class="quiz-option p-3 border rounded-lg cursor-pointer correct-answer">
+                                    B. Structured Query Language
+                                </div>
+                                <div class="quiz-option p-3 border rounded-lg cursor-pointer">
+                                    C. Simple Query Language
+                                </div>
+                                <div class="quiz-option p-3 border rounded-lg cursor-pointer">
+                                    D. Sequential Query Language
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Flashcard -->
+                        <div class="mb-6">
+                            <p class="font-medium mb-3">Which of these is NOT a category of SQL commands?</p>
+                            
+                            <div class="flip-card w-full" id="flashcard">
+                                <div class="flip-card-inner">
+                                    <div class="flip-card-front bg-indigo-50 p-4 rounded-lg cursor-pointer">
+                                        <div class="flex justify-between items-center">
+                                            <span>Click to reveal answer</span>
+                                            <i class="fas fa-redo text-indigo-600"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flip-card-back bg-green-50 p-4 rounded-lg">
+                                        <p>Data Formatting Language (DFL) is not a standard SQL category.</p>
+                                        <p class="mt-2 text-sm">The standard categories are DQL, DDL, DML, and DCL.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Navigation Buttons -->
+                        <div class="flex justify-between">
+                            <button class="text-gray-500 font-medium py-2 px-4 rounded cursor-not-allowed" disabled>
+                                <i class="fas fa-arrow-left mr-2"></i> Previous
+                            </button>
+                            <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded transition duration-200">
+                                Next Question <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center">
+                        <i class="fas fa-database text-2xl text-indigo-400 mr-2"></i>
+                        <span class="text-xl font-bold">SQL Mastery</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mt-1">Master database programming</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-6 pt-6 text-sm text-gray-400 text-center">
+                <p>© 2023 SQL Mastery. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Interactive Code Editor
+        document.getElementById('run-code').addEventListener('click', function() {
+            const codeOutput = document.getElementById('code-output');
+            codeOutput.classList.remove('hidden');
+            
+            // Scroll to the output
+            codeOutput.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        document.getElementById('reset-code').addEventListener('click', function() {
+            document.getElementById('sql-code').value = `-- This is your first SQL lesson
+-- Try running this simple query:
+
+SELECT 'Hello, SQL World!' AS greeting;`;
+            document.getElementById('code-output').classList.add('hidden');
+        });
+        
+        // Practice Exercise
+        document.getElementById('check-solution').addEventListener('click', function() {
+            const feedback = document.getElementById('solution-feedback');
+            feedback.classList.remove('hidden');
+            
+            // Scroll to the feedback
+            feedback.scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Next Lesson Button (shows quiz)
+        document.getElementById('next-lesson').addEventListener('click', function() {
+            document.querySelector('main > section:nth-child(3)').classList.add('hidden');
+            document.getElementById('quiz-section').classList.remove('hidden');
+            
+            // Scroll to top of quiz
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        // Flashcard interaction
+        document.getElementById('flashcard').addEventListener('click', function() {
+            this.classList.toggle('flipped');
+        });
+        
+        // Quiz option selection
+        const quizOptions = document.querySelectorAll('.quiz-option');
+        quizOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Remove any existing selected classes
+                quizOptions.forEach(opt => {
+                    opt.classList.remove('correct-answer', 'wrong-answer');
+                });
+                
+                // Add appropriate class
+                if (this.textContent.includes('B. Structured Query')) {
+                    this.classList.add('correct-answer');
+                } else {
+                    this.classList.add('wrong-answer');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

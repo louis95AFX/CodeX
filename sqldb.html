@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Mastery - Database Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
+    <style>
+        .sidebar {
+            scrollbar-width: thin;
+            scrollbar-color: #3b82f6 #1e1e2d;
+        }
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sidebar::-webkit-scrollbar-track {
+            background: #1e1e2d;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: #3b82f6;
+            border-radius: 3px;
+        }
+        .CodeMirror {
+            height: auto;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+        .output-console {
+            background-color: #1e1e2d;
+            color: #f8f8f2;
+            font-family: 'Courier New', monospace;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            height: 200px;
+            overflow-y: auto;
+        }
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .module-item.completed {
+            color: #10b981;
+        }
+        .module-item.completed i {
+            color: #10b981;
+        }
+        .table-preview {
+            background-color: #1e1e2d;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        table.data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table.data-table th, table.data-table td {
+            border: 1px solid #374151;
+            padding: 0.5rem;
+            text-align: left;
+        }
+        table.data-table th {
+            background-color: #1f2937;
+            color: #f3f4f6;
+        }
+        table.data-table tr:nth-child(even) {
+            background-color: #1f2937;
+        }
+        table.data-table tr:hover {
+            background-color: #374151;
+        }
+        .sql-keyword {
+            color: #f472b6;
+        }
+        .sql-function {
+            color: #60a5fa;
+        }
+        .sql-string {
+            color: #84cc16;
+        }
+        .sql-number {
+            color: #f59e0b;
+        }
+        .sql-comment {
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <div class="sidebar w-64 bg-gray-800 flex-shrink-0 overflow-y-auto">
+        <div class="p-4 flex items-center space-x-3 border-b border-gray-700">
+            <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                <i class="fas fa-database text-white text-xl"></i>
+            </div>
+            <h1 class="text-xl font-bold">SQL Mastery</h1>
+        </div>
+        
+        <div class="p-4">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold">Course Progress</h2>
+                <span class="text-sm text-blue-400">0%</span>
+            </div>
+            
+            <div class="relative w-20 h-20 mx-auto mb-4">
+                <svg class="w-full h-full" viewBox="0 0 36 36">
+                    <path class="text-gray-700" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
+                    <path class="text-blue-600 progress-ring__circle" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
+                </svg>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <span class="text-sm font-bold">0%</span>
+                </div>
+            </div>
+            
+            <div class="space-y-2">
+                <div class="flex items-center space-x-2 p-2 bg-gray-700 rounded-lg">
+                    <i class="fas fa-user-graduate text-blue-400"></i>
+                    <span>Student: DataLearner</span>
+                </div>
+                <div class="flex items-center space-x-2 p-2 bg-gray-700 rounded-lg">
+                    <i class="fas fa-medal text-yellow-400"></i>
+                    <span>Level: Beginner</span>
+                </div>
+                <div class="flex items-center space-x-2 p-2 bg-gray-700 rounded-lg">
+                    <i class="fas fa-bolt text-green-400"></i>
+                    <span>Streak: New</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="border-t border-gray-700 pt-4">
+            <h3 class="px-4 text-sm font-semibold text-gray-400 uppercase tracking-wider">Course Modules</h3>
+            <nav class="mt-2">
+                <div class="module-item px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-blue-400 border-l-4 border-blue-600">
+                    <i class="fas fa-play-circle"></i>
+                    <span>SQL Fundamentals</span>
+                </div>
+                <div class="module-item px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-gray-400">
+                    <i class="fas fa-table"></i>
+                    <span>Database Design</span>
+                </div>
+                <div class="module-item px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-gray-400">
+                    <i class="fas fa-filter"></i>
+                    <span>Query Optimization</span>
+                </div>
+                <div class="module-item px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-gray-400">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Security & Permissions</span>
+                </div>
+                <div class="module-item px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-gray-400">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>Transactions & ACID</span>
+                </div>
+                <div class="module-item px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-gray-400">
+                    <i class="fas fa-server"></i>
+                    <span>Database Administration</span>
+                </div>
+                <div class="module-item px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-gray-400">
+                    <i class="fas fa-cloud"></i>
+                    <span>Cloud Databases</span>
+                </div>
+                <div class="module-item px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-gray-400">
+                    <i class="fas fa-project-diagram"></i>
+                    <span>Advanced SQL</span>
+                </div>
+            </nav>
+        </div>
+        
+        <div class="p-4 border-t border-gray-700 mt-auto">
+            <div class="bg-gray-700 rounded-lg p-3">
+                <h4 class="text-sm font-semibold mb-2">Need help?</h4>
+                <p class="text-xs text-gray-300 mb-2">Our SQL experts are available to help</p>
+                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded text-sm">
+                    Ask a Question
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Header -->
+        <header class="bg-gray-800 border-b border-gray-700 p-4 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <h2 class="text-xl font-semibold">SQL Database Fundamentals</h2>
+                <span class="bg-blue-600 text-xs px-2 py-1 rounded-full">Active</span>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button class="bg-gray-700 hover:bg-gray-600 p-2 rounded-full">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <button class="bg-gray-700 hover:bg-gray-600 p-2 rounded-full">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Content Area -->
+        <main class="flex-1 overflow-auto p-6 bg-gray-900">
+            <div class="max-w-4xl mx-auto">
+                <!-- Course Navigation -->
+                <div class="flex items-center justify-between mb-6">
+                    <button class="flex items-center space-x-2 text-blue-400 hover:text-blue-300 opacity-50 cursor-not-allowed" disabled>
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Previous Lesson</span>
+                    </button>
+                    <div class="flex space-x-2">
+                        <button class="bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
+                        <button class="bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                    <button class="flex items-center space-x-2 text-blue-400 hover:text-blue-300">
+                        <span>Next Lesson</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                
+                <!-- Lesson Content -->
+                <div class="bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                    <!-- Tabs -->
+                    <div class="flex border-b border-gray-700">
+                        <button class="tab-btn px-4 py-3 font-medium text-blue-400 border-b-2 border-blue-600" data-tab="lesson">
+                            <i class="fas fa-graduation-cap mr-2"></i>Lesson
+                        </button>
+                        <button class="tab-btn px-4 py-3 font-medium text-gray-400 hover:text-gray-300" data-tab="exercise">
+                            <i class="fas fa-code mr-2"></i>Exercise
+                        </button>
+                        <button class="tab-btn px-4 py-3 font-medium text-gray-400 hover:text-gray-300" data-tab="resources">
+                            <i class="fas fa-link mr-2"></i>Resources
+                        </button>
+                    </div>
+                    
+                    <!-- Tab Contents -->
+                    <div class="p-6">
+                        <!-- Lesson Tab -->
+                        <div id="lesson" class="tab-content active">
+                            <h1 class="text-2xl font-bold mb-4">Introduction to SQL Databases</h1>
+                            <div class="prose prose-invert max-w-none">
+                                <p class="mb-4">SQL (Structured Query Language) is the standard language for managing and manipulating relational databases. It allows you to create, read, update, and delete data (CRUD operations) in a structured way.</p>
+                                
+                                <div class="bg-blue-900 bg-opacity-30 p-4 rounded-lg mb-4">
+                                    <h3 class="text-lg font-semibold mb-2 text-blue-400">
+                                        <i class="fas fa-info-circle mr-2"></i>Why Learn SQL?
+                                    </h3>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Used by 99% of relational databases worldwide</li>
+                                        <li>Essential skill for data analysts, developers, and DBAs</li>
+                                        <li>Standardized language across database systems</li>
+                                        <li>High demand in the job market</li>
+                                        <li>Foundation for understanding data structures</li>
+                                    </ul>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Database Management Systems</h2>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                    <div class="bg-gray-700 p-4 rounded-lg">
+                                        <h3 class="font-semibold text-green-400 mb-2">MySQL</h3>
+                                        <ul class="list-disc pl-5 space-y-1 text-sm">
+                                            <li>Open-source RDBMS</li>
+                                            <li>Popular for web applications</li>
+                                            <li>Owned by Oracle</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg">
+                                        <h3 class="font-semibold text-blue-400 mb-2">PostgreSQL</h3>
+                                        <ul class="list-disc pl-5 space-y-1 text-sm">
+                                            <li>Advanced open-source RDBMS</li>
+                                            <li>Supports complex queries</li>
+                                            <li>Highly extensible</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg">
+                                        <h3 class="font-semibold text-red-400 mb-2">SQL Server</h3>
+                                        <ul class="list-disc pl-5 space-y-1 text-sm">
+                                            <li>Microsoft's enterprise RDBMS</li>
+                                            <li>Integrated with .NET ecosystem</li>
+                                            <li>Powerful BI tools</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Basic SQL Commands</h2>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    <div class="bg-gray-700 p-4 rounded-lg">
+                                        <h3 class="font-semibold text-yellow-400 mb-2">Data Definition Language (DDL)</h3>
+                                        <ul class="list-disc pl-5 space-y-1 text-sm">
+                                            <li><span class="sql-keyword">CREATE</span> - Create database objects</li>
+                                            <li><span class="sql-keyword">ALTER</span> - Modify database objects</li>
+                                            <li><span class="sql-keyword">DROP</span> - Delete database objects</li>
+                                            <li><span class="sql-keyword">TRUNCATE</span> - Remove all records</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg">
+                                        <h3 class="font-semibold text-purple-400 mb-2">Data Manipulation Language (DML)</h3>
+                                        <ul class="list-disc pl-5 space-y-1 text-sm">
+                                            <li><span class="sql-keyword">SELECT</span> - Retrieve data</li>
+                                            <li><span class="sql-keyword">INSERT</span> - Add new records</li>
+                                            <li><span class="sql-keyword">UPDATE</span> - Modify records</li>
+                                            <li><span class="sql-keyword">DELETE</span> - Remove records</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Sample Database Schema</h2>
+                                <p class="mb-4">We'll use a simple e-commerce database with these tables:</p>
+                                
+                                <div class="table-preview mb-6">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Table</th>
+                                                <th>Description</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>customers</td>
+                                                <td>Customer information</td>
+                                            </tr>
+                                            <tr>
+                                                <td>products</td>
+                                                <td>Product catalog</td>
+                                            </tr>
+                                            <tr>
+                                                <td>orders</td>
+                                                <td>Customer orders</td>
+                                            </tr>
+                                            <tr>
+                                                <td>order_items</td>
+                                                <td>Items within each order</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Creating a Table</h2>
+                                <p class="mb-4">Here's how to create the customers table:</p>
+                                
+                                <div class="output-console mb-6">
+<pre><span class="sql-keyword">CREATE TABLE</span> customers (
+    customer_id <span class="sql-keyword">INT</span> <span class="sql-keyword">PRIMARY KEY</span>,
+    first_name <span class="sql-keyword">VARCHAR</span>(50) <span class="sql-keyword">NOT NULL</span>,
+    last_name <span class="sql-keyword">VARCHAR</span>(50) <span class="sql-keyword">NOT NULL</span>,
+    email <span class="sql-keyword">VARCHAR</span>(100) <span class="sql-keyword">UNIQUE</span>,
+    join_date <span class="sql-keyword">DATE</span> <span class="sql-keyword">DEFAULT</span> <span class="sql-function">CURRENT_DATE</span>,
+    is_active <span class="sql-keyword">BOOLEAN</span> <span class="sql-keyword">DEFAULT</span> <span class="sql-keyword">TRUE</span>
+);</pre>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Basic SELECT Query</h2>
+                                <p class="mb-4">Retrieve data from the products table:</p>
+                                
+                                <div class="output-console mb-6">
+<pre><span class="sql-keyword">SELECT</span> product_id, product_name, price
+<span class="sql-keyword">FROM</span> products
+<span class="sql-keyword">WHERE</span> price <span class="sql-keyword">BETWEEN</span> 10 <span class="sql-keyword">AND</span> 100
+<span class="sql-keyword">ORDER BY</span> price <span class="sql-keyword">DESC</span>
+<span class="sql-keyword">LIMIT</span> 10;</pre>
+                                </div>
+                                
+                                <div class="bg-gray-700 p-4 rounded-lg mb-6">
+                                    <h3 class="text-lg font-semibold mb-2 text-green-400">
+                                        <i class="fas fa-lightbulb mr-2"></i>Pro Tip
+                                    </h3>
+                                    <p>Always include a <span class="sql-keyword">WHERE</span> clause to filter your results. Retrieving all rows with <span class="sql-keyword">SELECT *</span> can be inefficient for large tables.</p>
+                                </div>
+                                
+                                <div class="flex justify-between mt-8">
+                                    <button class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded flex items-center opacity-50 cursor-not-allowed" disabled>
+                                        <i class="fas fa-arrow-left mr-2"></i> Previous
+                                    </button>
+                                    <button id="mark-complete" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded flex items-center">
+                                        Mark Complete <i class="fas fa-check ml-2"></i>
+                                    </button>
+                                    <button class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded flex items-center">
+                                        Next <i class="fas fa-arrow-right ml-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Exercise Tab -->
+                        <div id="exercise" class="tab-content">
+                            <h1 class="text-2xl font-bold mb-4">SQL Practice: Fundamentals</h1>
+                            <div class="prose prose-invert max-w-none">
+                                <p class="mb-6">Practice your SQL skills with these interactive exercises. Use the sample database schema shown below:</p>
+                                
+                                <div class="bg-blue-900 bg-opacity-30 border border-blue-700 p-4 rounded-lg mb-6">
+                                    <h3 class="text-lg font-semibold mb-2 flex items-center">
+                                        <i class="fas fa-database mr-2"></i> Sample Database Schema
+                                    </h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <h4 class="font-medium">customers</h4>
+                                            <ul class="text-xs">
+                                                <li>customer_id (INT, PK)</li>
+                                                <li>first_name (VARCHAR)</li>
+                                                <li>last_name (VARCHAR)</li>
+                                                <li>email (VARCHAR)</li>
+                                                <li>join_date (DATE)</li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium">products</h4>
+                                            <ul class="text-xs">
+                                                <li>product_id (INT, PK)</li>
+                                                <li>product_name (VARCHAR)</li>
+                                                <li>price (DECIMAL)</li>
+                                                <li>category (VARCHAR)</li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium">orders</h4>
+                                            <ul class="text-xs">
+                                                <li>order_id (INT, PK)</li>
+                                                <li>customer_id (INT, FK)</li>
+                                                <li>order_date (DATE)</li>
+                                                <li>total_amount (DECIMAL)</li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium">order_items</h4>
+                                            <ul class="text-xs">
+                                                <li>order_item_id (INT, PK)</li>
+                                                <li>order_id (INT, FK)</li>
+                                                <li>product_id (INT, FK)</li>
+                                                <li>quantity (INT)</li>
+                                                <li>unit_price (DECIMAL)</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Interactive SQL Editor</h2>
+                                <p class="mb-4">Write and execute your SQL queries below:</p>
+                                
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium mb-2">SQL Query:</label>
+                                    <textarea id="sql-editor">-- Write your SQL queries here
+SELECT * FROM customers LIMIT 5;</textarea>
+                                </div>
+                                
+                                <button id="run-sql" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded mb-6">
+                                    <i class="fas fa-play mr-2"></i> Execute Query
+                                </button>
+                                
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium mb-2">Query Results:</label>
+                                    <div id="sql-output" class="output-console">
+                                        <div class="text-gray-500">Results will appear here after execution...</div>
+                                    </div>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Exercise 1: Basic SELECT</h2>
+                                <p class="mb-4">Write a query to retrieve the product name and price of all products in the 'Electronics' category, sorted by price from highest to lowest.</p>
+                                
+                                <div class="bg-gray-700 p-4 rounded-lg mb-6">
+                                    <h3 class="font-semibold text-yellow-400 mb-2">Expected Output</h3>
+                                    <div class="table-preview">
+                                        <table class="data-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>product_name</th>
+                                                    <th>price</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>4K Smart TV</td>
+                                                    <td>899.99</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Wireless Headphones</td>
+                                                    <td>199.99</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Bluetooth Speaker</td>
+                                                    <td>129.99</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Exercise 2: JOIN Practice</h2>
+                                <p class="mb-4">Write a query to show all orders with customer names (first and last) and order dates for orders placed in January 2023.</p>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Exercise 3: Aggregation</h2>
+                                <p class="mb-4">Calculate the total revenue by product category, showing only categories with more than $1000 in sales.</p>
+                                
+                                <div class="flex justify-between mt-8">
+                                    <button id="reset-sql" class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded">
+                                        <i class="fas fa-redo mr-2"></i> Reset Editor
+                                    </button>
+                                    <button id="show-solution" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded">
+                                        Show Solution <i class="fas fa-lightbulb ml-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Resources Tab -->
+                        <div id="resources" class="tab-content">
+                            <h1 class="text-2xl font-bold mb-4">SQL Learning Resources</h1>
+                            <div class="prose prose-invert max-w-none">
+                                <p class="mb-6">Enhance your SQL learning with these recommended resources:</p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    <div class="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition cursor-pointer">
+                                        <h3 class="font-semibold text-blue-400 mb-2 flex items-center">
+                                            <i class="fas fa-book mr-2"></i> SQLZoo Interactive Tutorial
+                                        </h3>
+                                        <p class="text-sm mb-2">Interactive SQL tutorial with exercises.</p>
+                                        <a href="#" class="text-blue-400 text-sm hover:underline">https://sqlzoo.net/</a>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition cursor-pointer">
+                                        <h3 class="font-semibold text-blue-400 mb-2 flex items-center">
+                                            <i class="fab fa-youtube mr-2"></i> SQL for Beginners
+                                        </h3>
+                                        <p class="text-sm mb-2">FreeCodeCamp's complete SQL course.</p>
+                                        <a href="#" class="text-blue-400 text-sm hover:underline">YouTube Link</a>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition cursor-pointer">
+                                        <h3 class="font-semibold text-blue-400 mb-2 flex items-center">
+                                            <i class="fas fa-file-pdf mr-2"></i> SQL Cheat Sheet
+                                        </h3>
+                                        <p class="text-sm mb-2">Quick reference for SQL syntax.</p>
+                                        <a href="#" class="text-blue-400 text-sm hover:underline">Download PDF</a>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition cursor-pointer">
+                                        <h3 class="font-semibold text-blue-400 mb-2 flex items-center">
+                                            <i class="fas fa-graduation-cap mr-2"></i> Mode Analytics SQL Tutorial
+                                        </h3>
+                                        <p class="text-sm mb-2">Interactive SQL tutorial with real datasets.</p>
+                                        <a href="#" class="text-blue-400 text-sm hover:underline">https://mode.com/sql-tutorial/</a>
+                                    </div>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Recommended Tools</h2>
+                                <div class="bg-gray-700 p-4 rounded-lg mb-6">
+                                    <div class="flex items-start mb-3">
+                                        <div class="bg-blue-600 p-2 rounded mr-3">
+                                            <i class="fas fa-database"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold">DB Browser for SQLite</h3>
+                                            <p class="text-sm">Lightweight GUI for SQLite databases.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start mb-3">
+                                        <div class="bg-green-600 p-2 rounded mr-3">
+                                            <i class="fas fa-terminal"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold">MySQL Workbench</h3>
+                                            <p class="text-sm">Official GUI for MySQL database management.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="bg-yellow-600 p-2 rounded mr-3">
+                                            <i class="fas fa-cloud"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold">DBeaver</h3>
+                                            <p class="text-sm">Universal database tool with multi-platform support.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Practice Databases</h2>
+                                <div class="space-y-3">
+                                    <div class="flex items-center space-x-3 p-3 bg-gray-700 rounded-lg hover:bg-gray-600 cursor-pointer">
+                                        <i class="fas fa-shopping-cart text-blue-400"></i>
+                                        <span>Northwind Traders (Sample DB)</span>
+                                    </div>
+                                    <div class="flex items-center space-x-3 p-3 bg-gray-700 rounded-lg hover:bg-gray-600 cursor-pointer">
+                                        <i class="fas fa-chart-line text-green-400"></i>
+                                        <span>Chinook Database (Music Store)</span>
+                                    </div>
+                                    <div class="flex items-center space-x-3 p-3 bg-gray-700 rounded-lg hover:bg-gray-600 cursor-pointer">
+                                        <i class="fas fa-university text-yellow-400"></i>
+                                        <span>World Database (Countries)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/sql/sql.min.js"></script>
+    <script>
+        // Initialize CodeMirror for SQL
+        const sqlEditor = CodeMirror.fromTextArea(document.getElementById('sql-editor'), {
+            mode: 'text/x-sql',
+            theme: 'dracula',
+            lineNumbers: true,
+            indentUnit: 4,
+            extraKeys: {
+                'Ctrl-Enter': runSQL,
+                'Cmd-Enter': runSQL
+            }
+        });
+        
+        // Tab functionality
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                
+                // Update active tab button
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('text-blue-400', 'border-blue-600');
+                    btn.classList.add('text-gray-400');
+                });
+                button.classList.add('text-blue-400', 'border-blue-600');
+                button.classList.remove('text-gray-400');
+                
+                // Show active tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Run SQL button
+        document.getElementById('run-sql').addEventListener('click', runSQL);
+        
+        // Reset SQL editor
+        document.getElementById('reset-sql').addEventListener('click', function() {
+            sqlEditor.setValue('-- Write your SQL queries here\nSELECT * FROM customers LIMIT 5;');
+        });
+        
+        // Show solution
+        document.getElementById('show-solution').addEventListener('click', function() {
+            const currentTab = document.querySelector('.tab-content.active').id;
+            
+            if (currentTab === 'exercise') {
+                const output = document.getElementById('sql-output');
+                output.innerHTML = `
+                    <div class="mb-4">
+                        <h4 class="font-medium text-green-400">Exercise 1 Solution:</h4>
+                        <pre class="mt-2"><span class="sql-keyword">SELECT</span> product_name, price
+<span class="sql-keyword">FROM</span> products
+<span class="sql-keyword">WHERE</span> category = <span class="sql-string">'Electronics'</span>
+<span class="sql-keyword">ORDER BY</span> price <span class="sql-keyword">DESC</span>;</pre>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="font-medium text-green-400">Exercise 2 Solution:</h4>
+                        <pre class="mt-2"><span class="sql-keyword">SELECT</span> c.first_name, c.last_name, o.order_date
+<span class="sql-keyword">FROM</span> orders o
+<span class="sql-keyword">JOIN</span> customers c <span class="sql-keyword">ON</span> o.customer_id = c.customer_id
+<span class="sql-keyword">WHERE</span> o.order_date <span class="sql-keyword">BETWEEN</span> <span class="sql-string">'2023-01-01'</span> <span class="sql-keyword">AND</span> <span class="sql-string">'2023-01-31'</span>;</pre>
+                    </div>
+                    <div>
+                        <h4 class="font-medium text-green-400">Exercise 3 Solution:</h4>
+                        <pre class="mt-2"><span class="sql-keyword">SELECT</span> p.category, <span class="sql-function">SUM</span>(oi.quantity * oi.unit_price) <span class="sql-keyword">AS</span> total_revenue
+<span class="sql-keyword">FROM</span> order_items oi
+<span class="sql-keyword">JOIN</span> products p <span class="sql-keyword">ON</span> oi.product_id = p.product_id
+<span class="sql-keyword">GROUP BY</span> p.category
+<span class="sql-keyword">HAVING</span> <span class="sql-function">SUM</span>(oi.quantity * oi.unit_price) > 1000;</pre>
+                    </div>
+                `;
+            }
+        });
+        
+        // Sample SQL execution
+        function runSQL() {
+            const query = sqlEditor.getValue().toLowerCase();
+            const output = document.getElementById('sql-output');
+            
+            output.innerHTML = '<div class="text-green-400">$ Executing SQL query...</div>';
+            
+            // Simulate query execution with different responses
+            setTimeout(() => {
+                if (query.includes('select * from customers')) {
+                    output.innerHTML = `
+                        <div class="text-green-400">Query executed successfully. 5 rows returned.</div>
+                        <div class="table-preview mt-2">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>customer_id</th>
+                                        <th>first_name</th>
+                                        <th>last_name</th>
+                                        <th>email</th>
+                                        <th>join_date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>John</td>
+                                        <td>Doe</td>
+                                        <td>john@example.com</td>
+                                        <td>2022-01-15</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Jane</td>
+                                        <td>Smith</td>
+                                        <td>jane@example.com</td>
+                                        <td>2022-02-20</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Robert</td>
+                                        <td>Johnson</td>
+                                        <td>robert@example.com</td>
+                                        <td>2022-03-10</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>Emily</td>
+                                        <td>Williams</td>
+                                        <td>emily@example.com</td>
+                                        <td>2022-04-05</td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td>Michael</td>
+                                        <td>Brown</td>
+                                        <td>michael@example.com</td>
+                                        <td>2022-05-12</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                }
+                else if (query.includes('select') && query.includes('products') && query.includes('electronics')) {
+                    output.innerHTML = `
+                        <div class="text-green-400">Query executed successfully. 3 rows returned.</div>
+                        <div class="table-preview mt-2">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>product_name</th>
+                                        <th>price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>4K Smart TV</td>
+                                        <td>899.99</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Wireless Headphones</td>
+                                        <td>199.99</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bluetooth Speaker</td>
+                                        <td>129.99</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                }
+                else if (query.includes('join') && query.includes('customers') && query.includes('orders')) {
+                    output.innerHTML = `
+                        <div class="text-green-400">Query executed successfully. 8 rows returned.</div>
+                        <div class="table-preview mt-2">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>first_name</th>
+                                        <th>last_name</th>
+                                        <th>order_date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>John</td>
+                                        <td>Doe</td>
+                                        <td>2023-01-05</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Jane</td>
+                                        <td>Smith</td>
+                                        <td>2023-01-12</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Robert</td>
+                                        <td>Johnson</td>
+                                        <td>2023-01-15</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Emily</td>
+                                        <td>Williams</td>
+                                        <td>2023-01-18</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                }
+                else if (query.includes('group by') && query.includes('category')) {
+                    output.innerHTML = `
+                        <div class="text-green-400">Query executed successfully. 2 rows returned.</div>
+                        <div class="table-preview mt-2">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>category</th>
+                                        <th>total_revenue</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Electronics</td>
+                                        <td>2450.50</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Clothing</td>
+                                        <td>1200.75</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                }
+                else if (query.includes('select')) {
+                    output.innerHTML = `
+                        <div class="text-green-400">Query executed successfully.</div>
+                        <div class="mt-2">Your query: ${query}</div>
+                    `;
+                }
+                else if (query.includes('insert') || query.includes('update') || query.includes('delete')) {
+                    output.innerHTML = `
+                        <div class="text-green-400">Query executed successfully.</div>
+                        <div class="mt-2">1 row affected.</div>
+                    `;
+                }
+                else if (query.includes('create table')) {
+                    output.innerHTML = `
+                        <div class="text-green-400">Query executed successfully.</div>
+                        <div class="mt-2">Table created successfully.</div>
+                    `;
+                }
+                else {
+                    output.innerHTML = `
+                        <div class="text-yellow-400">Query executed but no results to display.</div>
+                        <div class="mt-2">Your query: ${query}</div>
+                    `;
+                }
+                
+                // Scroll to bottom of output
+                output.scrollTop = output.scrollHeight;
+            }, 500);
+        }
+        
+        // Mark lesson as complete
+        document.getElementById('mark-complete').addEventListener('click', function() {
+            // Update progress ring
+            const progressCircle = document.querySelector('.progress-ring__circle');
+            progressCircle.setAttribute('stroke-dasharray', '25, 100');
+            
+            // Update progress percentage
+            document.querySelector('.relative.w-20.h-20 svg + div span').textContent = '25%';
+            document.querySelector('.p-4 span.text-sm').textContent = '25%';
+            
+            // Update module item
+            document.querySelectorAll('.module-item')[0].classList.add('completed');
+            
+            // Show completion message
+            alert('Lesson marked as complete! Progress updated to 25%.');
+            
+            // Disable the button
+            this.disabled = true;
+            this.classList.add('opacity-50', 'cursor-not-allowed');
+        });
+    </script>
+</body>
+</html>

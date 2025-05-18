@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Learn HTML | CodeX Academy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+      @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+      }
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+      .card-hover:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+      }
+      .progress-bar {
+        height: 10px;
+        border-radius: 5px;
+        background-color: #e5e7eb;
+      }
+      .progress-fill {
+        height: 100%;
+        border-radius: 5px;
+        transition: width 0.5s ease;
+      }
+      .locked-overlay {
+        transition: all 0.5s ease;
+      }
+      .pulse {
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+        70% { transform: scale(1.02); box-shadow: 0 0 0 12px rgba(59, 130, 246, 0); }
+        100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+      }
+      .floating-icon {
+        animation: float 4s ease-in-out infinite;
+      }
+      .glow {
+        box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+      }
+      .course-card {
+        position: relative;
+        overflow: hidden;
+      }
+      .course-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%);
+        z-index: 1;
+      }
+      .confetti {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: #f00;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  
+  <body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen font-sans">
+    <!-- Header -->
+    <header class="bg-white p-4 shadow-lg fixed top-0 w-full z-50">
+      <div class="container mx-auto flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <img src="codexbg.png" alt="Logo" class="h-10 w-10 rounded-full glow">
+          <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">CodeX Academy</span>
+        </div>
+        <div class="flex items-center space-x-4">
+          <a href="myprofile.html" class="text-gray-600 hover:text-blue-600 transition-colors duration-300 text-xl flex items-center gap-2 group">
+            <i class="fa-solid fa-user-circle group-hover:scale-110 transition-transform"></i>
+            <span class="text-sm font-medium hidden md:inline">Dashboard</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="container mx-auto pt-24 pb-16 px-4">
+      <!-- Welcome Section -->
+      <div class="max-w-4xl mx-auto text-center mb-16 animate__animated animate__fadeIn">
+        <div class="inline-block mb-4">
+          <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">BEGINNER TRACK</span>
+        </div>
+        <h1 class="text-5xl font-bold text-gray-800 mb-4 bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">Web Development Fundamentals</h1>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">Master web development through our structured learning path. Track your progress and unlock new levels as you go!</p>
+      </div>
+    
+      <!-- Courses Grid -->
+      <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <!-- Level 1 Card -->
+        <div class="course-card bg-white rounded-2xl shadow-lg overflow-hidden card-hover animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
+          <div class="relative">
+            <div class="absolute top-4 right-4 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg z-10 flex items-center">
+              <i class="fas fa-code mr-1"></i> HTML
+            </div>
+            <div class="h-48 bg-gradient-to-r from-blue-500 to-blue-400 flex items-center justify-center relative overflow-hidden">
+              <i class="fas fa-file-code text-white text-7xl opacity-90 floating-icon"></i>
+              <div class="absolute bottom-0 left-0 right-0 h-1 bg-blue-300"></div>
+            </div>
+          </div>
+          
+          <div class="p-6 relative z-10">
+            <div class="flex justify-between items-start mb-3">
+              <h3 class="text-2xl font-bold text-gray-800">HTML Basics</h3>
+              <span class="text-xs font-semibold bg-blue-100 text-blue-800 px-2 py-1 rounded">Level 1</span>
+            </div>
+            <p class="text-gray-600 mb-5">Learn the structure of HTML, essential tags, and how to create a simple webpage from scratch.</p>
+            
+            <div class="mb-6">
+              <div class="flex justify-between text-sm text-gray-600 mb-2">
+                <span class="font-medium">Your progress</span>
+                <span id="progress-text-level1" class="font-bold">0%</span>
+              </div>
+              <div class="progress-bar">
+                <div id="progress-level1" class="progress-fill bg-blue-600" style="width: 0%"></div>
+              </div>
+            </div>
+            
+            <button onclick="startLesson('level1')" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-xl font-medium transition-all duration-300 flex items-center justify-center gap-2 pulse">
+              <i class="fas fa-play mr-1"></i> Start Learning
+            </button>
+          </div>
+        </div>
+        
+        <!-- Level 2 Card -->
+        <div class="course-card bg-white rounded-2xl shadow-lg overflow-hidden card-hover animate__animated animate__fadeInUp relative" style="animation-delay: 0.2s">
+          <div id="level2-overlay" class="locked-overlay absolute inset-0 bg-gray-900/80 flex flex-col justify-center items-center p-6 z-20 backdrop-blur-sm">
+            <div class="bg-white rounded-full p-4 mb-4 transform transition-all duration-500 hover:scale-110">
+              <i class="fas fa-lock text-gray-800 text-2xl"></i>
+            </div>
+            <p class="text-white text-center font-medium text-lg mb-2">Complete Level 1 to unlock</p>
+            <p class="text-blue-200 text-sm">Master HTML basics first</p>
+          </div>
+          
+          <div class="relative">
+            <div class="absolute top-4 right-4 bg-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg z-10 flex items-center">
+              <i class="fas fa-paint-brush mr-1"></i> CSS
+            </div>
+            <div class="h-48 bg-gradient-to-r from-purple-500 to-purple-400 flex items-center justify-center">
+              <i class="fas fa-palette text-white text-7xl opacity-90"></i>
+            </div>
+          </div>
+          
+          <div class="p-6 relative z-10">
+            <div class="flex justify-between items-start mb-3">
+              <h3 class="text-2xl font-bold text-gray-800">CSS Styling</h3>
+              <span class="text-xs font-semibold bg-purple-100 text-purple-800 px-2 py-1 rounded">Level 2</span>
+            </div>
+            <p class="text-gray-600 mb-5">Explore CSS for styling, layout techniques, and responsive design principles for modern websites.</p>
+            
+            <div class="mb-6">
+              <div class="flex justify-between text-sm text-gray-600 mb-2">
+                <span class="font-medium">Your progress</span>
+                <span id="progress-text-level2" class="font-bold">0%</span>
+              </div>
+              <div class="progress-bar">
+                <div id="progress-level2" class="progress-fill bg-purple-600" style="width: 0%"></div>
+              </div>
+            </div>
+            
+            <button id="level2-btn" onclick="startLesson('level2')" class="w-full bg-gray-300 text-gray-500 px-4 py-3 rounded-xl font-medium cursor-not-allowed flex items-center justify-center gap-2">
+              <i class="fas fa-lock mr-1"></i> Locked
+            </button>
+          </div>
+        </div>
+        
+        <!-- Level 3 Card -->
+        <div class="course-card bg-white rounded-2xl shadow-lg overflow-hidden card-hover animate__animated animate__fadeInUp relative" style="animation-delay: 0.3s">
+          <div id="level3-overlay" class="locked-overlay absolute inset-0 bg-gray-900/80 flex flex-col justify-center items-center p-6 z-20 backdrop-blur-sm">
+            <div class="bg-white rounded-full p-4 mb-4 transform transition-all duration-500 hover:scale-110">
+              <i class="fas fa-lock text-gray-800 text-2xl"></i>
+            </div>
+            <p class="text-white text-center font-medium text-lg mb-2">Complete Level 2 to unlock</p>
+            <p class="text-yellow-200 text-sm">CSS mastery required</p>
+          </div>
+          
+          <div class="relative">
+            <div class="absolute top-4 right-4 bg-yellow-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg z-10 flex items-center">
+              <i class="fas fa-code-branch mr-1"></i> JavaScript
+            </div>
+            <div class="h-48 bg-gradient-to-r from-yellow-500 to-yellow-400 flex items-center justify-center">
+              <i class="fas fa-laptop-code text-white text-7xl opacity-90"></i>
+            </div>
+          </div>
+          
+          <div class="p-6 relative z-10">
+            <div class="flex justify-between items-start mb-3">
+              <h3 class="text-2xl font-bold text-gray-800">JavaScript Fundamentals</h3>
+              <span class="text-xs font-semibold bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Level 3</span>
+            </div>
+            <p class="text-gray-600 mb-5">Understand JavaScript syntax, functions, DOM manipulation and how to make interactive web pages.</p>
+            
+            <div class="mb-6">
+              <div class="flex justify-between text-sm text-gray-600 mb-2">
+                <span class="font-medium">Your progress</span>
+                <span id="progress-text-level3" class="font-bold">0%</span>
+              </div>
+              <div class="progress-bar">
+                <div id="progress-level3" class="progress-fill bg-yellow-500" style="width: 0%"></div>
+              </div>
+            </div>
+            
+            <button id="level3-btn" onclick="startLesson('level3')" class="w-full bg-gray-300 text-gray-500 px-4 py-3 rounded-xl font-medium cursor-not-allowed flex items-center justify-center gap-2">
+              <i class="fas fa-lock mr-1"></i> Locked
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Final Quiz Section -->
+      <div class="text-center mt-20 animate__animated animate__fadeIn" style="animation-delay: 0.4s">
+        <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-lg relative overflow-hidden">
+          <div class="absolute -top-10 -right-10 w-32 h-32 bg-blue-100 rounded-full opacity-20"></div>
+          <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-purple-100 rounded-full opacity-20"></div>
+          
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">Ready for the Final Challenge?</h2>
+          <p class="text-gray-600 mb-6">Test your knowledge with our comprehensive quiz and earn your certification badge!</p>
+          
+          <button id="finalQuizBtn" onclick="checkQuizAccess()" class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 group">
+            <i class="fas fa-trophy mr-3 text-xl group-hover:rotate-12 transition-transform"></i>
+            <span class="text-lg">Take Final Quiz</span>
+          </button>
+          
+          <div class="mt-6 text-sm text-gray-500 flex items-center justify-center">
+            <i class="fas fa-info-circle mr-2"></i>
+            <span>Complete all 3 courses to unlock the quiz</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Achievement Toast -->
+    <div id="achievementToast" class="fixed bottom-0 right-0 m-6 p-4 bg-white rounded-xl shadow-2xl transform translate-y-full transition-transform duration-500 z-50 max-w-sm">
+      <div class="flex items-start">
+        <div class="mr-4">
+          <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center">
+            <i class="fas fa-trophy text-yellow-600 text-xl"></i>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-bold text-gray-800 mb-1">New Achievement Unlocked!</h4>
+          <p class="text-sm text-gray-600">You've completed the HTML Basics course. Keep going!</p>
+        </div>
+        <button onclick="hideToast()" class="ml-4 text-gray-400 hover:text-gray-600">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+
+    <script>
+      // Initialize animations
+      document.addEventListener('DOMContentLoaded', function() {
+        // Initialize progress data
+        if (!localStorage.getItem('progress')) {
+            localStorage.setItem('progress', JSON.stringify({
+                level1: 0,
+                level2: 0,
+                level3: 0
+            }));
+        }
+
+        // Retrieve progress data
+        const progress = JSON.parse(localStorage.getItem('progress')) || {
+            level1: 0,
+            level2: 0,
+            level3: 0
+        };
+
+        // Update progress displays
+        ['level1', 'level2', 'level3'].forEach(level => {
+            const progressElement = document.getElementById(`progress-${level}`);
+            const progressTextElement = document.getElementById(`progress-text-${level}`);
+            
+            progressElement.style.width = `${progress[level]}%`;
+            progressTextElement.textContent = `${progress[level]}%`;
+        });
+
+        // Check level completion to unlock next levels
+        const level1Progress = progress.level1 || 0;
+        const level2Progress = progress.level2 || 0;
+        
+        const level2Overlay = document.getElementById('level2-overlay');
+        const level2Btn = document.getElementById('level2-btn');
+        
+        const level3Overlay = document.getElementById('level3-overlay');
+        const level3Btn = document.getElementById('level3-btn');
+
+        // Update level 2 access
+        if (level1Progress >= 100) {
+            level2Overlay.style.opacity = '0';
+            level2Overlay.style.pointerEvents = 'none';
+            level2Btn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+            level2Btn.classList.add('bg-purple-600', 'hover:bg-purple-700', 'text-white', 'cursor-pointer');
+            level2Btn.innerHTML = '<i class="fas fa-play mr-1"></i> Start Learning';
+        }
+
+        // Update level 3 access
+        if (level2Progress >= 100) {
+            level3Overlay.style.opacity = '0';
+            level3Overlay.style.pointerEvents = 'none';
+            level3Btn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+            level3Btn.classList.add('bg-yellow-500', 'hover:bg-yellow-600', 'text-white', 'cursor-pointer');
+            level3Btn.innerHTML = '<i class="fas fa-play mr-1"></i> Start Learning';
+        }
+      });
+
+      function startLesson(level) {
+        localStorage.setItem('currentLesson', level);
+        
+        if (level === 'level1') {
+            window.location.href = 'htmcourse.html';
+        } else if (level === 'level2') {
+            window.location.href = 'csscourse.html';
+        } else if (level === 'level3') {
+            window.location.href = 'jscourse.html';
+        }
+      }
+      
+      function checkQuizAccess() {
+        const progress = JSON.parse(localStorage.getItem('progress')) || {
+            level1: 0,
+            level2: 0,
+            level3: 0
+        };
+        
+        if (progress.level1 >= 100 && progress.level2 >= 100 && progress.level3 >= 100) {
+            window.location.href = 'quiz.html';
+        } else {
+            // Show error message
+            const quizBtn = document.getElementById('finalQuizBtn');
+            quizBtn.classList.remove('bg-gradient-to-r', 'from-green-500', 'to-green-600');
+            quizBtn.classList.add('bg-red-500');
+            quizBtn.innerHTML = '<i class="fas fa-exclamation-triangle mr-3"></i> Complete All Courses First';
+            
+            setTimeout(() => {
+                quizBtn.classList.remove('bg-red-500');
+                quizBtn.classList.add('bg-gradient-to-r', 'from-green-500', 'to-green-600');
+                quizBtn.innerHTML = '<i class="fas fa-trophy mr-3"></i> Take Final Quiz';
+            }, 2000);
+            
+            // Show achievement toast
+            showToast('Please complete all 3 courses before taking the final quiz.');
+        }
+      }
+      
+      function showToast(message) {
+        const toast = document.getElementById('achievementToast');
+        toast.querySelector('p').textContent = message;
+        toast.style.transform = 'translateY(0)';
+        
+        setTimeout(() => {
+            hideToast();
+        }, 5000);
+      }
+      
+      function hideToast() {
+        const toast = document.getElementById('achievementToast');
+        toast.style.transform = 'translateY(200%)';
+      }
+      
+      // Function to mark level as complete
+      function completeLevel(level) {
+          const progress = JSON.parse(localStorage.getItem('progress')) || {
+              level1: 0,
+              level2: 0,
+              level3: 0
+          };
+          
+          if (level === 'level1') {
+              progress.level1 = 100;
+              localStorage.setItem('progress', JSON.stringify(progress));
+              
+              // Update progress display
+              document.getElementById('progress-level1').style.width = '100%';
+              document.getElementById('progress-text-level1').textContent = '100%';
+              
+              // Unlock next level
+              const level2Overlay = document.getElementById('level2-overlay');
+              const level2Btn = document.getElementById('level2-btn');
+              level2Overlay.style.opacity = '0';
+              level2Overlay.style.pointerEvents = 'none';
+              level2Btn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+              level2Btn.classList.add('bg-purple-600', 'hover:bg-purple-700', 'text-white', 'cursor-pointer');
+              level2Btn.innerHTML = '<i class="fas fa-play mr-1"></i> Start Learning';
+              
+              // Show achievement
+              showToast('Congratulations! You\'ve unlocked the CSS Styling course.');
+          }
+      }
+
+      // Check if we're coming back from level 1
+      if (localStorage.getItem('currentLesson') === 'level1') {
+          completeLevel('level1');
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Editing Masterclass</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .lesson-card:hover .lesson-icon {
+            transform: scale(1.1);
+            transition: all 0.3s ease;
+        }
+        .sidebar {
+            scrollbar-width: thin;
+            scrollbar-color: #4b5563 #1f2937;
+        }
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sidebar::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: #4b5563;
+            border-radius: 6px;
+        }
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        .tab-button.active {
+            border-bottom: 3px solid #3b82f6;
+            color: #3b82f6;
+        }
+        .flash {
+            animation: flash 0.5s;
+        }
+        @keyframes flash {
+            0% { background-color: rgba(59, 130, 246, 0.3); }
+            100% { background-color: transparent; }
+        }
+        .exercise-tab {
+            display: none;
+        }
+        .exercise-tab.active {
+            display: block;
+        }
+        .hint-box {
+            display: none;
+        }
+        .hint-box.visible {
+            display: block;
+        }
+        .success-message {
+            display: none;
+        }
+        .success-message.visible {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .module-toggle {
+            cursor: pointer;
+        }
+        .module-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .module-content.expanded {
+            max-height: 1000px;
+        }
+        .module-toggle i {
+            transition: transform 0.3s ease;
+        }
+        .module-toggle.expanded i {
+            transform: rotate(90deg);
+        }
+        .video-icon {
+            color: #3b82f6;
+        }
+        .active-lesson {
+            background-color: #1d4ed8;
+            color: white;
+        }
+        .timeline {
+            background-color: #1e293b;
+            border-radius: 0.5rem;
+        }
+        .video-preview {
+            background-color: #111827;
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+        }
+        .clip-thumbnail {
+            transition: all 0.2s ease;
+        }
+        .clip-thumbnail:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-gray-800 shadow-lg">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-video video-icon text-3xl"></i>
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                    Video Editing Masterclass
+                </h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <div class="w-12 h-12">
+                        <svg class="w-full h-full" viewBox="0 0 36 36">
+                            <path 
+                                d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none"
+                                stroke="#4b5563",
+                                stroke-width="2",
+                                stroke-dasharray="100, 100"
+                            />
+                            <path 
+                                class="progress-ring__circle"
+                                d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none"
+                                stroke="#3b82f6",
+                                stroke-width="2",
+                                stroke-dasharray="0, 100"
+                            />
+                        </svg>
+                    </div>
+                    <span class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs font-bold">0%</span>
+                </div>
+                <button class="profile-btn bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-medium flex items-center space-x-2">
+                    <i class="fas fa-user-tie"></i>
+                    <span>My Profile</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar w-64 bg-gray-800 overflow-y-auto flex-shrink-0">
+            <div class="p-4">
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold mb-2 text-gray-300">Course Content</h2>
+                    <div class="space-y-1">
+                        <!-- Module 1 -->
+                        <div class="mb-2">
+                            <div class="module-toggle flex items-center justify-between px-2 py-1 bg-gray-700 rounded">
+                                <span class="font-medium">Module 1: Editing Fundamentals</span>
+                                <div class="flex items-center">
+                                    <span class="text-xs text-gray-400 mr-2">0%</span>
+                                    <i class="fas fa-chevron-right text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="module-content ml-4 mt-1 space-y-1">
+                                <a href="#" class="block px-2 py-1 rounded active-lesson flash">
+                                    <i class="fas fa-play-circle text-blue-400 mr-2"></i>
+                                    Introduction to Video Editing
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Understanding the Timeline
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Basic Cutting Techniques
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Transitions & Effects
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Audio Basics
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Module 2 -->
+                        <div class="mb-2">
+                            <div class="module-toggle flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 2: Advanced Techniques</span>
+                                <div class="flex items-center">
+                                    <span class="text-xs text-gray-400 mr-2">0%</span>
+                                    <i class="fas fa-chevron-right text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="module-content ml-4 mt-1 space-y-1">
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Color Grading
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Keyframing & Animation
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Masking Techniques
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Advanced Audio Editing
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Multicam Editing
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Module 3 -->
+                        <div class="mb-2">
+                            <div class="module-toggle flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 3: Software Deep Dive</span>
+                                <div class="flex items-center">
+                                    <span class="text-xs text-gray-400 mr-2">0%</span>
+                                    <i class="fas fa-chevron-right text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="module-content ml-4 mt-1 space-y-1">
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Adobe Premiere Pro
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Final Cut Pro
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    DaVinci Resolve
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    After Effects for Editors
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Comparing NLEs
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Module 4 -->
+                        <div class="mb-2">
+                            <div class="module-toggle flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 4: Workflow & Efficiency</span>
+                                <div class="flex items-center">
+                                    <span class="text-xs text-gray-400 mr-2">0%</span>
+                                    <i class="fas fa-chevron-right text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="module-content ml-4 mt-1 space-y-1">
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Organizing Media
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Keyboard Shortcuts
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Proxy Workflows
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Collaborative Editing
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Exporting & Delivery
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Module 5 -->
+                        <div class="mb-2">
+                            <div class="module-toggle flex items-center justify-between px-2 py-1 rounded hover:bg-gray-700">
+                                <span class="font-medium">Module 5: Creative Storytelling</span>
+                                <div class="flex items-center">
+                                    <span class="text-xs text-gray-400 mr-2">0%</span>
+                                    <i class="fas fa-chevron-right text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="module-content ml-4 mt-1 space-y-1">
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Pacing & Rhythm
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Emotional Impact
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Montage Theory
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Documentary Editing
+                                </a>
+                                <a href="#" class="block px-2 py-1 rounded hover:bg-gray-700 text-gray-400">
+                                    <i class="far fa-circle mr-2"></i>
+                                    Narrative Editing
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold mb-2 text-gray-300">Quick Links</h2>
+                    <div class="space-y-2">
+                        <a href="#" class="quick-link flex items-center px-3 py-2 rounded-lg bg-gray-700 hover:bg-gray-600">
+                            <i class="fas fa-film text-purple-400 mr-3"></i>
+                            <span>Sample Footage</span>
+                        </a>
+                        <a href="#" class="quick-link flex items-center px-3 py-2 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-music text-blue-400 mr-3"></i>
+                            <span>Royalty-Free Music</span>
+                        </a>
+                        <a href="#" class="quick-link flex items-center px-3 py-2 rounded-lg hover:bg-gray-700">
+                            <i class="fas fa-question-circle text-green-400 mr-3"></i>
+                            <span>Editing FAQ</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="daily-challenge p-4 bg-gray-700 rounded-lg">
+                    <h3 class="font-medium mb-2">Daily Editing Challenge</h3>
+                    <p class="text-sm text-gray-300 mb-3">Create a 30-second montage from provided clips.</p>
+                    <button class="challenge-btn w-full bg-blue-600 hover:bg-blue-700 py-1 rounded text-sm">
+                        Start Challenge
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-auto bg-gray-900">
+            <div class="container mx-auto px-4 py-6">
+                <!-- Breadcrumbs -->
+                <div class="flex items-center text-sm text-gray-400 mb-6">
+                    <a href="#" class="hover:text-blue-400">Home</a>
+                    <span class="mx-2">/</span>
+                    <a href="#" class="hover:text-blue-400">Module 1</a>
+                    <span class="mx-2">/</span>
+                    <span class="text-blue-400">Introduction to Video Editing</span>
+                </div>
+                
+                <!-- Lesson Header -->
+                <div class="bg-gray-800 rounded-lg p-6 mb-6 shadow-lg">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h2 class="text-2xl font-bold mb-2">Introduction to Video Editing</h2>
+                            <p class="text-gray-400 mb-4">Learn the core concepts and workflow of professional video editing.</p>
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <span class="ml-2 text-gray-400">4.7</span>
+                                </div>
+                                <span class="text-gray-400"><i class="fas fa-clock mr-1"></i> 52 min</span>
+                                <span class="text-gray-400"><i class="fas fa-tasks mr-1"></i> 4 exercises</span>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="bookmark-btn p-2 rounded-full bg-gray-700 hover:bg-gray-600">
+                                <i class="fas fa-bookmark"></i>
+                            </button>
+                            <button class="share-btn p-2 rounded-full bg-gray-700 hover:bg-gray-600">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Lesson Content -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <!-- Theory Section -->
+                    <div class="lg:col-span-2 bg-gray-800 rounded-lg p-6 shadow-lg">
+                        <div class="prose prose-invert max-w-none">
+                            <h3 class="text-xl font-semibold mb-4">The Art of Video Editing</h3>
+                            <p>Video editing is the process of manipulating and rearranging video shots to create a new work. It's both a technical and creative process that transforms raw footage into a compelling story.</p>
+                            
+                            <div class="my-6 p-4 bg-gray-700 rounded-lg border-l-4 border-blue-500">
+                                <h4 class="font-medium mb-2">Key Concepts:</h4>
+                                <ul class="list-disc pl-5 space-y-1">
+                                    <li><strong>Non-linear editing (NLE):</strong> Modern digital editing workflow</li>
+                                    <li><strong>Timeline:</strong> Where you arrange your clips</li>
+                                    <li><strong>Cutting:</strong> The basic building block of editing</li>
+                                    <li><strong>Continuity:</strong> Maintaining consistency between shots</li>
+                                    <li><strong>Pacing:</strong> The rhythm of your edit</li>
+                                    <li><strong>J-cut & L-cut:</strong> Audio leading into or out of a scene</li>
+                                </ul>
+                            </div>
+                            
+                            <h4 class="font-semibold mt-6 mb-3">1. The Editing Workflow</h4>
+                            <p>Professional editors follow a structured workflow to ensure efficiency and quality:</p>
+                            <div class="bg-gray-700 p-3 rounded-lg my-4">
+                                <div class="grid grid-cols-5 gap-2 text-center text-xs">
+                                    <div class="bg-blue-900 p-2 rounded">
+                                        <i class="fas fa-upload block text-xl mb-1"></i>
+                                        <span>Ingest</span>
+                                    </div>
+                                    <div class="bg-blue-900 p-2 rounded">
+                                        <i class="fas fa-folder-open block text-xl mb-1"></i>
+                                        <span>Organize</span>
+                                    </div>
+                                    <div class="bg-blue-900 p-2 rounded">
+                                        <i class="fas fa-cut block text-xl mb-1"></i>
+                                        <span>Rough Cut</span>
+                                    </div>
+                                    <div class="bg-blue-900 p-2 rounded">
+                                        <i class="fas fa-paint-brush block text-xl mb-1"></i>
+                                        <span>Fine Cut</span>
+                                    </div>
+                                    <div class="bg-blue-900 p-2 rounded">
+                                        <i class="fas fa-file-export block text-xl mb-1"></i>
+                                        <span>Export</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h4 class="font-semibold mt-6 mb-3">2. Types of Editing</h4>
+                            <p>Different projects require different editing approaches:</p>
+                            <div class="bg-gray-700 p-3 rounded-lg my-4">
+                                <div class="grid grid-cols-3 gap-3">
+                                    <div class="bg-gray-800 p-2 rounded">
+                                        <h5 class="font-medium mb-1">Narrative Editing</h5>
+                                        <p class="text-xs text-gray-400">Story-driven with scripted content</p>
+                                    </div>
+                                    <div class="bg-gray-800 p-2 rounded">
+                                        <h5 class="font-medium mb-1">Documentary</h5>
+                                        <p class="text-xs text-gray-400">Real footage organized to tell a story</p>
+                                    </div>
+                                    <div class="bg-gray-800 p-2 rounded">
+                                        <h5 class="font-medium mb-1">Commercial</h5>
+                                        <p class="text-xs text-gray-400">Short, high-impact promotional content</p>
+                                    </div>
+                                    <div class="bg-gray-800 p-2 rounded">
+                                        <h5 class="font-medium mb-1">Social Media</h5>
+                                        <p class="text-xs text-gray-400">Quick cuts for short attention spans</p>
+                                    </div>
+                                    <div class="bg-gray-800 p-2 rounded">
+                                        <h5 class="font-medium mb-1">Corporate</h5>
+                                        <p class="text-xs text-gray-400">Clean, professional business content</p>
+                                    </div>
+                                    <div class="bg-gray-800 p-2 rounded">
+                                        <h5 class="font-medium mb-1">Music Video</h5>
+                                        <p class="text-xs text-gray-400">Rhythmic editing synchronized to music</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h4 class="font-semibold mt-6 mb-3">3. Essential Editing Tools</h4>
+                            <p>Every editor should be familiar with these fundamental tools:</p>
+                            <div class="bg-gray-700 p-3 rounded-lg my-4">
+                                <div class="grid grid-cols-2 gap-2 text-sm">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-cut text-blue-400 mr-2"></i>
+                                        <span>Razor Tool (Cutting)</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-arrows-alt text-blue-400 mr-2"></i>
+                                        <span>Selection Tool</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-sliders-h text-blue-400 mr-2"></i>
+                                        <span>Effects Controls</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-wave-square text-blue-400 mr-2"></i>
+                                        <span>Audio Mixer</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-palette text-blue-400 mr-2"></i>
+                                        <span>Color Correction</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-text-height text-blue-400 mr-2"></i>
+                                        <span>Title Tool</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 p-4 bg-blue-900 bg-opacity-30 rounded-lg border-l-4 border-blue-400">
+                                <h4 class="font-medium mb-2"><i class="fas fa-lightbulb mr-2"></i>Editing Wisdom</h4>
+                                <p>Great editing is invisible. When done well, the audience should be so engaged with the story that they don't notice the cuts and transitions.</p>
+                            </div>
+                            
+                            <!-- Timeline Visualization -->
+                            <div class="timeline rounded-lg p-4 mt-6">
+                                <h4 class="font-semibold mb-3 text-center">Basic Timeline Structure</h4>
+                                <div class="flex items-center h-24 bg-gray-700 rounded px-4 mb-2">
+                                    <div class="w-16 h-16 bg-blue-600 rounded clip-thumbnail mr-2"></div>
+                                    <div class="w-24 h-16 bg-purple-600 rounded clip-thumbnail mr-2"></div>
+                                    <div class="w-32 h-16 bg-green-600 rounded clip-thumbnail mr-2"></div>
+                                    <div class="w-20 h-16 bg-yellow-600 rounded clip-thumbnail"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-gray-400 px-2">
+                                    <span>Video Track</span>
+                                    <span>00:00:00:00</span>
+                                </div>
+                                <div class="flex items-center h-16 bg-gray-700 rounded px-4 mt-4">
+                                    <div class="w-full h-8 bg-gray-600 rounded"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-gray-400 px-2">
+                                    <span>Audio Track</span>
+                                    <span>-6db</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 flex justify-between border-t border-gray-700 pt-4">
+                            <button class="prev-lesson flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                Previous Lesson
+                            </button>
+                            <button class="next-lesson flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg">
+                                Next Lesson
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Practice Section -->
+                    <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+                        <div class="bg-gray-700 px-4 py-3 border-b border-gray-600">
+                            <h3 class="font-semibold"><i class="fas fa-edit mr-2"></i>Editing Lab</h3>
+                        </div>
+                        <div class="p-4">
+                            <div class="mb-4">
+                                <div class="flex border-b border-gray-700">
+                                    <button class="tab-button active px-4 py-2 font-medium" data-tab="exercise1">Exercise 1</button>
+                                    <button class="tab-button px-4 py-2 font-medium" data-tab="exercise2">Exercise 2</button>
+                                    <button class="tab-button px-4 py-2 font-medium" data-tab="exercise3">Exercise 3</button>
+                                    <button class="tab-button px-4 py-2 font-medium" data-tab="exercise4">Timeline Lab</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Exercise 1 -->
+                            <div class="exercise-tab active" id="exercise1">
+                                <div class="mb-4">
+                                    <h4 class="font-medium mb-2">Task:</h4>
+                                    <p class="text-sm text-gray-300">Match each editing term with its correct definition.</p>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <div class="grid grid-cols-1 gap-3">
+                                        <div class="bg-gray-700 p-3 rounded-lg">
+                                            <p class="font-medium mb-2">Non-linear Editing (NLE)</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm" data-correct="1">Digital editing that allows random access to clips</button>
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Editing film by physically cutting and splicing</button>
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">A type of transition between scenes</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-gray-700 p-3 rounded-lg">
+                                            <p class="font-medium mb-2">J-cut</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">A jump cut between two similar shots</button>
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm" data-correct="2">When audio from next scene starts before video</button>
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">A type of color grading technique</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-gray-700 p-3 rounded-lg">
+                                            <p class="font-medium mb-2">Continuity Editing</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Making sure all clips are the same length</button>
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Keeping the same filter throughout the video</button>
+                                                <button class="option-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm" data-correct="3">Maintaining consistency between shots</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="hint-box bg-gray-700 bg-opacity-50 rounded-lg p-3 border border-gray-600 mb-4">
+                                    <div class="flex items-start">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-info-circle text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Hint</h4>
+                                            <p class="text-sm text-gray-300">Think about how these terms are used in actual editing workflows. NLE refers to modern digital editing, J-cuts are about audio leading video, and continuity ensures visual consistency.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="success-message bg-blue-900 bg-opacity-30 rounded-lg p-3 border border-blue-600 mb-4">
+                                    <div class="flex items-center">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-check text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Success!</h4>
+                                            <p class="text-sm text-gray-300">You've correctly matched all editing terms!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="check-btn w-full bg-purple-600 hover:bg-purple-700 py-2 rounded font-medium">
+                                    <i class="fas fa-check-circle mr-2"></i> Check Answers
+                                </button>
+                            </div>
+                            
+                            <!-- Exercise 2 -->
+                            <div class="exercise-tab" id="exercise2">
+                                <div class="mb-4">
+                                    <h4 class="font-medium mb-2">Task:</h4>
+                                    <p class="text-sm text-gray-300">Identify the correct editing workflow sequence.</p>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <div class="bg-gray-700 p-3 rounded-lg">
+                                        <div class="grid grid-cols-1 gap-3" id="sortable">
+                                            <div class="bg-gray-800 p-2 rounded flex items-center cursor-move" data-order="3">
+                                                <i class="fas fa-grip-lines mr-2 text-gray-500"></i>
+                                                <span>Fine Cut (polish edit, add effects)</span>
+                                            </div>
+                                            <div class="bg-gray-800 p-2 rounded flex items-center cursor-move" data-order="1">
+                                                <i class="fas fa-grip-lines mr-2 text-gray-500"></i>
+                                                <span>Organize footage (label, group, select)</span>
+                                            </div>
+                                            <div class="bg-gray-800 p-2 rounded flex items-center cursor-move" data-order="4">
+                                                <i class="fas fa-grip-lines mr-2 text-gray-500"></i>
+                                                <span>Export final video</span>
+                                            </div>
+                                            <div class="bg-gray-800 p-2 rounded flex items-center cursor-move" data-order="2">
+                                                <i class="fas fa-grip-lines mr-2 text-gray-500"></i>
+                                                <span>Rough Cut (basic sequence of scenes)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="hint-box bg-gray-700 bg-opacity-50 rounded-lg p-3 border border-gray-600 mb-4">
+                                    <div class="flex items-start">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-info-circle text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Hint</h4>
+                                            <p class="text-sm text-gray-300">The workflow typically starts with organizing your media, then creating a rough structure before polishing the details.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="success-message bg-blue-900 bg-opacity-30 rounded-lg p-3 border border-blue-600 mb-4">
+                                    <div class="flex items-center">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-check text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Success!</h4>
+                                            <p class="text-sm text-gray-300">Perfect! You've arranged the editing workflow correctly.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="check-btn w-full bg-purple-600 hover:bg-purple-700 py-2 rounded font-medium">
+                                    <i class="fas fa-check-circle mr-2"></i> Check Sequence
+                                </button>
+                            </div>
+                            
+                            <!-- Exercise 3 -->
+                            <div class="exercise-tab" id="exercise3">
+                                <div class="mb-4">
+                                    <h4 class="font-medium mb-2">Task:</h4>
+                                    <p class="text-sm text-gray-300">Select the best editing approach for each scenario.</p>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <div class="grid grid-cols-1 gap-3">
+                                        <div class="bg-gray-700 p-3 rounded-lg">
+                                            <p class="font-medium mb-2">A fast-paced action sequence</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm" data-correct="1">Quick cuts, dynamic angles, intense music</button>
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Long takes, steady shots, minimal music</button>
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Slow motion, soft transitions, ambient sound</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-gray-700 p-3 rounded-lg">
+                                            <p class="font-medium mb-2">An emotional interview segment</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Frequent cuts to different angles</button>
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm" data-correct="2">Longer takes, subtle cutaways, soft music</button>
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Fast-paced montage with effects</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-gray-700 p-3 rounded-lg">
+                                            <p class="font-medium mb-2">A corporate training video</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Artistic transitions, dramatic music</button>
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm" data-correct="3">Clean cuts, professional graphics, clear audio</button>
+                                                <button class="scenario-btn px-3 py-1 bg-gray-600 hover:bg-gray-500 rounded text-sm">Experimental editing techniques</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="hint-box bg-gray-700 bg-opacity-50 rounded-lg p-3 border border-gray-600 mb-4">
+                                    <div class="flex items-start">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-info-circle text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Hint</h4>
+                                            <p class="text-sm text-gray-300">Consider the purpose and audience for each type of video. Action needs energy, emotion needs space, and corporate needs clarity.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="success-message bg-blue-900 bg-opacity-30 rounded-lg p-3 border border-blue-600 mb-4">
+                                    <div class="flex items-center">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-check text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Success!</h4>
+                                            <p class="text-sm text-gray-300">Excellent choices! You're thinking like an editor.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="check-btn w-full bg-purple-600 hover:bg-purple-700 py-2 rounded font-medium">
+                                    <i class="fas fa-check-circle mr-2"></i> Check Answers
+                                </button>
+                            </div>
+                            
+                            <!-- Exercise 4 - Timeline Lab -->
+                            <div class="exercise-tab" id="exercise4">
+                                <div class="mb-4">
+                                    <h4 class="font-medium mb-2">Task:</h4>
+                                    <p class="text-sm text-gray-300">Arrange these clips in the correct storytelling order.</p>
+                                </div>
+                                
+                                <div class="video-preview p-4 mb-4 rounded-lg">
+                                    <div class="grid grid-cols-4 gap-2 mb-4">
+                                        <div class="clip-thumbnail bg-blue-600 h-16 rounded cursor-move flex items-center justify-center" data-clip="1">
+                                            <span class="text-xs">Wide shot</span>
+                                        </div>
+                                        <div class="clip-thumbnail bg-purple-600 h-16 rounded cursor-move flex items-center justify-center" data-clip="2">
+                                            <span class="text-xs">Close-up</span>
+                                        </div>
+                                        <div class="clip-thumbnail bg-green-600 h-16 rounded cursor-move flex items-center justify-center" data-clip="3">
+                                            <span class="text-xs">Medium shot</span>
+                                        </div>
+                                        <div class="clip-thumbnail bg-yellow-600 h-16 rounded cursor-move flex items-center justify-center" data-clip="4">
+                                            <span class="text-xs">Reaction</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="timeline-area bg-gray-700 h-24 rounded p-2">
+                                        <div class="flex h-full" id="timeline-slots">
+                                            <div class="w-1/4 border border-dashed border-gray-500 mx-1"></div>
+                                            <div class="w-1/4 border border-dashed border-gray-500 mx-1"></div>
+                                            <div class="w-1/4 border border-dashed border-gray-500 mx-1"></div>
+                                            <div class="w-1/4 border border-dashed border-gray-500 mx-1"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="hint-box bg-gray-700 bg-opacity-50 rounded-lg p-3 border border-gray-600 mb-4">
+                                    <div class="flex items-start">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-info-circle text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Hint</h4>
+                                            <p class="text-sm text-gray-300">Traditional editing often starts with a wide shot to establish the scene, then moves to closer shots for detail and emotion.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="success-message bg-blue-900 bg-opacity-30 rounded-lg p-3 border border-blue-600 mb-4">
+                                    <div class="flex items-center">
+                                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                                            <i class="fas fa-check text-white"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium mb-1">Success!</h4>
+                                            <p class="text-sm text-gray-300">Great sequencing! Your timeline tells a clear story.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="check-btn w-full bg-purple-600 hover:bg-purple-700 py-2 rounded font-medium">
+                                    <i class="fas fa-check-circle mr-2"></i> Check Timeline
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Resources -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Editing Resources</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <a href="#" class="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-start">
+                            <div class="bg-blue-600 rounded-lg p-3 mr-4">
+                                <i class="fas fa-video text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Editing Templates</h4>
+                                <p class="text-sm text-gray-400">Premiere Pro & Final Cut templates</p>
+                            </div>
+                        </a>
+                        <a href="#" class="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-start">
+                            <div class="bg-purple-600 rounded-lg p-3 mr-4">
+                                <i class="fas fa-music text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Sound Effects</h4>
+                                <p class="text-sm text-gray-400">Professional SFX library</p>
+                            </div>
+                        </a>
+                        <a href="#" class="p-4 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-start">
+                            <div class="bg-green-600 rounded-lg p-3 mr-4">
+                                <i class="fas fa-book-open text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Editing Books</h4>
+                                <p class="text-sm text-gray-400">Recommended reading</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Community Section -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
+                    <h3 class="text-xl font-semibold mb-4">Editor's Forum</h3>
+                    <div class="mb-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
+                                <span class="font-bold">AS</span>
+                            </div>
+                            <div class="flex-1 bg-gray-700 rounded-lg p-3">
+                                <div class="flex justify-between items-center mb-1">
+                                    <span class="font-medium">Alex Stone</span>
+                                    <span class="text-xs text-gray-400">3 hours ago</span>
+                                </div>
+                                <p class="text-sm">What's your favorite keyboard shortcut that saves you tons of time when editing?</p>
+                                <div class="flex space-x-2 mt-2">
+                                    <button class="text-xs text-gray-400 hover:text-blue-400"><i class="far fa-thumbs-up mr-1"></i>Like (8)</button>
+                                    <button class="text-xs text-gray-400 hover:text-blue-400"><i class="far fa-comment mr-1"></i>Reply (5)</button>
+                                </div>
+                                
+                                <!-- Replies -->
+                                <div class="mt-3 pl-3 border-l-2 border-gray-600 space-y-3">
+                                    <div class="flex items-start space-x-2">
+                                        <div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-xs">
+                                            <span>MJ</span>
+                                        </div>
+                                        <div class="bg-gray-800 rounded-lg p-2 text-xs">
+                                            <p>In Premiere: Cmd/Ctrl+K to cut at playhead. Saves so much time!</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-2">
+                                        <div class="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-xs">
+                                            <span>TK</span>
+                                        </div>
+                                        <div class="bg-gray-800 rounded-lg p-2 text-xs">
+                                            <p>Q and W for ripple trim in Premiere. Game changer!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center">
+                            <span class="font-bold">AM</span>
+                        </div>
+                        <div class="flex-1">
+                            <textarea class="w-full bg-gray-700 rounded-lg p-3 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Join the editing discussion..."></textarea>
+                            <button class="mt-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded text-sm">Post Comment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Toggle module content
+        document.querySelectorAll('.module-toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const content = toggle.nextElementSibling;
+                content.classList.toggle('expanded');
+                toggle.classList.toggle('expanded');
+            });
+        });
+
+        // Tab switching
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                
+                // Remove active class from all tabs and buttons
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.exercise-tab').forEach(tab => tab.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding tab
+                button.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Check buttons for exercises
+        document.querySelectorAll('.check-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const successMessage = button.closest('.exercise-tab').querySelector('.success-message');
+                successMessage.classList.add('visible');
+                
+                // Scroll to show the success message
+                successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+        });
+
+        // Option selection for exercise 1
+        document.querySelectorAll('.option-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove highlight from all options in this question
+                button.parentElement.querySelectorAll('.option-btn').forEach(btn => {
+                    btn.classList.remove('bg-blue-600', 'text-white');
+                });
+                
+                // Highlight selected option
+                button.classList.add('bg-blue-600', 'text-white');
+            });
+        });
+
+        // Scenario selection for exercise 3
+        document.querySelectorAll('.scenario-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove highlight from all options in this question
+                button.parentElement.querySelectorAll('.scenario-btn').forEach(btn => {
+                    btn.classList.remove('bg-blue-600', 'text-white');
+                });
+                
+                // Highlight selected option
+                button.classList.add('bg-blue-600', 'text-white');
+            });
+        });
+
+        // Simple drag and drop for timeline exercise
+        const clips = document.querySelectorAll('.clip-thumbnail');
+        const slots = document.querySelectorAll('#timeline-slots > div');
+        
+        clips.forEach(clip => {
+            clip.addEventListener('dragstart', function(e) {
+                e.dataTransfer.setData('text/plain', this.dataset.clip);
+                setTimeout(() => this.classList.add('opacity-0'), 0);
+            });
+            
+            clip.addEventListener('dragend', function() {
+                this.classList.remove('opacity-0');
+            });
+        });
+        
+        slots.forEach(slot => {
+            slot.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('border-blue-400', 'bg-gray-600');
+            });
+            
+            slot.addEventListener('dragleave', function() {
+                this.classList.remove('border-blue-400', 'bg-gray-600');
+            });
+            
+            slot.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('border-blue-400', 'bg-gray-600');
+                
+                const clipId = e.dataTransfer.getData('text/plain');
+                const clip = document.querySelector(`.clip-thumbnail[data-clip="${clipId}"]`);
+                
+                // Clear any existing content
+                while(this.firstChild) {
+                    this.removeChild(this.firstChild);
+                }
+                
+                // Clone and append the dragged clip
+                const clonedClip = clip.cloneNode(true);
+                clonedClip.classList.remove('opacity-0', 'cursor-move');
+                clonedClip.classList.add('w-full', 'h-full');
+                this.appendChild(clonedClip);
+            });
+        });
+
+        // Navigation buttons
+        document.querySelector('.next-lesson').addEventListener('click', () => {
+            alert('Moving to the next lesson: Understanding the Timeline');
+        });
+
+        document.querySelector('.prev-lesson').addEventListener('click', () => {
+            alert('This is the first lesson in the course');
+        });
+
+        // Bookmark button
+        document.querySelector('.bookmark-btn').addEventListener('click', function() {
+            const icon = this.querySelector('i');
+            if (icon.classList.contains('fas')) {
+                icon.classList.replace('fas', 'far');
+                alert('Lesson removed from bookmarks');
+            } else {
+                icon.classList.replace('far', 'fas');
+                alert('Lesson added to bookmarks');
+            }
+        });
+
+        // Expand the first module by default
+        document.querySelector('.module-toggle').click();
+    </script>
+</body>
+</html>
