@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQL5 Programming Masterclass</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
+    <style>
+        .sidebar {
+            scrollbar-width: thin;
+            scrollbar-color: #3b82f6 #1e1e2d;
+        }
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sidebar::-webkit-scrollbar-track {
+            background: #1e1e2d;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: #3b82f6;
+            border-radius: 3px;
+        }
+        .CodeMirror {
+            height: auto;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+        .output-console {
+            background-color: #1e1e2d;
+            color: #f8f8f2;
+            font-family: 'Courier New', monospace;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            height: 200px;
+            overflow-y: auto;
+        }
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .module-item.completed {
+            color: #10b981;
+        }
+        .module-item.completed i {
+            color: #10b981;
+        }
+        .chart-container {
+            background-color: #1e1e2d;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <div class="sidebar w-64 bg-gray-800 flex-shrink-0 overflow-y-auto">
+        <div class="p-4 flex items-center space-x-3 border-b border-gray-700">
+            <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                <i class="fas fa-chart-line text-white text-xl"></i>
+            </div>
+            <h1 class="text-xl font-bold">MQL5 Pro</h1>
+        </div>
+        
+        <div class="p-4">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold">Course Progress</h2>
+                <span class="text-sm text-blue-400">0%</span>
+            </div>
+            
+            <div class="relative w-20 h-20 mx-auto mb-4">
+                <svg class="w-full h-full" viewBox="0 0 36 36">
+                    <path class="text-gray-700" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
+                    <path class="text-blue-600 progress-ring__circle" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
+                </svg>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <span class="text-sm font-bold">0%</span>
+                </div>
+            </div>
+            
+            <div class="space-y-2">
+                <div class="flex items-center space-x-2 p-2 bg-gray-700 rounded-lg">
+                    <i class="fas fa-user-graduate text-blue-400"></i>
+                    <span>Student: TraderDev</span>
+                </div>
+                <div class="flex items-center space-x-2 p-2 bg-gray-700 rounded-lg">
+                    <i class="fas fa-medal text-yellow-400"></i>
+                    <span>Level: Beginner</span>
+                </div>
+                <div class="flex items-center space-x-2 p-2 bg-gray-700 rounded-lg">
+                    <i class="fas fa-bolt text-green-400"></i>
+                    <span>Streak: New</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="border-t border-gray-700 pt-4">
+            <h3 class="px-4 text-sm font-semibold text-gray-400 uppercase tracking-wider">Course Modules</h3>
+            <nav class="mt-2">
+                <div class="module-item px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-blue-400 border-l-4 border-blue-600">
+                    <i class="fas fa-play-circle"></i>
+                    <span>Getting Started</span>
+                </div>
+                <div class="module-item px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-gray-400">
+                    <i class="fas fa-code"></i>
+                    <span>MQL5 Basics</span>
+                </div>
+                <div class="module-item px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-gray-400">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Technical Indicators</span>
+                </div>
+                <div class="module-item px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-gray-400">
+                    <i class="fas fa-robot"></i>
+                    <span>Expert Advisors</span>
+                </div>
+                <div class="module-item px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-gray-400">
+                    <i class="fas fa-bell"></i>
+                    <span>Custom Indicators</span>
+                </div>
+                <div class="module-item px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-gray-400">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Trading Functions</span>
+                </div>
+                <div class="module-item px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-gray-400">
+                    <i class="fas fa-bug"></i>
+                    <span>Debugging & Optimization</span>
+                </div>
+                <div class="module-item px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center space-x-2 text-gray-400">
+                    <i class="fas fa-cubes"></i>
+                    <span>Advanced Strategies</span>
+                </div>
+            </nav>
+        </div>
+        
+        <div class="p-4 border-t border-gray-700 mt-auto">
+            <div class="bg-gray-700 rounded-lg p-3">
+                <h4 class="text-sm font-semibold mb-2">Need help?</h4>
+                <p class="text-xs text-gray-300 mb-2">Our MQL5 mentors are available to help</p>
+                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded text-sm">
+                    Ask a Question
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Header -->
+        <header class="bg-gray-800 border-b border-gray-700 p-4 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <h2 class="text-xl font-semibold">MQL5 Programming Basics</h2>
+                <span class="bg-blue-600 text-xs px-2 py-1 rounded-full">Active</span>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button class="bg-gray-700 hover:bg-gray-600 p-2 rounded-full">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <button class="bg-gray-700 hover:bg-gray-600 p-2 rounded-full">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Content Area -->
+        <main class="flex-1 overflow-auto p-6 bg-gray-900">
+            <div class="max-w-4xl mx-auto">
+                <!-- Course Navigation -->
+                <div class="flex items-center justify-between mb-6">
+                    <button class="flex items-center space-x-2 text-blue-400 hover:text-blue-300 opacity-50 cursor-not-allowed" disabled>
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Previous Lesson</span>
+                    </button>
+                    <div class="flex space-x-2">
+                        <button class="bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
+                        <button class="bg-gray-800 hover:bg-gray-700 px-3 py-1 rounded">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                    <button class="flex items-center space-x-2 text-blue-400 hover:text-blue-300">
+                        <span>Next Lesson</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                
+                <!-- Lesson Content -->
+                <div class="bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                    <!-- Tabs -->
+                    <div class="flex border-b border-gray-700">
+                        <button class="tab-btn px-4 py-3 font-medium text-blue-400 border-b-2 border-blue-600" data-tab="lesson">
+                            <i class="fas fa-graduation-cap mr-2"></i>Lesson
+                        </button>
+                        <button class="tab-btn px-4 py-3 font-medium text-gray-400 hover:text-gray-300" data-tab="exercise">
+                            <i class="fas fa-code mr-2"></i>Exercise
+                        </button>
+                        <button class="tab-btn px-4 py-3 font-medium text-gray-400 hover:text-gray-300" data-tab="resources">
+                            <i class="fas fa-link mr-2"></i>Resources
+                        </button>
+                    </div>
+                    
+                    <!-- Tab Contents -->
+                    <div class="p-6">
+                        <!-- Lesson Tab -->
+                        <div id="lesson" class="tab-content active">
+                            <h1 class="text-2xl font-bold mb-4">Introduction to MQL5</h1>
+                            <div class="prose prose-invert max-w-none">
+                                <p class="mb-4">MQL5 (MetaQuotes Language 5) is a high-level programming language designed for developing trading robots (Expert Advisors), technical indicators, scripts, and libraries in the MetaTrader 5 trading platform.</p>
+                                
+                                <div class="bg-blue-900 bg-opacity-30 p-4 rounded-lg mb-4">
+                                    <h3 class="text-lg font-semibold mb-2 text-blue-400">
+                                        <i class="fas fa-info-circle mr-2"></i>Why Learn MQL5?
+                                    </h3>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Automate your trading strategies</li>
+                                        <li>Create custom technical indicators</li>
+                                        <li>Backtest trading ideas quickly</li>
+                                        <li>Join the algorithmic trading revolution</li>
+                                        <li>Potential income from selling EAs</li>
+                                    </ul>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">MQL5 vs MQL4</h2>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    <div class="bg-gray-700 p-4 rounded-lg">
+                                        <h3 class="font-semibold text-green-400 mb-2">MQL5 Improvements</h3>
+                                        <ul class="list-disc pl-5 space-y-1 text-sm">
+                                            <li>Object-oriented programming support</li>
+                                            <li>More built-in technical indicators</li>
+                                            <li>Enhanced strategy tester</li>
+                                            <li>Direct database access</li>
+                                            <li>Network functions</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg">
+                                        <h3 class="font-semibold text-yellow-400 mb-2">Similarities</h3>
+                                        <ul class="list-disc pl-5 space-y-1 text-sm">
+                                            <li>Similar basic syntax</li>
+                                            <li>Same development environment</li>
+                                            <li>Compatible with MetaTrader platform</li>
+                                            <li>Common trading functions</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Your First Expert Advisor</h2>
+                                <p class="mb-4">Here's a simple "Hello World" Expert Advisor that displays a message when attached to a chart:</p>
+                                
+                                <div class="output-console mb-6">
+<pre>//+------------------------------------------------------------------+
+//|                                                      HelloEA.mq5 |
+//|                        Copyright 2023, MetaQuotes Software Corp. |
+//|                                             https://www.metaquotes.net/ |
+//+------------------------------------------------------------------+
+#property copyright "Copyright 2023, MetaQuotes Software Corp."
+#property link      "https://www.metaquotes.net/"
+#property version   "1.00"
+
+//+------------------------------------------------------------------+
+//| Expert initialization function                                   |
+//+------------------------------------------------------------------+
+int OnInit()
+  {
+   Alert("Hello, MQL5 World!");
+   return(INIT_SUCCEEDED);
+  }</pre>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">MQL5 Program Structure</h2>
+                                <p class="mb-4">MQL5 programs have a specific structure depending on their type (EA, Indicator, Script):</p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                    <div class="bg-gray-700 p-4 rounded-lg">
+                                        <h3 class="font-semibold text-blue-400 mb-2">Expert Advisor</h3>
+                                        <ul class="list-disc pl-5 space-y-1 text-xs">
+                                            <li>OnInit() - Initialization</li>
+                                            <li>OnDeinit() - Deinitialization</li>
+                                            <li>OnTick() - Main trading logic</li>
+                                            <li>OnTimer() - Timer events</li>
+                                            <li>OnChartEvent() - UI events</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg">
+                                        <h3 class="font-semibold text-blue-400 mb-2">Indicator</h3>
+                                        <ul class="list-disc pl-5 space-y-1 text-xs">
+                                            <li>OnInit() - Initialization</li>
+                                            <li>OnDeinit() - Deinitialization</li>
+                                            <li>OnCalculate() - Main calculation</li>
+                                            <li>Indicator buffers</li>
+                                            <li>Plotting functions</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg">
+                                        <h3 class="font-semibold text-blue-400 mb-2">Script</h3>
+                                        <ul class="list-disc pl-5 space-y-1 text-xs">
+                                            <li>OnStart() - Main function</li>
+                                            <li>Single execution</li>
+                                            <li>No event handling</li>
+                                            <li>Good for one-time tasks</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">MetaEditor Overview</h2>
+                                <p class="mb-4">The MetaEditor is the integrated development environment (IDE) for MQL5 programming:</p>
+                                
+                                <div class="chart-container mb-6">
+                                    <div class="flex justify-center items-center h-48 bg-gray-900 rounded">
+                                        <div class="text-center">
+                                            <i class="fas fa-laptop-code text-4xl text-blue-400 mb-2"></i>
+                                            <p class="text-gray-400">MetaEditor Screenshot</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-gray-700 p-4 rounded-lg mb-6">
+                                    <h3 class="text-lg font-semibold mb-2 text-green-400">
+                                        <i class="fas fa-lightbulb mr-2"></i>Pro Tip
+                                    </h3>
+                                    <p>Use <code class="bg-gray-800 px-1 rounded">Ctrl+T</code> in MetaEditor to quickly open the Strategy Tester for backtesting your Expert Advisors.</p>
+                                </div>
+                                
+                                <div class="flex justify-between mt-8">
+                                    <button class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded flex items-center opacity-50 cursor-not-allowed" disabled>
+                                        <i class="fas fa-arrow-left mr-2"></i> Previous
+                                    </button>
+                                    <button id="mark-complete" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded flex items-center">
+                                        Mark Complete <i class="fas fa-check ml-2"></i>
+                                    </button>
+                                    <button class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded flex items-center">
+                                        Next <i class="fas fa-arrow-right ml-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Exercise Tab -->
+                        <div id="exercise" class="tab-content">
+                            <h1 class="text-2xl font-bold mb-4">MQL5 Practice: First Steps</h1>
+                            <div class="prose prose-invert max-w-none">
+                                <p class="mb-6">Now it's time to practice what you've learned. Try these exercises in the interactive MQL5 environment below.</p>
+                                
+                                <div class="bg-blue-900 bg-opacity-30 border border-blue-700 p-4 rounded-lg mb-6">
+                                    <h3 class="text-lg font-semibold mb-2 flex items-center">
+                                        <i class="fas fa-flask mr-2"></i> Interactive MQL5 Editor
+                                    </h3>
+                                    <p class="text-sm text-gray-300">Type your MQL5 code in the editor and click "Run Code" to see the output.</p>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Exercise 1: Hello MQL5</h2>
+                                <p class="mb-4">Create a script that displays "Hello, MQL5!" in the Experts tab when executed.</p>
+                                
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium mb-2">Write your MQL5 code:</label>
+                                    <textarea id="mql5-editor">//+------------------------------------------------------------------+
+//| Script program start function                                    |
+//+------------------------------------------------------------------+
+void OnStart()
+  {
+   // Write your code here
+   Print("Hello, World!");
+  }</textarea>
+                                </div>
+                                
+                                <button id="run-code" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded mb-6">
+                                    <i class="fas fa-play mr-2"></i> Run Code
+                                </button>
+                                
+                                <div class="mb-6">
+                                    <label class="block text-sm font-medium mb-2">Program Output:</label>
+                                    <div id="mql5-output" class="output-console">
+                                        <div class="text-gray-500">Output will appear here after execution...</div>
+                                    </div>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Exercise 2: Simple Calculator</h2>
+                                <p class="mb-4">Create a script that calculates and prints the result of 15 multiplied by 38.</p>
+                                
+                                <div class="bg-gray-700 p-4 rounded-lg mb-6">
+                                    <h3 class="font-semibold text-yellow-400 mb-2">Challenge</h3>
+                                    <p class="mb-2">After solving the multiplication, try calculating (3 + 4) × (5 + 6)</p>
+                                    <p class="text-sm text-gray-300">Remember MQL5 follows standard order of operations.</p>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Exercise 3: Current Price</h2>
+                                <p class="mb-4">Create a script that prints the current Bid and Ask prices of the chart it's attached to.</p>
+                                
+                                <div class="output-console mb-6 text-xs">
+                                    <div class="text-green-400">// Example output:</div>
+                                    <div>Current EURUSD Bid: 1.08543, Ask: 1.08556</div>
+                                </div>
+                                
+                                <div class="flex justify-between mt-8">
+                                    <button class="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded">
+                                        <i class="fas fa-redo mr-2"></i> Reset Code
+                                    </button>
+                                    <button class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded">
+                                        Check Solution <i class="fas fa-check ml-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Resources Tab -->
+                        <div id="resources" class="tab-content">
+                            <h1 class="text-2xl font-bold mb-4">MQL5 Learning Resources</h1>
+                            <div class="prose prose-invert max-w-none">
+                                <p class="mb-6">Enhance your MQL5 learning journey with these recommended resources:</p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                    <div class="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition cursor-pointer">
+                                        <h3 class="font-semibold text-blue-400 mb-2 flex items-center">
+                                            <i class="fas fa-book mr-2"></i> Official MQL5 Documentation
+                                        </h3>
+                                        <p class="text-sm mb-2">The complete reference for MQL5 language.</p>
+                                        <a href="#" class="text-blue-400 text-sm hover:underline">https://www.mql5.com/en/docs</a>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition cursor-pointer">
+                                        <h3 class="font-semibold text-blue-400 mb-2 flex items-center">
+                                            <i class="fab fa-youtube mr-2"></i> MQL5 Programming Course
+                                        </h3>
+                                        <p class="text-sm mb-2">Free comprehensive MQL5 tutorial series.</p>
+                                        <a href="#" class="text-blue-400 text-sm hover:underline">YouTube Link</a>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition cursor-pointer">
+                                        <h3 class="font-semibold text-blue-400 mb-2 flex items-center">
+                                            <i class="fas fa-file-pdf mr-2"></i> MQL5 Cheat Sheet
+                                        </h3>
+                                        <p class="text-sm mb-2">Quick reference for MQL5 syntax and functions.</p>
+                                        <a href="#" class="text-blue-400 text-sm hover:underline">Download PDF</a>
+                                    </div>
+                                    <div class="bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition cursor-pointer">
+                                        <h3 class="font-semibold text-blue-400 mb-2 flex items-center">
+                                            <i class="fas fa-graduation-cap mr-2"></i> MQL5 Code Base
+                                        </h3>
+                                        <p class="text-sm mb-2">Thousands of free scripts and indicators.</p>
+                                        <a href="#" class="text-blue-400 text-sm hover:underline">https://www.mql5.com/en/code</a>
+                                    </div>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">Recommended Tools</h2>
+                                <div class="bg-gray-700 p-4 rounded-lg mb-6">
+                                    <div class="flex items-start mb-3">
+                                        <div class="bg-blue-600 p-2 rounded mr-3">
+                                            <i class="fas fa-download"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold">MetaTrader 5</h3>
+                                            <p class="text-sm">The trading platform with built-in MetaEditor.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start mb-3">
+                                        <div class="bg-green-600 p-2 rounded mr-3">
+                                            <i class="fas fa-chart-line"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold">Strategy Tester</h3>
+                                            <p class="text-sm">Built-in backtesting tool for Expert Advisors.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <div class="bg-yellow-600 p-2 rounded mr-3">
+                                            <i class="fas fa-database"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold">Market Watch</h3>
+                                            <p class="text-sm">Monitor real-time price data for testing.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h2 class="text-xl font-semibold mt-6 mb-3">MQL5 Communities</h2>
+                                <div class="space-y-3">
+                                    <div class="flex items-center space-x-3 p-3 bg-gray-700 rounded-lg hover:bg-gray-600 cursor-pointer">
+                                        <i class="fab fa-meta text-blue-400"></i>
+                                        <span>MQL5 Community Forum</span>
+                                    </div>
+                                    <div class="flex items-center space-x-3 p-3 bg-gray-700 rounded-lg hover:bg-gray-600 cursor-pointer">
+                                        <i class="fab fa-discord text-indigo-400"></i>
+                                        <span>Algorithmic Trading Discord</span>
+                                    </div>
+                                    <div class="flex items-center space-x-3 p-3 bg-gray-700 rounded-lg hover:bg-gray-600 cursor-pointer">
+                                        <i class="fab fa-stack-overflow text-yellow-400"></i>
+                                        <span>Stack Overflow</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script>
+    <script>
+        // Initialize CodeMirror for MQL5 (using C-like mode as closest match)
+        const mql5Editor = CodeMirror.fromTextArea(document.getElementById('mql5-editor'), {
+            mode: 'text/x-c++src',
+            theme: 'dracula',
+            lineNumbers: true,
+            indentUnit: 4,
+            extraKeys: {
+                'Ctrl-Enter': runMQL5Code,
+                'Cmd-Enter': runMQL5Code
+            }
+        });
+        
+        // Tab functionality
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                
+                // Update active tab button
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('text-blue-400', 'border-blue-600');
+                    btn.classList.add('text-gray-400');
+                });
+                button.classList.add('text-blue-400', 'border-blue-600');
+                button.classList.remove('text-gray-400');
+                
+                // Show active tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+        
+        // Run MQL5 code button
+        document.getElementById('run-code').addEventListener('click', runMQL5Code);
+        
+        // Sample MQL5 code execution
+        function runMQL5Code() {
+            const code = mql5Editor.getValue();
+            const output = document.getElementById('mql5-output');
+            
+            output.innerHTML = '<div class="text-green-400">$ mql5 script.mq5</div>';
+            
+            // Try to execute the code (simulated)
+            try {
+                // This is a simulation - in a real environment you'd need an MQL5 interpreter
+                if (code.includes('Print("Hello, MQL5!")')) {
+                    output.innerHTML += '<div class="my-2">Hello, MQL5!</div>';
+                    output.innerHTML += '<div class="text-green-400">Script executed successfully!</div>';
+                } 
+                else if (code.includes('15 * 38')) {
+                    output.innerHTML += '<div class="my-2">570</div>';
+                    output.innerHTML += '<div class="text-green-400">Script executed successfully!</div>';
+                }
+                else if (code.includes('(3 + 4) * (5 + 6)')) {
+                    output.innerHTML += '<div class="my-2">77</div>';
+                    output.innerHTML += '<div class="text-green-400">Script executed successfully!</div>';
+                }
+                else if (code.includes('SymbolInfoDouble') && (code.includes('Bid') || code.includes('Ask'))) {
+                    output.innerHTML += '<div class="my-2">Current EURUSD Bid: 1.08543, Ask: 1.08556</div>';
+                    output.innerHTML += '<div class="text-green-400">Script executed successfully!</div>';
+                }
+                else if (code.includes('Print')) {
+                    const match = code.match(/Print\(([^)]+)\)/);
+                    if (match) {
+                        output.innerHTML += `<div class="my-2">${match[1].replace(/['"]/g, '')}</div>`;
+                    }
+                    output.innerHTML += '<div class="text-green-400">Script executed successfully!</div>';
+                }
+                else {
+                    output.innerHTML += '<div class="text-yellow-400">Script executed but no output produced.</div>';
+                    output.innerHTML += '<div class="text-green-400">Script executed successfully!</div>';
+                }
+            } catch (e) {
+                output.innerHTML += `<div class="text-red-400">Error: ${e.message}</div>`;
+            }
+            
+            // Scroll to bottom of output
+            output.scrollTop = output.scrollHeight;
+        }
+        
+        // Mark lesson as complete
+        document.getElementById('mark-complete').addEventListener('click', function() {
+            // Update progress ring
+            const progressCircle = document.querySelector('.progress-ring__circle');
+            progressCircle.setAttribute('stroke-dasharray', '25, 100');
+            
+            // Update progress percentage
+            document.querySelector('.relative.w-20.h-20 svg + div span').textContent = '25%';
+            document.querySelector('.p-4 span.text-sm').textContent = '25%';
+            
+            // Update module item
+            document.querySelectorAll('.module-item')[0].classList.add('completed');
+            
+            // Show completion message
+            alert('Lesson marked as complete! Progress updated to 25%.');
+            
+            // Disable the button
+            this.disabled = true;
+            this.classList.add('opacity-50', 'cursor-not-allowed');
+        });
+    </script>
+</body>
+</html>

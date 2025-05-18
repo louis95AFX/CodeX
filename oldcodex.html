@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CodeX</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+
+  <style>
+    /* Add smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    @keyframes tvOff {
+    0% {
+      opacity: 1;
+      transform: scaleY(1) scaleX(1);
+    }
+    50% {
+      transform: scaleY(0.05);
+      opacity: 0.7;
+    }
+    100% {
+      transform: scaleY(0.01) scaleX(0);
+      opacity: 0;
+    }
+  }
+
+  .tv-off-animation {
+    animation: tvOff 0.6s forwards;
+  }
+  
+  .input {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.375rem;
+    margin-top: 0.25rem;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 1px #2563eb;
+  }
+  #loaderOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6); /* semi-transparent overlay */
+      display: none; /* Change from hidden to none */
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+  
+    .loaderContent {
+      text-align: center;
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+  
+    .computerIcon {
+      font-size: 48px;
+      animation: bounce 1.2s infinite;
+    }
+  
+    .loadingText {
+      margin-top: 15px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+    }
+  
+    /* Animation */
+    @keyframes bounce {
+      0%, 100% {
+          transform: translateY(0);
+      }
+      50% {
+          transform: translateY(-10px);
+      }
+    }
+  
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <header class="bg-white text-gray-800 p-4 fixed w-full z-10 top-0 shadow-md">
+        <div class="container mx-auto flex items-center justify-between">
+          <!-- Logo and Slogan -->
+            <div class="flex items-center space-x-4 pl-4">
+                <img src="codexbg.png" alt="Code Academy Logo" class="h-20">
+                <span class="text-sm font-light text-gray-700 italic tracking-wide">Learn. Code. Succeed.</span>
+            </div>
+            
+          
+          <!-- Centralized Navigation with Padding -->
+          <nav style="padding-right: 240px;" class="flex space-x-8">
+            <a href="purchase.html" class="hover:text-blue-600 hover:font-bold transition">Courses</a>
+            <a href="#certification" class="hover:text-blue-600 hover:font-bold transition">Certification</a>
+            <a href="#contact" class="hover:text-blue-600 hover:font-bold transition">Contact</a>
+          </nav>
+          
+          
+          <!-- Sign In Icon and Text -->
+          <a href="javascript:void(0);" onclick="toggleModal()" class="text-center flex flex-col items-center pr-4">
+            <i class="fas fa-laptop-code text-2xl text-blue-600 hover:text-blue-700 transition duration-300"></i>
+            <span class="text-sm text-blue-600 hover:text-blue-700 mt-0.5">Sign In</span>
+          </a>
+        </div>
+      </header>
+      
+      <!-- Sign In Modal -->
+<div id="signinModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold text-gray-700">Sign In</h2>
+        <button onclick="toggleModal()" class="text-gray-500 hover:text-red-500 text-xl">&times;</button>
+      </div>
+      <form onsubmit="event.preventDefault(); signInUser();">
+        <div class="mb-4">
+          <label class="block text-gray-600 text-sm mb-2">Email</label>
+          <input id="emailInput" type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300" placeholder="Enter email">
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-600 text-sm mb-2">Password</label>
+          <input id="passwordInput" type="password" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300" placeholder="Enter password">
+        </div>
+        <button type="button" onclick="handleLogin()" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+            Sign In
+          </button>
+  
+        <div class="text-center mt-4 space-y-2">
+          <a href="forgotpass.html" class="text-sm text-blue-600 hover:underline block">Forgot password?</a>
+          <a href="register.html" class="text-sm text-gray-600 hover:underline block">New here? Create an account</a>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+
+  <section class="bg-gradient-to-r from-blue-50 via-white to-blue-50 py-24 mt-12">
+    <div class="container mx-auto text-center px-6">
+      <h2 class="text-4xl font-bold text-gray-800 mb-4">Unlock Your Future with CodeX</h2>
+      <p class="text-lg text-gray-700 mb-6 max-w-xl mx-auto">
+        Master essential skills in <span class="font-semibold text-blue-600">Web Development</span>, <span class="font-semibold text-green-600">Cybersecurity</span>, <span class="font-semibold text-yellow-500">Data Science</span>, and more! 
+        <br class="sm:hidden">Earn certifications to boost your career in today's digital world.
+      </p>
+      <a href="purchase.html" class="inline-block bg-blue-600 text-white text-lg font-medium px-8 py-3 rounded-lg shadow hover:bg-blue-700 transition duration-300">
+         Explore Courses & Start Learning
+      </a>
+    </div>
+  </section>
+
+  <section id="courses" class="container mx-auto my-12">
+    <h3 class="text-2xl font-semibold mb-6 text-center">Courses</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+           <!-- Web Development Card -->
+           <div class="bg-white p-6 rounded shadow hover:shadow-lg transition cursor-pointer flex flex-col items-center relative">
+            <img src="codexweb.jpg" alt="Web Development" class="w-full h-40 object-cover rounded mb-4">
+            <span class="absolute top-2 right-2 bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded-full">With Certification</span>
+            <h4 class="text-xl font-bold mb-2">Web Development</h4>
+            <p class="mb-2 text-center">Learn how to build websites using HTML, CSS, and JavaScript and get certified.</p>
+            <span class="bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full mt-4">R499</span>
+            <!-- <button class="bg-blue-600 text-white px-4 py-2 rounded mt-4" onclick="setCourse('Web Development'); openModal();">Enroll Now</button> -->
+          </div>
+  
+        <!-- Cybersecurity -->
+        <div class="bg-white p-6 rounded shadow hover:shadow-lg transition cursor-pointer flex flex-col items-center relative">
+            <img src="cyber.jpg" alt="Cybersecurity" class="w-full h-40 object-cover rounded mb-4">
+            <h4 class="text-xl font-bold mb-2">Cybersecurity</h4>
+            <p class="mb-2 text-center">Protect web applications and systems from threats and vulnerabilities.</p>
+            <span class="bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full mt-4">R799</span>
+            <div class="absolute top-0 right-0 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded-bl-lg mt-2 mr-2">With Certification</div>
+            <!-- <button class="bg-blue-600 text-white px-6 py-2 rounded mt-4 hover:bg-blue-700 transition" onclick="setCourse('Cybersecurity'); openModal();">Enroll Now</button> -->
+          </div>
+          
+        <!-- Data Science -->
+        <div class="bg-white p-6 rounded shadow hover:shadow-lg transition cursor-pointer flex flex-col items-center">
+            <img src="data2.jpg" alt="Data Science" class="w-full h-40 object-cover rounded mb-4">
+            <h4 class="text-xl font-bold mb-2">Data Science</h4>
+            <p class="mb-2 text-center">Explore data analysis, machine learning, and data visualization techniques.</p>
+            <span class="bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-full mt-4">R1199</span>
+            <!-- <button class="bg-blue-600 text-white px-6 py-2 rounded mt-4 hover:bg-blue-700 transition" onclick="setCourse('Data Science'); openModal();">Enroll Now</button> -->
+        </div>
+       
+  </section>
+
+<!-- Your Existing Enrollment Modal -->
+<div id="enrollmentModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden z-50">
+    <div class="bg-white p-8 rounded shadow-lg w-96 relative">
+      <button onclick="closeModal()" class="absolute top-2 right-2 text-xl text-gray-600 hover:text-gray-800 transition">&times;</button>
+      <h3 class="text-2xl font-semibold mb-6 text-center">Enroll Now</h3>
+  
+      <form id="enrollmentForm" class="space-y-6">
+        <input type="hidden" id="selectedCourse" name="course" value="">
+        
+        <div class="flex flex-col">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" required placeholder="Enter your full name" class="input" />
+        </div>
+  
+        <div class="flex flex-col">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" required placeholder="Enter your email" class="input" />
+        </div>
+  
+        <div class="flex flex-col">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" required placeholder="e.g. 071 234 5678" class="input" />
+        </div>
+  
+        <div class="flex flex-col">
+          <label for="paymentMethod">Payment Method</label>
+          <select id="paymentMethod" required class="input">
+            <option value="" disabled selected>Select a payment method</option>
+            <option value="card">Credit/Debit Card</option>
+            <option value="paypal">PayPal</option>
+            <option value="Crypto">Crypto</option>
+          </select>
+        </div>
+  
+        <div class="flex flex-col">
+          <label for="course">Course</label>
+          <input type="text" id="course" readonly value="My Awesome Course" class="input bg-gray-100" />
+        </div>
+  
+        <div class="flex flex-col">
+          <label for="message">Additional Message</label>
+          <textarea id="message" rows="4" placeholder="Any additional details?" class="input"></textarea>
+        </div>
+  
+        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">Submit Enrollment</button>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Hidden PayFast Form -->
+  <form id="payfastForm" action="https://www.payfast.co.za/eng/process" method="post" style="display: none;">
+    <input type="hidden" name="merchant_id" value="19032115" />
+    <input type="hidden" name="merchant_key" value="rdifn4ynyzjfm" />
+    <input type="hidden" name="return_url" value="https://yourwebsite.com/thank-you" />
+    <input type="hidden" name="cancel_url" value="https://yourwebsite.com/payment-cancelled" />
+    <input type="hidden" name="notify_url" value="https://yourwebsite.com/payfast-ipn" />
+  
+    <input type="hidden" name="amount" value="500.00" />
+    <input type="hidden" name="item_name" value="Course Enrollment" />
+    <input type="hidden" name="name_first" id="pf_name" />
+    <input type="hidden" name="email_address" id="pf_email" />
+    <input type="hidden" name="cell_number" id="pf_phone" />
+  </form>
+
+  <div class="my-12 text-center">
+    <hr class="border-t-2 border-blue-600 w-1/2 mx-auto mb-6">
+  </div>
+
+  <section id="certification" class="container mx-auto my-12 text-center">
+    <h3 class="text-2xl font-semibold mb-4">Get Certified</h3>
+    <p>Complete all courses and pass the final quiz to earn your certificate.</p>
+    <button class="mt-4 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">Claim Certificate</button>
+  </section>
+
+  <div class="my-12 text-center">
+    <hr class="border-t-2 border-blue-600 w-1/2 mx-auto mb-6">
+  </div>
+
+  <section id="contact" class="container mx-auto my-12 text-center">
+    <h3 class="text-2xl font-semibold mb-4">Contact Us</h3>
+    <p>Email: info@codeacademy.co.za</p>
+    <p>Phone: +27 00 123 4567</p>
+  </section>
+  <div id="loaderOverlay" class="hidden">
+    <div class="loaderContent">
+        <div class="computerIcon">
+            💻
+        </div>
+        <div class="loadingText">Signing in... Please wait</div>
+    </div>
+</div>
+  <footer class="bg-gray-800 text-white text-center py-4">
+    <div class="mb-2">
+      <a href="https://facebook.com" target="_blank" class="mx-2 hover:text-blue-500 transition">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a href="https://instagram.com" target="_blank" class="mx-2 hover:text-pink-500 transition">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://twitter.com" target="_blank" class="mx-2 hover:text-blue-400 transition">
+        <i class="fab fa-x-twitter"></i>
+      </a>
+    </div>
+    &copy; 2025 Code Academy. All rights reserved.
+  </footer>
+
+  <script>
+   document.addEventListener('DOMContentLoaded', function () {
+  function showCourseInfo(course) {
+    document.querySelectorAll('.course-info').forEach(function (section) {
+      section.classList.add('hidden');
+      section.classList.remove('tv-off-animation');
+    });
+
+    const selectedSection = document.getElementById(course);
+    selectedSection.classList.remove('hidden');
+    selectedSection.classList.remove('tv-off-animation');
+
+    setTimeout(() => {
+      selectedSection.classList.add('tv-off-animation');
+      setTimeout(() => {
+        selectedSection.classList.add('hidden');
+        selectedSection.classList.remove('tv-off-animation');
+      }, 600);
+    }, 10000);
+  }
+
+  function openModal() {
+    document.getElementById('enrollmentModal').classList.remove('hidden');
+  }
+
+  function closeModal() {
+    document.getElementById('enrollmentModal').classList.add('hidden');
+  }
+
+  function setCourse(courseName) {
+    document.getElementById('selectedCourse').value = courseName;
+    document.getElementById('course').value = courseName;
+    openModal();
+  }
+
+  // // ✅ Attach event listener safely after DOM is ready
+  // const form = document.getElementById('enrollmentForm');
+  // form.addEventListener('submit', function (event) {
+  //   event.preventDefault();
+
+  //   const paymentMethod = document.getElementById('paymentMethod').value;
+  // });
+
+  // Optionally expose functions globally
+  window.showCourseInfo = showCourseInfo;
+  window.openModal = openModal;
+  window.closeModal = closeModal;
+  window.setCourse = setCourse;
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('showSigninModal') === 'true') {
+      toggleModal(); // Assuming toggleModal() is defined and visible at this point
+      localStorage.removeItem('showSigninModal');
+    }
+  });
+
+  function toggleModal() {
+    const modal = document.getElementById("signinModal");
+    modal.classList.toggle("hidden");
+    modal.classList.toggle("flex");
+  }
+
+  async function handleLogin() {
+  const email = document.querySelector('input[placeholder="Enter email"]').value;
+  const password = document.querySelector('input[placeholder="Enter password"]').value;
+
+  // Show the loading indicator
+  const loadingIndicator = document.getElementById('loadingIndicator');
+  loaderOverlay.style.display = 'flex'; // Show overlay & loader
+
+  try {
+  const response = await fetch("http://localhost:5000/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password })
+  });
+
+  const data = await response.json();
+
+  if (response.ok) {
+    // Save correct user ID to localStorage
+    localStorage.setItem("userID", data.user.id);
+    localStorage.setItem("userEmail", email);
+
+    // Redirect to profile with correct user ID
+    window.location.href = `myprofile.html?userId=${data.user.id}`;
+  } else {
+    alert(data.message || "Login failed");
+  }
+} catch (error) {
+  console.error("Login request error:", error);
+  alert("An error occurred. Please try again.");
+} finally {
+    // Hide the loading indicator after the operation
+    loaderOverlay.style.display = 'none'; // Hide loader 
+  }
+}
+
+  </script>
+  
+</body>
+</html>

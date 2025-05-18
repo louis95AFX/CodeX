@@ -6,10 +6,11 @@
   <title>Dashboard - CodeX</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<!-- Spinner styles (you can put this in your CSS file or inside <style>) -->
-  <style>
-    .loader {
+<style>
+  .loader {
     border: 6px solid #f3f3f3;
     border-top: 6px solid #3498db;
     border-radius: 50%;
@@ -22,164 +23,377 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
-  </style>
-<body class="bg-gray-100 text-gray-800">
+
+  .card-hover {
+    transition: all 0.3s ease;
+    transform: translateY(0);
+  }
+  .card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .progress-ring__circle {
+    transition: stroke-dashoffset 0.5s;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+  }
+
+  .gradient-bg {
+    background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+  }
+
+  .notification-bell {
+    position: relative;
+  }
+  .notification-bell::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 10px;
+    height: 10px;
+    background-color: #FF4757;
+    border-radius: 50%;
+    border: 2px solid white;
+  }
+
+  .profile-pic-upload {
+    transition: all 0.3s ease;
+  }
+  .profile-pic-upload:hover {
+    transform: scale(1.05);
+  }
+
+  .floating-btn {
+    box-shadow: 0 4px 15px rgba(0, 77, 255, 0.3);
+    transition: all 0.3s ease;
+  }
+  .floating-btn:hover {
+    box-shadow: 0 6px 20px rgba(0, 77, 255, 0.4);
+    transform: translateY(-2px);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+</style>
+<body class="bg-gray-50 text-gray-800 font-sans">
 
   <!-- Header -->
-  <header class="bg-white p-4 shadow fixed top-0 w-full z-10">
+  <header class="bg-white p-4 shadow fixed top-0 w-full z-50">
     <div class="container mx-auto flex justify-between items-center">
-      <img src="codexbg.png" alt="Logo" class="h-12">
-      <h2 class="text-xl font-semibold" id="welcomeMessage"></h2>
-      <!-- Logout Icon -->
-      <a href="codex.html" class="text-gray-600 hover:text-red-600 text-xl flex items-center gap-2">
-        <i class="fas fa-sign-out-alt"></i>
-        <span class="text-sm">Log out</span>
-      </a>
+      <div class="flex items-center space-x-2">
+        <img src="codexbg.png" alt="Logo" class="h-10 animate__animated animate__fadeIn">
+        <span class="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">CodeX</span>
+      </div>
+      
+      <div class="flex items-center space-x-6">
+        <h2 class="text-lg font-medium hidden md:block" id="welcomeMessage"></h2>
+        
+        <div class="flex items-center space-x-4">
+          <button class="notification-bell text-gray-600 hover:text-blue-600 transition">
+            <i class="fas fa-bell text-xl"></i>
+          </button>
+          
+          <!-- User dropdown -->
+          <div class="relative group">
+            <div class="flex items-center space-x-2 cursor-pointer">
+              <img id="profilePic" src="http://localhost:5000/uploads/default-profile.png" 
+                   class="w-8 h-8 rounded-full border-2 border-blue-100 object-cover">
+              <i class="fas fa-chevron-down text-xs text-gray-500 group-hover:text-blue-600 transition"></i>
+            </div>
+            
+            <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden group-hover:block animate__animated animate__fadeIn">
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">Profile</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">Settings</a>
+              <a href="codex.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600">Sign out</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </header>
 
-  <main class="pt-24 container mx-auto px-4">
-    <div class="bg-white p-6 rounded shadow mb-6">
-      <div class="flex items-center justify-between w-full">
-        <!-- Profile Section -->
-        <div class="flex items-center space-x-4 pr-10"> <!-- Add padding-right here -->
-          <div class="relative group">
-            <img
-              id="profilePic"
-              src="http://localhost:5000/uploads/default-profile.png"
-              alt="Profile Picture"
-              class="w-16 h-16 rounded-full border border-gray-300 object-cover"
-            />
-            <label
-              for="profileImage"
-              class="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center cursor-pointer"
-              title="Upload Profile Picture"
-            >
-              <span class="text-sm">+</span>
-              <input
-                type="file"
-                id="profileImage"
-                name="profileImage"
-                accept="image/*"
-                class="hidden"
-                onchange="previewImage(event)"
-              />
+  <main class="pt-24 container mx-auto px-4 pb-12">
+    <!-- Profile Card -->
+    <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8 animate__animated animate__fadeIn">
+      <div class="md:flex">
+        <div class="md:w-1/4 gradient-bg p-6 flex flex-col items-center justify-center">
+          <div class="relative group mb-4">
+            <img id="profilePic" src="http://localhost:5000/uploads/default-profile.png" 
+                 class="w-24 h-24 rounded-full border-4 border-white object-cover shadow-md profile-pic-upload">
+            <label for="profileImage" class="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer shadow-md hover:bg-blue-700 transition">
+              <i class="fas fa-camera text-xs"></i>
+              <input type="file" id="profileImage" name="profileImage" accept="image/*" class="hidden" onchange="previewImage(event)">
             </label>
-            <div
-              class="absolute bottom-10 right-0 bg-gray-800 text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            >
-              Upload Profile Picture
+          </div>
+          <h3 class="text-white font-semibold text-lg" id="userName">User Name</h3>
+          <p class="text-blue-100 text-sm" id="studentNumber">Student Number</p>
+        </div>
+        
+        <div class="md:w-3/4 p-6">
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div class="mb-4 md:mb-0">
+              <h2 class="text-2xl font-bold text-gray-800">Dashboard Overview</h2>
+              <p class="text-gray-600">Track your learning progress and achievements</p>
+            </div>
+            
+            <button onclick="handlePurchase()" class="floating-btn px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full transition flex items-center">
+              <i class="fas fa-book-open mr-2"></i> Browse Courses
+            </button>
+          </div>
+          
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+            <div class="bg-blue-50 p-4 rounded-lg">
+              <p class="text-sm text-blue-600">Enrolled Courses</p>
+              <h3 class="text-2xl font-bold" id="courseCount">0</h3>
+            </div>
+            <div class="bg-green-50 p-4 rounded-lg">
+              <p class="text-sm text-green-600">Certificates</p>
+              <h3 class="text-2xl font-bold" id="certificateCount">0</h3>
+            </div>
+            <div class="bg-purple-50 p-4 rounded-lg">
+              <p class="text-sm text-purple-600">Learning Hours</p>
+              <h3 class="text-2xl font-bold" id="learningHours">0</h3>
+            </div>
+            <div class="bg-orange-50 p-4 rounded-lg">
+              <p class="text-sm text-orange-600">Streak</p>
+              <h3 class="text-2xl font-bold" id="streakCount">0 days</h3>
             </div>
           </div>
-    
-          <div>
-            <h3 class="text-xl font-semibold" id="userName">User Name</h3>
-            <p class="text-sm text-gray-600" id="studentNumber">Student Number</p>
-          </div>
         </div>
-    
-        <!-- 🎯 Centered Purchase Button (Blue) -->
-        <button
-          onclick="handlePurchase()"
-          class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded shadow">
-          View all available courses
-        </button>
       </div>
     </div>
 
     <!-- Dashboard Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- My Courses -->
-      <div class="bg-white p-6 rounded shadow hover:shadow-md transition">
-        <div class="flex items-center gap-2 mb-2">
-          <i class="fas fa-book-reader text-blue-600 text-lg"></i>
-          <h3 class="text-lg font-semibold">My Courses</h3>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      <!-- Progress Chart -->
+      <div class="bg-white p-6 rounded-xl shadow-md card-hover animate__animated animate__fadeIn animate__delay-1s">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold flex items-center">
+            <i class="fas fa-chart-line text-blue-600 mr-2"></i> Learning Progress
+          </h3>
+          <select id="progressFilter" class="text-sm border border-gray-200 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500">
+            <option>All Courses</option>
+            <option>Last 30 Days</option>
+            <option>This Year</option>
+          </select>
         </div>
-        <ul id="coursesList" class="space-y-2 mb-4"></ul>
-        <div class="text-right">
-          <a href="#courses" class="text-sm text-white bg-blue-600 px-4 py-1 rounded hover:bg-blue-700 transition inline-block">
-            My Courses
-          </a>
+        <div class="h-64">
+          <canvas id="progressChart"></canvas>
         </div>
       </div>
       
-      <!-- Progress -->
-      <div class="bg-white p-6 rounded shadow hover:shadow-md transition">
-        <div class="flex items-center gap-2 mb-2">
-          <i class="fas fa-chart-line text-green-600 text-lg"></i>
-          <h3 class="text-lg font-semibold">Course Progress</h3>
+      <!-- Recent Activity -->
+      <div class="bg-white p-6 rounded-xl shadow-md card-hover animate__animated animate__fadeIn animate__delay-2s">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-semibold flex items-center">
+            <i class="fas fa-clock text-purple-600 mr-2"></i> Recent Activity
+          </h3>
+          <a href="#" class="text-sm text-blue-600 hover:text-blue-800">View All</a>
         </div>
-        <div id="progressList"></div>
-      </div>
-
-      <!-- Certificates -->
-      <div class="bg-white p-6 rounded shadow hover:shadow-md transition">
-        <div class="flex items-center gap-2 mb-2">
-          <i class="fas fa-award text-yellow-500 text-lg"></i>
-          <h3 class="text-lg font-semibold">Certificates</h3>
-        </div>
-        <p id="certificateCountText">You have earned <strong id="certificateCount">0 certificates</strong>.</p>
-        <a href="#" class="text-blue-600 font-semibold hover:text-blue-800 mt-2 inline-block transition">View Certificate</a>
-      </div>
-
-      <!-- Payment History -->
-      <div class="bg-white p-6 rounded shadow hover:shadow-md transition">
-        <div class="flex items-center gap-2 mb-2">
-          <i class="fas fa-receipt text-purple-500 text-lg"></i>
-          <h3 class="text-lg font-semibold">Payment History</h3>
-        </div>
-        <ul id="paymentHistory" class="text-sm space-y-2"></ul>
-      </div>
-
-      <!-- Account Settings -->
-      <div class="bg-white p-6 rounded shadow hover:shadow-md transition">
-        <div class="flex items-center gap-2 mb-2">
-          <i class="fas fa-user-cog text-orange-500 text-lg"></i>
-          <h3 class="text-lg font-semibold">Account Settings</h3>
-        </div>
-        <ul class="text-sm space-y-2">
-          <li><a href="#" class="text-blue-600 font-semibold hover:text-blue-800 transition">Change Password</a></li>
-          <li><a href="#" class="text-blue-600 font-semibold hover:text-blue-800 transition">Update Email</a></li>
-          <li><a href="#" class="text-blue-600 font-semibold hover:text-blue-800 transition">Notification Preferences</a></li>
+        <ul id="recentActivity" class="space-y-3">
+          <li class="animate-pulse flex items-center space-x-3">
+            <div class="h-8 w-8 rounded-full bg-gray-200"></div>
+            <div class="flex-1 space-y-2">
+              <div class="h-3 rounded bg-gray-200 w-3/4"></div>
+              <div class="h-2 rounded bg-gray-200 w-1/2"></div>
+            </div>
+          </li>
+          <li class="animate-pulse flex items-center space-x-3">
+            <div class="h-8 w-8 rounded-full bg-gray-200"></div>
+            <div class="flex-1 space-y-2">
+              <div class="h-3 rounded bg-gray-200 w-3/4"></div>
+              <div class="h-2 rounded bg-gray-200 w-1/2"></div>
+            </div>
+          </li>
         </ul>
       </div>
-
-      <!-- Support -->
-      <div class="bg-white p-6 rounded shadow hover:shadow-md transition">
-        <div class="flex items-center gap-2 mb-2">
-          <i class="fas fa-headset text-red-500 text-lg"></i>
-          <h3 class="text-lg font-semibold">Support</h3>
+      
+      <!-- Quick Actions -->
+      <div class="bg-white p-6 rounded-xl shadow-md card-hover animate__animated animate__fadeIn animate__delay-3s">
+        <h3 class="text-lg font-semibold flex items-center mb-4">
+          <i class="fas fa-bolt text-yellow-500 mr-2"></i> Quick Actions
+        </h3>
+        <div class="grid grid-cols-2 gap-3">
+          <a href="#" class="p-3 bg-blue-50 rounded-lg flex flex-col items-center justify-center text-center hover:bg-blue-100 transition">
+            <i class="fas fa-book text-blue-600 text-xl mb-2"></i>
+            <span class="text-sm font-medium">Continue Learning</span>
+          </a>
+          <a href="#" class="p-3 bg-green-50 rounded-lg flex flex-col items-center justify-center text-center hover:bg-green-100 transition">
+            <i class="fas fa-certificate text-green-600 text-xl mb-2"></i>
+            <span class="text-sm font-medium">View Certificates</span>
+          </a>
+          <a href="#" class="p-3 bg-purple-50 rounded-lg flex flex-col items-center justify-center text-center hover:bg-purple-100 transition">
+            <i class="fas fa-tasks text-purple-600 text-xl mb-2"></i>
+            <span class="text-sm font-medium">Assignments</span>
+          </a>
+          <a href="#" class="p-3 bg-orange-50 rounded-lg flex flex-col items-center justify-center text-center hover:bg-orange-100 transition">
+            <i class="fas fa-calendar-alt text-orange-600 text-xl mb-2"></i>
+            <span class="text-sm font-medium">Schedule</span>
+          </a>
         </div>
-        <p>Need help or have questions?</p>
-        <a href="#" class="text-blue-600 font-semibold hover:text-blue-800 transition">Contact Support</a>
       </div>
+    </div>
 
+    <!-- Courses Section -->
+    <div class="bg-white p-6 rounded-xl shadow-md mb-8 animate__animated animate__fadeIn">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-xl font-semibold flex items-center">
+          <i class="fas fa-book-reader text-blue-600 mr-3"></i> My Courses
+        </h3>
+        <div class="flex space-x-2">
+          <button id="viewAllBtn" class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50 transition">View All</button>
+          <button id="sortCoursesBtn" class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium hover:bg-gray-50 transition flex items-center">
+            <span>Sort By</span>
+            <i class="fas fa-chevron-down ml-2 text-xs"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div id="coursesList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Courses will be loaded here -->
+      </div>
+      
+      <div class="mt-6 text-center">
+        <button onclick="handlePurchase()" class="px-6 py-2 bg-white border-2 border-blue-500 text-blue-600 font-medium rounded-full hover:bg-blue-50 transition">
+          <i class="fas fa-plus mr-2"></i> Enroll in New Course
+        </button>
+      </div>
+    </div>
+
+    <!-- Payment History -->
+    <div class="bg-white p-6 rounded-xl shadow-md animate__animated animate__fadeIn">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-xl font-semibold flex items-center">
+          <i class="fas fa-receipt text-purple-600 mr-3"></i> Payment History
+        </h3>
+        <button class="px-4 py-2 bg-purple-50 text-purple-600 rounded-lg text-sm font-medium hover:bg-purple-100 transition">
+          <i class="fas fa-download mr-2"></i> Export
+        </button>
+      </div>
+      
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Invoice</th>
+            </tr>
+          </thead>
+          <tbody id="paymentHistory" class="bg-white divide-y divide-gray-200">
+            <!-- Payment history will be loaded here -->
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="mt-4 flex justify-between items-center">
+        <div class="text-sm text-gray-500">
+          Showing <span id="paymentStart">1</span> to <span id="paymentEnd">5</span> of <span id="paymentTotal">0</span> entries
+        </div>
+        <div class="flex space-x-2">
+          <button class="px-3 py-1 bg-gray-100 rounded text-sm disabled:opacity-50" disabled id="prevPageBtn">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="px-3 py-1 bg-blue-600 text-white rounded text-sm" id="nextPageBtn">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </main>
+
+  <!-- Floating Action Button -->
+  <div class="fixed bottom-8 right-8 z-40">
+    <button id="helpBtn" class="w-14 h-14 rounded-full bg-blue-600 text-white shadow-xl flex items-center justify-center hover:bg-blue-700 transition transform hover:scale-110">
+      <i class="fas fa-question text-xl"></i>
+    </button>
+  </div>
+
+  <!-- Loading Spinner -->
   <div id="loadingSpinner" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(255,255,255,0.8); display: flex; justify-content: center;
-  align-items: center; z-index: 9999;">
-  <div class="loader"></div>
-</div>
+  background: rgba(255,255,255,0.95); display: flex; justify-content: center;
+  align-items: center; z-index: 9999; flex-direction: column;">
+    <div class="loader mb-4"></div>
+    <p class="text-gray-600">Loading your dashboard...</p>
+  </div>
 
   <!-- Footer -->
-  <footer class="bg-gray-800 shadow mt-12">
-    <div class="container mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-300">
-      <p>&copy; 2025 CodeX Academy. All rights reserved.</p>
-      <div class="flex space-x-6">
-        <a href="#privacy" class="hover:text-blue-400 transition">Privacy Policy</a>
-        <a href="#terms" class="hover:text-blue-400 transition">Terms of Service</a>
-        <a href="#faq" class="hover:text-blue-400 transition">FAQ</a>
+  <footer class="bg-gray-900 text-gray-300 py-12">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <div class="flex items-center mb-4">
+            <img src="codexbg.png" alt="Logo" class="h-8 mr-2">
+            <span class="text-xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">CodeX</span>
+          </div>
+          <p class="text-sm mb-4">Empowering the next generation of developers and designers through quality education.</p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        
+        <div>
+          <h4 class="text-white font-medium mb-4">Courses</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-sm hover:text-blue-400 transition">Web Development</a></li>
+            <li><a href="#" class="text-sm hover:text-blue-400 transition">Mobile Development</a></li>
+            <li><a href="#" class="text-sm hover:text-blue-400 transition">UI/UX Design</a></li>
+            <li><a href="#" class="text-sm hover:text-blue-400 transition">Data Science</a></li>
+            <li><a href="#" class="text-sm hover:text-blue-400 transition">Cybersecurity</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-white font-medium mb-4">Resources</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-sm hover:text-blue-400 transition">Blog</a></li>
+            <li><a href="#" class="text-sm hover:text-blue-400 transition">Tutorials</a></li>
+            <li><a href="#" class="text-sm hover:text-blue-400 transition">Documentation</a></li>
+            <li><a href="#" class="text-sm hover:text-blue-400 transition">Community</a></li>
+            <li><a href="#" class="text-sm hover:text-blue-400 transition">Events</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-white font-medium mb-4">Support</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-sm hover:text-blue-400 transition">Help Center</a></li>
+            <li><a href="#" class="text-sm hover:text-blue-400 transition">Contact Us</a></li>
+            <li><a href="#" class="text-sm hover:text-blue-400 transition">Feedback</a></li>
+            <li><a href="#" class="text-sm hover:text-blue-400 transition">System Status</a></li>
+            <li><a href="#" class="text-sm hover:text-blue-400 transition">Forums</a></li>
+          </ul>
+        </div>
       </div>
-      <div class="flex space-x-4">
-        <a href="https://facebook.com" target="_blank" class="hover:text-blue-500 transition"><i class="fab fa-facebook-f"></i></a>
-        <a href="https://instagram.com" target="_blank" class="hover:text-pink-500 transition"><i class="fab fa-instagram"></i></a>
-        <a href="https://twitter.com" target="_blank" class="hover:text-blue-400 transition"><i class="fab fa-x-twitter"></i></a>
+      
+      <div class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+        <p class="text-sm text-gray-500 mb-4 md:mb-0">© 2025 CodeX Academy. All rights reserved.</p>
+        <div class="flex space-x-6">
+          <a href="#" class="text-sm text-gray-500 hover:text-gray-300 transition">Privacy Policy</a>
+          <a href="#" class="text-sm text-gray-500 hover:text-gray-300 transition">Terms of Service</a>
+          <a href="#" class="text-sm text-gray-500 hover:text-gray-300 transition">Cookie Policy</a>
+        </div>
       </div>
     </div>
   </footer>
 
   <script>
+   const progressMap = {};
+   let progressChartInstance = null;
+
     // Preview image and upload to server
     function previewImage(event) {
       const selectedFile = event.target.files[0];
@@ -223,121 +437,321 @@
     }
   
     // Redirect to course purchase
-    function handlePurchase() {
-      window.location.href = 'purchase.html';
+   function initProgressChart() {
+  const ctx = document.getElementById('progressChart').getContext('2d');
+
+  // Destroy existing chart if it exists
+  if (progressChartInstance) {
+    progressChartInstance.destroy();
+  }
+
+  const labels = Object.keys(progressMap);
+  const data = labels.map(label => progressMap[label]);
+
+  // Generate unique colors for each bar
+  const backgroundColors = labels.map((_, i) =>
+    `hsl(${(i * 60) % 360}, 70%, 60%)` // Rotate hue for variation
+  );
+
+  const borderColors = labels.map((_, i) =>
+    `hsl(${(i * 60) % 360}, 70%, 40%)`
+  );
+
+  progressChartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Progress %',
+        data: data,
+        backgroundColor: backgroundColors,
+        borderColor: borderColors,
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100
+        }
+      },
+      plugins: {
+        legend: {
+          display: false
+        }
+      }
     }
-  
+  });
+}
+
+
+    // Load recent activity
+ async function loadRecentActivity() {
+  const userEmail = localStorage.getItem('userEmail');
+  if (!userEmail) return;
+
+  try {
+    const res = await fetch(`http://localhost:5000/getUserActivity?email=${encodeURIComponent(userEmail)}`);
+    const activities = await res.json();
+
+    const container = document.getElementById('recentActivity');
+    container.innerHTML = '';
+
+    if (activities.length === 0) {
+      container.innerHTML = '<li class="text-gray-500 text-sm">No recent activity found.</li>';
+      return;
+    }
+
+    activities.forEach(activity => {
+      const item = document.createElement('li');
+      item.className = 'flex items-start space-x-3 animate-fade-in';
+      item.innerHTML = `
+        <div class="flex-shrink-0">
+          <i class="${activity.icon} ${activity.color} text-xl mt-1"></i>
+        </div>
+        <div>
+          <p class="text-sm font-medium">${activity.title}</p>
+          <p class="text-xs text-gray-500">${new Date(activity.time).toLocaleString()}</p>
+        </div>
+      `;
+      container.appendChild(item);
+    });
+
+  } catch (error) {
+    console.error("Error loading recent activity:", error);
+  }
+}
+
+
+    // Load courses with better UI
+    function loadCourses(courses) {
+      const container = document.getElementById('coursesList');
+      container.innerHTML = '';
+
+      if (courses.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full text-center py-12">
+            <i class="fas fa-book-open text-4xl text-gray-300 mb-4"></i>
+            <h4 class="text-lg font-medium text-gray-500">No courses enrolled yet</h4>
+            <p class="text-gray-400 mb-4">Start your learning journey today</p>
+            <button onclick="handlePurchase()" class="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition">
+              Browse Courses
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      const coursePageMap = {
+        "Web Development": "webdev.html",
+        "Graphic Design": "graphicdesign.html",
+        "Digital Marketing": "digitalmarketing.html",
+        "Cybersecurity": "cybercourse.html",
+        "Mobile App Development": "mobileapp.html",
+        "UI/UX Design": "uiux.html",
+        "Cloud Computing": "#",
+        "Ethical Hacking": "ethicalhacking.html",
+        "Python Programming": "python.html",
+        "MQL5 Programming": "mql5_programming.html",
+        "SQL Database Management": "sql_database.html",
+        "Content Writing": "contentwriting.html",
+        "Photography": "photography.html",
+        "video/mp4": "videoediting.html",
+        "Blockchain Development": "#",
+        "Artificial Intelligence": "AI.html",
+        "Game Development": "gamedev.html",
+        "Data Science": "datascience",
+      };
+
+      const courseImageMap = {
+        "Web Development": "codexweb.jpg",
+        "Graphic Design": "graphic_design.jpg",
+        "Digital Marketing": "digital_marketing.jpg",
+        "Cybersecurity": "cyber.jpg",
+        "Mobile App Development": "mobile_app.jpg",
+        "UI/UX Design": "uiux.jpg",
+        "Cloud Computing": "cloud_computing.jpg",
+        "Ethical Hacking": "ethical_hacking.jpg",
+        "Python Programming": "python_programming.jpg",
+        "MQL5 Programming": "mql5_programming.jpg",
+        "SQL Database Management": "sql_database.jpg",
+        "Content Writing": "content_writing.jpg",
+        "Photography": "photography.jpg",
+        "video/mp4": "video_editing.mp4",
+        "Blockchain Development": "blockchain.jpg",
+        "Artificial Intelligence": "ai.jpg",
+        "Game Development": "game_dev.jpg",
+        "Data Science": "data2.jpg",
+      };
+
+      courses.forEach((course, index) => {
+  const courseName = course.course;
+  const courseLink = coursePageMap[courseName] || `course.html?courseName=${encodeURIComponent(courseName)}`;
+  const progress = Math.floor(Math.random() * 100); // or actual progress from data
+  progressMap[courseName] = progress;
+
+
+const imageUrl = courseImageMap[courseName] || 'https://via.placeholder.com/400x200?text=Course';
+
+  const card = document.createElement('div');
+  card.className = 'bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition';
+  card.innerHTML = `
+    <div class="relative">
+      <img src="${imageUrl}" alt="${courseName}" class="w-full h-40 object-cover">
+      <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+        <h4 class="text-white font-semibold">${courseName}</h4>
+      </div>
+    </div>
+    <div class="p-4">
+      <div class="flex justify-between items-center mb-2">
+        <span class="text-xs font-medium text-gray-500">Progress</span>
+        <span class="text-xs font-bold">${progress}%</span>
+      </div>
+      <div class="w-full bg-gray-200 rounded-full h-1.5 mb-4">
+        <div class="bg-blue-600 h-1.5 rounded-full" style="width: ${progress}%"></div>
+      </div>
+      <div class="flex justify-between">
+        <a href="${courseLink}" class="text-sm font-medium text-blue-600 hover:text-blue-800 transition">
+          Continue
+        </a>
+        <button class="text-sm text-gray-500 hover:text-gray-700 transition">
+          <i class="fas fa-ellipsis-h"></i>
+        </button>
+      </div>
+    </div>
+  `;
+
+  card.style.animationDelay = `${index * 0.1}s`;
+  card.classList.add('animate__animated', 'animate__fadeInUp');
+
+  container.appendChild(card);
+});
+initProgressChart();
+    }
+
     // Main logic runs after DOM is loaded
     document.addEventListener("DOMContentLoaded", async () => {
       const spinner = document.getElementById("loadingSpinner");
       if (spinner) spinner.style.display = "flex";
-  
+
       const userId = localStorage.getItem("userID");
       const userEmail = localStorage.getItem("userEmail");
-  
+
       if (!userId) {
         alert("You are not logged in.");
         window.location.href = "codex.html";
         return;
       }
-  
+
       try {
+        // Initialize charts
+        initProgressChart();
+        
+        // Load recent activity
+        loadRecentActivity();
+
         // Fetch and populate user data
         const res = await fetch(`http://localhost:5000/user/${userId}`);
         if (!res.ok) throw new Error("Failed to fetch user data");
         const userData = await res.json();
-  
-        document.getElementById("welcomeMessage").textContent = `Welcome, ${userData.name}`;
-        document.getElementById("userName").textContent = userData.name;
-        document.getElementById("studentNumber").textContent = `Student Number: ${userData.student_id}`;
-  
+
+        document.getElementById("welcomeMessage").textContent = `Welcome back, ${userData.name || 'User'}`;
+        document.getElementById("userName").textContent = userData.name || 'User';
+        document.getElementById("studentNumber").textContent = `Student ID: ${userData.student_id || 'N/A'}`;
+
         const certCount = userData.certificateCount || 0;
-        document.getElementById("certificateCount").textContent = `${certCount} certificate${certCount !== 1 ? 's' : ''}`;
-  
-        const coursesList = document.getElementById("coursesList");
-        const progressList = document.getElementById("progressList");
-        const paymentHistory = document.getElementById("paymentHistory");
-  
-        if (userData.courses && Array.isArray(userData.courses)) {
-          userData.courses.forEach(course => {
-            const listItem = document.createElement("li");
-            listItem.className = "flex justify-between items-center";
-            listItem.innerHTML = `<span>${course.name}</span><button class='text-blue-600 font-semibold hover:text-blue-800 transition'>Continue</button>`;
-            coursesList.appendChild(listItem);
-  
-            const progressItem = document.createElement("div");
-            progressItem.className = "mb-4";
-            progressItem.innerHTML = `
-              <div class='flex justify-between items-center mb-1'>
-                <p>${course.name}</p>
-                <span class='text-sm font-medium text-gray-600'>${course.progress}%</span>
-              </div>
-              <div class='w-full bg-gray-200 rounded-full h-2'>
-                <div class='bg-blue-600 h-2 rounded-full' style='width: ${course.progress}%'></div>
-              </div>`;
-            progressList.appendChild(progressItem);
-          });
-        }
-  
-        if (userData.paymentHistory && Array.isArray(userData.paymentHistory)) {
-          userData.paymentHistory.forEach(payment => {
-            const paymentItem = document.createElement("li");
-            paymentItem.innerHTML = `${payment.course} – ${payment.amount} – <span class='text-green-600 font-semibold'>${payment.status}</span>`;
-            paymentHistory.appendChild(paymentItem);
-          });
-        }
-  
+        document.getElementById("certificateCount").textContent = certCount;
+        document.getElementById("courseCount").textContent = userData.courses?.length || 0;
+        document.getElementById("learningHours").textContent = Math.floor(Math.random() * 100); // Demo data
+        document.getElementById("streakCount").textContent = `${Math.floor(Math.random() * 30)} days`; // Demo data
+
         if (userData.profilePic) {
-          const profilePic = document.getElementById("profilePic");
-          profilePic.src = `http://localhost:5000${userData.profilePic}`;
+          const profilePics = document.querySelectorAll("#profilePic");
+          profilePics.forEach(pic => {
+            pic.src = `http://localhost:5000${userData.profilePic}`;
+          });
         }
+
+        // Load payment history
+        if (userEmail) {
+          const paymentRes = await fetch(`http://localhost:5000/getPurchases?email=${encodeURIComponent(userEmail)}`);
+          const paymentData = await paymentRes.json();
+          renderPaymentHistory(paymentData);
+        }
+
+        // Load courses
+        if (userEmail) {
+  const coursesRes = await fetch(`http://localhost:5000/getUserCourses?email=${encodeURIComponent(userEmail)}`);
+  const courses = await coursesRes.json();
+
+  // ✅ Set course count based on array length
+  document.getElementById("courseCount").textContent = courses.length || 0;
+
+  // ✅ Load the course cards
+  loadCourses(courses);
+}
+
       } catch (err) {
         console.error("Error loading user data:", err);
+      } finally {
+        if (spinner) spinner.style.display = "none";
       }
-  
-      // Load course links
-      if (userEmail) {
-        try {
-          const response = await fetch(`http://localhost:5000/getUserCourses?email=${encodeURIComponent(userEmail)}`);
-          const courses = await response.json();
-  
-          const coursesList = document.getElementById("coursesList");
-          coursesList.innerHTML = "";
-  
-          if (courses.length === 0) {
-            coursesList.innerHTML = `<li class="text-gray-600">You haven't enrolled in any courses yet.</li>`;
-          } else {
-            const coursePageMap = {
-              "Web Development": "webdev.html",
-              "Graphic Design": "graphicdesign.html",
-              "Digital Marketing": "digitalmarketing.html"
-            };
-  
-            courses.forEach(course => {
-              const listItem = document.createElement("li");
-              listItem.className = "p-2 bg-gray-100 rounded hover:bg-blue-100 transition";
-  
-              const courseName = course.course;
-              const courseLink = coursePageMap[courseName] || `course.html?courseName=${encodeURIComponent(courseName)}`;
-  
-              listItem.innerHTML = `
-                <a href="${courseLink}" class="block text-blue-700">
-                  <strong>${courseName}</strong>
-                </a>
-              `;
-  
-              coursesList.appendChild(listItem);
-            });
-          }
-        } catch (error) {
-          console.error("Error loading user courses:", error);
-          document.getElementById("coursesList").innerHTML = `<li class="text-red-600">Failed to load courses.</li>`;
-        }
-      }
-  
-      if (spinner) spinner.style.display = "none";
     });
+
+    // Render payment history with pagination
+    function renderPaymentHistory(payments) {
+      const container = document.getElementById('paymentHistory');
+      container.innerHTML = '';
+
+      if (!payments || payments.length === 0) {
+        container.innerHTML = `
+          <tr>
+            <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
+              No payment history found
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      // For demo, we'll just show first 5
+      payments.slice(0, 5).forEach(payment => {
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-gray-50';
+        row.innerHTML = `
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+            ${payment.course}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            ${new Date(payment.created_at).toLocaleDateString()}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            R${payment.amount ? parseFloat(payment.amount).toFixed(2) : '0.00'}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+              Completed
+            </span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <a href="#" class="text-blue-600 hover:text-blue-900">View</a>
+          </td>
+        `;
+        container.appendChild(row);
+      });
+
+      // Update pagination info
+      document.getElementById('paymentTotal').textContent = payments.length;
+    }
+
+    // Help button functionality
+    document.getElementById('helpBtn').addEventListener('click', () => {
+      alert("Need help? Our support team is available 24/7. Email us at support@codex.edu or call +27 123 456 789");
+    });
+    
   </script>
-  
 </body>
 </html>
