@@ -196,15 +196,15 @@
     <div class="container mx-auto px-6">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
         <div class="p-4">
-          <div class="text-3xl md:text-4xl font-bold text-blue-600 mb-2">50+</div>
+          <div class="text-3xl md:text-4xl font-bold text-blue-600 mb-2">15+</div>
           <div class="text-gray-600">Courses</div>
         </div>
         <div class="p-4">
-          <div class="text-3xl md:text-4xl font-bold text-green-600 mb-2">50K+</div>
+          <div class="text-3xl md:text-4xl font-bold text-green-600 mb-2">10K+</div>
           <div class="text-gray-600">Students</div>
         </div>
         <div class="p-4">
-          <div class="text-3xl md:text-4xl font-bold text-purple-600 mb-2">100+</div>
+          <div class="text-3xl md:text-4xl font-bold text-purple-600 mb-2">30+</div>
           <div class="text-gray-600">Instructors</div>
         </div>
         <div class="p-4">
@@ -487,6 +487,311 @@
           </div>
         </div>
       </div>
+
+      <!-- Course Card: Game Development -->
+<div class="course-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center relative overflow-hidden" data-course="Game Development" data-price="1199">
+  <div class="absolute top-2 right-2 badge-certified text-xs font-bold px-2 py-1 rounded-full">
+    <i class="fas fa-certificate mr-1"></i> Certified
+  </div>
+  <img src="game_dev.jpg" alt="Game Development" class="course-image w-full rounded-lg mb-4">
+  <div class="w-full">
+    <div class="flex items-center mb-1">
+      <span class="text-yellow-400 text-sm">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star-half-alt"></i>
+      </span>
+      <span class="text-gray-500 text-xs ml-1">(4.6)</span>
+    </div>
+    <h4 class="text-lg font-bold mb-2">Game Development</h4>
+    <p class="text-gray-600 text-sm mb-4">Learn the fundamentals of game development using Unity and C# to create engaging games.</p>
+    <div class="flex justify-between items-center">
+      <span class="price-tag text-sm font-bold px-3 py-1 rounded-full">R1199</span>
+      <button 
+        class="enroll-btn px-4 py-2 rounded-lg text-white text-sm font-medium bg-blue-600 hover:bg-blue-700 transition duration-200"
+        data-course="Game Development" 
+        data-price="1199" 
+        onclick="setCourse(this)">
+        Enroll Now
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Course Card: Video Editing -->
+<div class="course-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center relative overflow-hidden" data-course="Video Editing" data-price="799">
+  <div class="absolute top-2 right-2 badge-certified text-xs font-bold px-2 py-1 rounded-full">
+    <i class="fas fa-certificate mr-1"></i> Certified
+  </div>
+  <video class="course-image w-full rounded-lg mb-4" autoplay muted loop playsinline>
+    <source src="video_editing.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <div class="w-full">
+    <div class="flex items-center mb-1">
+      <span class="text-yellow-400 text-sm">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star-half-alt"></i>
+      </span>
+      <span class="text-gray-500 text-xs ml-1">(4.5)</span>
+    </div>
+    <h4 class="text-lg font-bold mb-2">Video Editing</h4>
+    <p class="text-gray-600 text-sm mb-4">Learn to create professional-quality videos using tools like Adobe Premiere and Final Cut Pro.</p>
+    <div class="flex justify-between items-center">
+      <span class="price-tag text-sm font-bold px-3 py-1 rounded-full">R799</span>
+      <button 
+        class="enroll-btn px-4 py-2 rounded-lg text-white text-sm font-medium bg-blue-600 hover:bg-blue-700 transition duration-200"
+        data-course="Video Editing" 
+        data-price="799" 
+        onclick="setCourse(this)">
+        Enroll Now
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Course Card: Photography -->
+<div class="course-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center relative overflow-hidden" data-course="Photography" data-price="899">
+  <div class="absolute top-2 right-2 badge-certified text-xs font-bold px-2 py-1 rounded-full">
+    <i class="fas fa-certificate mr-1"></i> Certified
+  </div>
+  <img src="photography.jpg" alt="Photography" class="course-image w-full rounded-lg mb-4">
+  <div class="w-full">
+    <div class="flex items-center mb-1">
+      <span class="text-yellow-400 text-sm">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star-half-alt"></i>
+      </span>
+      <span class="text-gray-500 text-xs ml-1">(4.8)</span>
+    </div>
+    <h4 class="text-lg font-bold mb-2">Photography</h4>
+    <p class="text-gray-600 text-sm mb-4">Master the art of photography, from basics to advanced techniques, and learn how to edit photos professionally.</p>
+    <div class="flex justify-between items-center">
+      <span class="price-tag text-sm font-bold px-3 py-1 rounded-full">R899</span>
+      <button 
+        class="enroll-btn px-4 py-2 rounded-lg text-white text-sm font-medium bg-blue-600 hover:bg-blue-700 transition duration-200"
+        data-course="Photography" 
+        data-price="899" 
+        onclick="setCourse(this)">
+        Enroll Now
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Course Card: Content Writing -->
+<div class="course-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center relative overflow-hidden" data-course="Content Writing" data-price="649">
+  <div class="absolute top-2 right-2 badge-certified text-xs font-bold px-2 py-1 rounded-full">
+    <i class="fas fa-certificate mr-1"></i> Certified
+  </div>
+  <img src="content_writing.jpg" alt="Content Writing" class="course-image w-full rounded-lg mb-4">
+  <div class="w-full">
+    <div class="flex items-center mb-1">
+      <span class="text-yellow-400 text-sm">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="far fa-star"></i>
+      </span>
+      <span class="text-gray-500 text-xs ml-1">(4.4)</span>
+    </div>
+    <h4 class="text-lg font-bold mb-2">Content Writing</h4>
+    <p class="text-gray-600 text-sm mb-4">Learn how to write compelling content for blogs, websites, and social media.</p>
+    <div class="flex justify-between items-center">
+      <span class="price-tag text-sm font-bold px-3 py-1 rounded-full">R649</span>
+      <button 
+        class="enroll-btn px-4 py-2 rounded-lg text-white text-sm font-medium bg-blue-600 hover:bg-blue-700 transition duration-200"
+        data-course="Content Writing" 
+        data-price="649" 
+        onclick="setCourse(this)">
+        Enroll Now
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Course Card: Graphic Design -->
+<div class="course-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center relative overflow-hidden" data-course="Graphic Design" data-price="799">
+  <div class="absolute top-2 right-2 badge-certified text-xs font-bold px-2 py-1 rounded-full">
+    <i class="fas fa-certificate mr-1"></i> Certified
+  </div>
+  <img src="graphic_design.jpg" alt="Graphic Design" class="course-image w-full rounded-lg mb-4">
+  <div class="w-full">
+    <div class="flex items-center mb-1">
+      <span class="text-yellow-400 text-sm">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star-half-alt"></i>
+      </span>
+      <span class="text-gray-500 text-xs ml-1">(4.6)</span>
+    </div>
+    <h4 class="text-lg font-bold mb-2">Graphic Design</h4>
+    <p class="text-gray-600 text-sm mb-4">Learn the fundamentals of design and how to create stunning graphics using Photoshop and Illustrator.</p>
+    <div class="flex justify-between items-center">
+      <span class="price-tag text-sm font-bold px-3 py-1 rounded-full">R799</span>
+      <button 
+        class="enroll-btn px-4 py-2 rounded-lg text-white text-sm font-medium bg-blue-600 hover:bg-blue-700 transition duration-200"
+        data-course="Graphic Design" 
+        data-price="799" 
+        onclick="setCourse(this)">
+        Enroll Now
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Course Card: Ethical Hacking -->
+<div class="course-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center relative overflow-hidden" data-course="Ethical Hacking" data-price="1399">
+  <div class="absolute top-2 right-2 badge-certified text-xs font-bold px-2 py-1 rounded-full">
+    <i class="fas fa-certificate mr-1"></i> Certified
+  </div>
+  <img src="ethical_hacking.jpg" alt="Ethical Hacking" class="course-image w-full rounded-lg mb-4">
+  <div class="w-full">
+    <div class="flex items-center mb-1">
+      <span class="text-yellow-400 text-sm">
+        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+      </span>
+      <span class="text-gray-500 text-xs ml-1">(4.8)</span>
+    </div>
+    <h4 class="text-lg font-bold mb-2">Ethical Hacking</h4>
+    <p class="text-gray-600 text-sm mb-4">Learn the tools and techniques used by ethical hackers to protect systems and networks from cyber-attacks.</p>
+    <div class="flex justify-between items-center">
+      <span class="price-tag text-sm font-bold px-3 py-1 rounded-full">R1399</span>
+      <button 
+        class="enroll-btn px-4 py-2 rounded-lg text-white text-sm font-medium bg-blue-600 hover:bg-blue-700 transition duration-200"
+        data-course="Ethical Hacking" 
+        data-price="1399" 
+        onclick="setCourse(this)">
+        Enroll Now
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Course Card: Python Programming -->
+<div class="course-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center relative overflow-hidden" data-course="Python Programming" data-price="799">
+  <div class="absolute top-2 right-2 badge-certified text-xs font-bold px-2 py-1 rounded-full">
+    <i class="fas fa-certificate mr-1"></i> Certified
+  </div>
+  <img src="python_programming.jpg" alt="Python Programming" class="course-image w-full rounded-lg mb-4">
+  <div class="w-full">
+    <div class="flex items-center mb-1">
+      <span class="text-yellow-400 text-sm">
+        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+      </span>
+      <span class="text-gray-500 text-xs ml-1">(4.5)</span>
+    </div>
+    <h4 class="text-lg font-bold mb-2">Python Programming</h4>
+    <p class="text-gray-600 text-sm mb-4">Learn Python, one of the most versatile programming languages, for web development, automation, and data analysis.</p>
+    <div class="flex justify-between items-center">
+      <span class="price-tag text-sm font-bold px-3 py-1 rounded-full">R799</span>
+      <button 
+        class="enroll-btn px-4 py-2 rounded-lg text-white text-sm font-medium bg-blue-600 hover:bg-blue-700 transition duration-200"
+        data-course="Python Programming" 
+        data-price="799" 
+        onclick="setCourse(this)">
+        Enroll Now
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Course Card: MQL5 Programming -->
+<div class="course-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center relative overflow-hidden" data-course="MQL5 Programming" data-price="999">
+  <div class="absolute top-2 right-2 badge-certified text-xs font-bold px-2 py-1 rounded-full">
+    <i class="fas fa-certificate mr-1"></i> Certified
+  </div>
+  <img src="mql5_programming.jpg" alt="MQL5 Programming" class="course-image w-full rounded-lg mb-4">
+  <div class="w-full">
+    <div class="flex items-center mb-1">
+      <span class="text-yellow-400 text-sm">
+        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+      </span>
+      <span class="text-gray-500 text-xs ml-1">(4.6)</span>
+    </div>
+    <h4 class="text-lg font-bold mb-2">MQL5 Programming</h4>
+    <p class="text-gray-600 text-sm mb-4">Master algorithmic trading by learning to build indicators, scripts, and expert advisors using MQL5 on MetaTrader 5.</p>
+    <div class="flex justify-between items-center">
+      <span class="price-tag text-sm font-bold px-3 py-1 rounded-full">R999</span>
+      <button 
+        class="enroll-btn px-4 py-2 rounded-lg text-white text-sm font-medium bg-blue-600 hover:bg-blue-700 transition duration-200"
+        data-course="MQL5 Programming" 
+        data-price="999" 
+        onclick="setCourse(this)">
+        Enroll Now
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Course Card: SQL Database Management -->
+<div class="course-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center relative overflow-hidden" data-course="SQL Database Management" data-price="849">
+  <div class="absolute top-2 right-2 badge-certified text-xs font-bold px-2 py-1 rounded-full">
+    <i class="fas fa-certificate mr-1"></i> Certified
+  </div>
+  <img src="sql_database.jpg" alt="SQL Database Management" class="course-image w-full rounded-lg mb-4">
+  <div class="w-full">
+    <div class="flex items-center mb-1">
+      <span class="text-yellow-400 text-sm">
+        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i>
+      </span>
+      <span class="text-gray-500 text-xs ml-1">(4.4)</span>
+    </div>
+    <h4 class="text-lg font-bold mb-2">SQL Database Management</h4>
+    <p class="text-gray-600 text-sm mb-4">Learn how to design, implement, and manage SQL databases effectively for efficient data storage and retrieval.</p>
+    <div class="flex justify-between items-center">
+      <span class="price-tag text-sm font-bold px-3 py-1 rounded-full">R849</span>
+      <button 
+        class="enroll-btn px-4 py-2 rounded-lg text-white text-sm font-medium bg-blue-600 hover:bg-blue-700 transition duration-200"
+        data-course="SQL Database Management" 
+        data-price="849" 
+        onclick="setCourse(this)">
+        Enroll Now
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Course Card: Digital Marketing -->
+<div class="course-card bg-white p-5 rounded-xl shadow-sm flex flex-col items-center relative overflow-hidden" data-course="Digital Marketing" data-price="849">
+  <div class="absolute top-2 right-2 badge-certified text-xs font-bold px-2 py-1 rounded-full">
+    <i class="fas fa-certificate mr-1"></i> Certified
+  </div>
+  <img src="digital_marketing.jpg" alt="Digital Marketing" class="course-image w-full rounded-lg mb-4">
+  <div class="w-full">
+    <div class="flex items-center mb-1">
+      <span class="text-yellow-400 text-sm">
+        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i>
+      </span>
+      <span class="text-gray-500 text-xs ml-1">(4.3)</span>
+    </div>
+    <h4 class="text-lg font-bold mb-2">Digital Marketing</h4>
+    <p class="text-gray-600 text-sm mb-4">Learn strategies to grow your business online using SEO, content marketing, and social media.</p>
+    <div class="flex justify-between items-center">
+      <span class="price-tag text-sm font-bold px-3 py-1 rounded-full bg-green-100 text-green-800">R849</span>
+      <button 
+        class="enroll-btn px-4 py-2 rounded-lg text-white text-sm font-medium bg-blue-600 hover:bg-blue-700 transition duration-200"
+        data-course="Digital Marketing" 
+        data-price="849" 
+        onclick="setCourse(this)">
+        Enroll Now
+      </button>
+    </div>
+  </div>
+</div>
     </div>
     
     <div class="text-center mt-12">
