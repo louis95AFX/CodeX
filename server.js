@@ -9,16 +9,15 @@ const crypto = require("crypto"); // Make sure this is at the top of your file
 
 const app = express();
 
+// Or you can keep your current connection details here:
 const pool = new Pool({
-  user: "neondb_owner",
-  host: "ep-morning-bonus-a405xosx-pooler.us-east-1.aws.neon.tech",
-  database: "codex",
-  password: "npg_RBuV5kZmtn7p",
-  port: 5432,
+  connectionString: 'postgresql://postgres:Amalouis1@db.ymymybedklefwjfihjwm.supabase.co:5432/postgres',
   ssl: {
-    rejectUnauthorized: false
-  }
+    rejectUnauthorized: false,
+  },
 });
+
+module.exports = pool;
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -80,7 +79,7 @@ app.post("/upload-profile-pic/:id", upload.single("profilePic"), async (req, res
     const imagePath = `/uploads/${req.file.filename}`;
   
     try {
-      await pool.query("UPDATE CodeX.users SET profile_pic = $1 WHERE id = $2", [imagePath, userId]);
+      await pool.query("UPDATE users SET profile_pic = $1 WHERE id = $2", [imagePath, userId]);
       res.json({ message: "Profile picture uploaded", imageUrl: imagePath });
     } catch (err) {
       console.error("Error updating profile pic:", err);
@@ -98,7 +97,7 @@ app.post("/register", async (req, res) => {
   
       // Insert the data into the users table (including student_id)
       const result = await pool.query(
-        'INSERT INTO "CodeX".users (name, surname, email, cell, dob, gender, password, student_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id',
+        'INSERT INTO users (name, surname, email, cell, dob, gender, password, student_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id',
         [name, surname, email, cell, dob, gender, hashedPassword, student_id]
       );
   
@@ -155,7 +154,7 @@ app.get('/resetpass.html', (req, res) => {
     
       try {
         // Check if the email exists
-        const userResult = await pool.query('SELECT id FROM CodeX.users WHERE email = $1', [email]);
+        const userResult = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
         if (userResult.rows.length === 0) {
           return res.status(404).json({ message: "Email not found" });
         }
@@ -163,11 +162,11 @@ app.get('/resetpass.html', (req, res) => {
         const userId = userResult.rows[0].id;
     
         // Delete old tokens (clean up)
-        await pool.query('DELETE FROM CodeX.password_resets WHERE expires_at < NOW()');
+        await pool.query('DELETE FROM password_resets WHERE expires_at < NOW()');
     
         // Check if a valid token already exists
         const tokenResult = await pool.query(
-          'SELECT * FROM CodeX.password_resets WHERE email = $1 AND expires_at > NOW()',
+          'SELECT * FROM password_resets WHERE email = $1 AND expires_at > NOW()',
           [email]
         );
     
@@ -182,7 +181,7 @@ app.get('/resetpass.html', (req, res) => {
     
         // Insert the token
         await pool.query(
-          `INSERT INTO CodeX.password_resets (user_id, email, token, expires_at)
+          `INSERT INTO password_resets (user_id, email, token, expires_at)
            VALUES ($1, $2, $3, NOW() + INTERVAL '24 hour')`,
           [userId, email, token]
         );
@@ -218,7 +217,7 @@ app.post("/reset-password", async (req, res) => {
   try {
     // Validate token and expiration
     const result = await pool.query(
-      'SELECT user_id, expires_at FROM CodeX.password_resets WHERE token = $1',
+      'SELECT user_id, expires_at FROM password_resets WHERE token = $1',
       [token]
     );
 
@@ -240,12 +239,12 @@ app.post("/reset-password", async (req, res) => {
 
     // Update user's password
     await pool.query(
-      'UPDATE CodeX.users SET password = $1 WHERE id = $2',
+      'UPDATE users SET password = $1 WHERE id = $2',
       [hashedPassword, user_id]
     );
 
     // Delete the token
-    await pool.query('DELETE FROM CodeX.password_resets WHERE token = $1', [token]);
+    await pool.query('DELETE FROM password_resets WHERE token = $1', [token]);
 
     res.status(200).json({ message: "Password updated successfully" });
 
@@ -260,7 +259,7 @@ app.post("/reset-password", async (req, res) => {
         try {
           const result = await pool.query(
             `SELECT name, surname, email, cell, dob, gender, student_id, profile_pic 
-            FROM "CodeX"."users" WHERE id = $1`,
+            FROM "users" WHERE id = $1`,
             [userId]
           );
           if (result.rows.length === 0) {
@@ -284,7 +283,7 @@ app.post("/login", async (req, res) => {
 
   try {
     const result = await pool.query(
-      'SELECT * FROM "CodeX".users WHERE email = $1',
+      'SELECT * FROM users WHERE email = $1',
       [email]
     );
 
@@ -318,7 +317,7 @@ app.post("/login", async (req, res) => {
   app.get("/check-email", async (req, res) => {
     const email = req.query.email;
     try {
-      const result = await pool.query("SELECT id FROM CodeX.users WHERE email = $1", [email]);
+      const result = await pool.query("SELECT id FROM users WHERE email = $1", [email]);
       if (result.rows.length > 0) {
         res.json({ exists: true });
       } else {
@@ -335,12 +334,12 @@ app.post("/login", async (req, res) => {
     try {
       // Insert purchase data into the database
       await pool.query(
-        'INSERT INTO "CodeX".purchases (email, course, amount, created_at) VALUES ($1, $2, $3, $4)',
+        'INSERT INTO purchases (email, course, amount, created_at) VALUES ($1, $2, $3, $4)',
         [email, course, price, created_at]
       );
        // 2. Log recent activity
     await pool.query(
-      `INSERT INTO "CodeX".recent_activity (email, title, icon, color) 
+      `INSERT INTO recent_activity (email, title, icon, color) 
        VALUES ($1, $2, $3, $4)`,
       [
         email,
@@ -361,7 +360,7 @@ app.post("/login", async (req, res) => {
   const { email } = req.query;
   try {
     const result = await pool.query(
-      'SELECT course, amount, created_at FROM "CodeX".purchases WHERE email = $1 ORDER BY created_at DESC',
+      'SELECT course, amount, created_at FROM purchases WHERE email = $1 ORDER BY created_at DESC',
       [email]
     );
     res.json(result.rows);
@@ -377,7 +376,7 @@ app.get('/getUserCourses', async (req, res) => {
   console.log("Fetching courses for email:", email);
   try {
     const result = await pool.query(
-      'SELECT * FROM "CodeX".purchases WHERE email = $1',
+      'SELECT * FROM purchases WHERE email = $1',
       [email]
     );
     res.json(result.rows);
@@ -391,7 +390,7 @@ app.post('/addActivity', async (req, res) => {
   const { email, title, icon, color } = req.body;
   try {
     await pool.query(
-      `INSERT INTO "CodeX".recent_activity (email, title, icon, color) VALUES ($1, $2, $3, $4)`,
+      `INSERT INTO recent_activity (email, title, icon, color) VALUES ($1, $2, $3, $4)`,
       [email, title, icon, color]
     );
     res.status(200).json({ message: "Activity logged" });
@@ -406,10 +405,10 @@ app.get('/getUserActivity', async (req, res) => {
 
   try {
     const result = await pool.query(
-      `SELECT title, icon, color, time 
-       FROM "CodeX".recent_activity 
-       WHERE email = $1 
-       ORDER BY time DESC 
+      `SELECT title, icon, color, created_at AS time
+       FROM recent_activity
+       WHERE email = $1
+       ORDER BY created_at DESC
        LIMIT 10`,
       [email]
     );
@@ -420,6 +419,7 @@ app.get('/getUserActivity', async (req, res) => {
     res.status(500).json({ message: "Failed to load activity" });
   }
 });
+
 
 
 const PORT = process.env.PORT || 5000;
